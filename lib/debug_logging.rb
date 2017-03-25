@@ -1,16 +1,11 @@
 require "logger"
 require "debug_logging/version"
+require "debug_logging/configuration"
 require "debug_logging/argument_printer"
 require "debug_logging/instance_logger_modulizer"
 require "debug_logging/instance_logger"
 require "debug_logging/class_logger"
 
-####################
-#                  #
-# Next Level Magic #
-# Classes inheriting from Module.
-# Cats and dogs sleeping together.
-#                  #
 ####################
 #                  #
 # NOTE: The manner this is made to work for class methods is totally different
@@ -24,15 +19,23 @@ require "debug_logging/class_logger"
 #                  #
 #     class Car
 #
+#       # adds the helper methods to the class, all are prefixed with debug_*,
+#       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
+#       extend DebugLogging
+#
+#       # per class configuration overrides!
+#       self.debug_class_benchmarks = true
+#       self.debug_instance_benchmarks = true
+#
 #       # For instance methods:
 #       # Option 1: specify the exact method(s) to add logging to
 #       include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
 #
 #       extend DebugLogging::ClassLogger
 #
-#       logged def self.make; new; end
-#       def self.design(*args); new; end
-#       def self.safety(*args); new; end
+#       logged def debug_make; new; end
+#       def design(*args); new; end
+#       def safety(*args); new; end
 #       logged :design, :safety
 #
 #       def drive(speed); speed; end
@@ -40,7 +43,7 @@ require "debug_logging/class_logger"
 #
 #       # For instance methods:
 #       # Option 2: add logging to all instance methods defined above (but *not* defined below)
-#       include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
+#       include DebugLogging::InstanceLogger.new(i_methods: debug_instance_methods(false))
 #
 #       def will_not_be_logged; false; end
 #
@@ -49,75 +52,93 @@ require "debug_logging/class_logger"
 ####################
 
 module DebugLogging
-  def self.config_reset
-    @@logger = nil
-    @@log_level = :debug
-    @@last_hash_to_s_proc = nil
-    @@last_hash_max_length = 1_000
-    @@args_max_length = 1_000
-    @@instance_benchmarks = false
-    @@class_benchmarks = false
-    @@add_invocation_id = true
-    @@ellipsis = " ✂️ …".freeze
+  def self.extended(base)
+    base.send(:extend, ArgumentPrinter)
+    base.debug_config_reset(debug_logging_configuration.dup)
   end
-  def self.logger
-    @@logger ||= Logger.new(STDOUT)
+
+  #### API ####
+  def debug_log(message)
+    debug_logger.send(debug_log_level, message)
   end
-  def self.logger=(logger)
-    @@logger = logger
+
+  # For single statement global config in an initializer
+  # e.g. DebugLogging.configuration.ellipsis = "..."
+  def self.configuration
+    self.debug_logging_configuration ||= Configuration.new
   end
-  def self.log_level
-    @@log_level || :debug
+
+  # For global config in an initializer with a block
+  def self.configure
+    yield(configuration)
   end
-  def self.log_level=(log_level)
-    @@log_level = log_level
+
+  # For per-class config with a block
+  def debug_logging_configure
+    @debug_logging_configuration ||= Configuration.new
+    yield(@debug_logging_configuration)
   end
-  def self.last_hash_to_s_proc
-    @@last_hash_to_s_proc
+
+  #### CONFIG ####
+  class << self
+    attr_accessor :debug_logging_configuration
   end
-  def self.last_hash_to_s_proc=(last_hash_to_s_proc)
-    @@last_hash_to_s_proc = last_hash_to_s_proc
+  def debug_config_reset(config = Configuration.new)
+    @debug_logging_configuration = config
   end
-  def self.last_hash_max_length
-    @@last_hash_max_length || 1_000
+  def debug_logger
+    @debug_logging_configuration.logger
   end
-  def self.last_hash_max_length=(last_hash_max_length)
-    @@last_hash_max_length = last_hash_max_length
+  def debug_logger=(logger)
+    @debug_logging_configuration.logger = logger
   end
-  def self.args_max_length
-    @@args_max_length || 1_000
+  def debug_log_level
+    @debug_logging_configuration.log_level
   end
-  def self.args_max_length=(args_max_length)
-    @@args_max_length = args_max_length
+  def debug_log_level=(log_level)
+    @debug_logging_configuration.log_level = log_level
   end
-  def self.instance_benchmarks
-    @@instance_benchmarks
+  def debug_last_hash_to_s_proc
+    @debug_logging_configuration.last_hash_to_s_proc
   end
-  def self.instance_benchmarks=(instance_benchmarks)
-    require "benchmark" if instance_benchmarks
-    @@instance_benchmarks = instance_benchmarks
+  def debug_last_hash_to_s_proc=(last_hash_to_s_proc)
+    @debug_logging_configuration.last_hash_to_s_proc = last_hash_to_s_proc
   end
-  def self.class_benchmarks
-    @@class_benchmarks
+  def debug_last_hash_max_length
+    @debug_logging_configuration.last_hash_max_length
   end
-  def self.class_benchmarks=(class_benchmarks)
-    require "benchmark" if class_benchmarks
-    @@class_benchmarks = class_benchmarks
+  def debug_last_hash_max_length=(last_hash_max_length)
+    @debug_logging_configuration.last_hash_max_length = last_hash_max_length
   end
-  def self.add_invocation_id
-    @@add_invocation_id
+  def debug_args_max_length
+    @debug_logging_configuration.args_max_length
   end
-  def self.add_invocation_id=(add_invocation_id)
-    @@add_invocation_id = add_invocation_id
+  def debug_args_max_length=(args_max_length)
+    @debug_logging_configuration.args_max_length = args_max_length
   end
-  def self.ellipsis
-    @@ellipsis
+  def debug_instance_benchmarks
+    @debug_logging_configuration.instance_benchmarks
   end
-  def self.ellipsis=(ellipsis)
-    @@ellipsis = ellipsis
+  def debug_instance_benchmarks=(instance_benchmarks)
+    @debug_logging_configuration.instance_benchmarks = instance_benchmarks
   end
-  def self.log(message)
-    logger.send(log_level, message)
+  def debug_class_benchmarks
+    @debug_logging_configuration.class_benchmarks
   end
-  config_reset # setup defaults
+  def debug_class_benchmarks=(class_benchmarks)
+    @debug_logging_configuration.class_benchmarks = class_benchmarks
+  end
+  def debug_add_invocation_id
+    @debug_logging_configuration.add_invocation_id
+  end
+  def debug_add_invocation_id=(add_invocation_id)
+    @debug_logging_configuration.add_invocation_id = add_invocation_id
+  end
+  def debug_ellipsis
+    @debug_logging_configuration.ellipsis
+  end
+  def debug_ellipsis=(ellipsis)
+    @debug_logging_configuration.ellipsis = ellipsis
+  end
+  self.debug_logging_configuration = Configuration.new # setup defaults
 end

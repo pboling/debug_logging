@@ -41,48 +41,75 @@ Crack open the specs for usage examples.
 ### Without Rails
 
 It just works. ;)
-Configuration can go anywhere you want.
+Configuration can go anywhere you want.  It will look like the Rails config though; see below.
 
 ### With Rails
 
 Recommend creating `config/initializers/debug_logging.rb` with:
+
 ```ruby
 # Showing the defaults
-DebugLogging.logger = Logger.new(STDOUT) # you probably want to override to be the Rails.logger
-DebugLogging.log_level = :debug # at what level do the messages created by this gem sent at?
-DebugLogging.last_hash_to_s_proc = nil # e.g. ->(hash) { "#{hash.keys}" }
-DebugLogging.last_hash_max_length = 1_000
-DebugLogging.args_max_length = 1_000
-DebugLogging.instance_benchmarks = false
-DebugLogging.class_benchmarks = false
-DebugLogging.add_invocation_id = true # invocation id allows you to identify a method call uniquely in a log
-DebugLogging.ellipsis = " ✂️ …".freeze
+DebugLogging.configuration.logger = Logger.new(STDOUT) # you probably want to override to be the Rails.logger
+DebugLogging.configuration.log_level = :debug # at what level do the messages created by this gem sent at?
+DebugLogging.configuration.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
+DebugLogging.configuration.last_hash_max_length = 1_000
+DebugLogging.configuration.args_max_length = 1_000
+DebugLogging.configuration.instance_benchmarks = false
+DebugLogging.configuration.class_benchmarks = false
+DebugLogging.configuration.add_invocation_id = true # invocation id allows you to identify a method call uniquely in a log
+DebugLogging.configuration.ellipsis = " ✂️ …".freeze
 ```
 
-Then in a class for you would like to have logs every time a method is called, with the arguments, potentially a benchmarck, and a unique invocation identifier:
+If you prefer to use the block style:
+
+```ruby
+DebugLogging.configure do |config|
+  config.logger = Logger.new(STDOUT) # probably want to override to be the Rails.logger
+  config.log_level = :debug # at what level do the messages created by this gem sent at?
+  config.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
+  config.last_hash_max_length = 1_000
+  config.args_max_length = 1_000
+  config.instance_benchmarks = false
+  config.class_benchmarks = false
+  config.add_invocation_id = true # invocation id allows you to identify a method call uniquely in a log
+  config.ellipsis = " ✂️ …".freeze
+end
+```
+
+**All** of the above **config** is **inheritable** and **configurable** at the **per-class** level as well!
+Just prepend `debug_` to any config value you want to override in a class.
+
+Every time a method is called, get logs, optionally with arguments, a benchmarck, and a unique invocation identifier:
 
 ```ruby
 class Car
 
+  # adds the helper methods to the class, all are prefixed with debug_*,
+  #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
+  extend DebugLogging
+
+  # per class configuration overrides!
+  self.debug_class_benchmarks = true
+  self.debug_instance_benchmarks = true
+
   # For instance methods:
   # Option 1: specify the exact method(s) to add logging to
   include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
-  
-  # To log all class method calls:
+
   extend DebugLogging::ClassLogger
-  
-  logged def self.make; new; end
-  def self.design(*args); new; end
-  def self.safety(*args); new; end
+
+  logged def debug_make; new; end
+  def design(*args); new; end
+  def safety(*args); new; end
   logged :design, :safety
-  
+
   def drive(speed); speed; end
   def stop; 0; end
-  
+
   # For instance methods:
   # Option 2: add logging to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
-  
+  include DebugLogging::InstanceLogger.new(i_methods: debug_instance_methods(false))
+
   def will_not_be_logged; false; end
 
 end

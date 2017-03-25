@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "debug_logging"
 require "rspec/pending_for"
+require "byebug"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
