@@ -2,15 +2,15 @@
 
 ## Next Level Magic
 
-Classes inheriting from Module.
-Cats and dogs sleeping together.
-Yet this gem monkey patches nothing.
-100% clean.
-0% obtrusive.
-100% tested.
-50% Ruby 2.0+ compatible.
-100% Ruby 2.1+ compatible.
-10g Monosodium glutamate.
+* Classes inheriting from Module.
+* Cats and dogs sleeping together.
+* Yet this gem monkey patches nothing.
+* 100% clean.
+* 0% obtrusive.
+* 100% tested.
+* 50% Ruby 2.0+ compatible.
+* 100% Ruby 2.1+ compatible.
+* 10g Monosodium glutamate.
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
 
