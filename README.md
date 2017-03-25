@@ -59,6 +59,8 @@ DebugLogging.add_invocation_id = true # invocation id allows you to identify a m
 DebugLogging.ellipsis = " ✂️ …".freeze
 ```
 
+Then in a class for you would like to have logs every time a method is called, with the arguments, potentially a benchmarck, and a unique invocation identifier:
+
 ```ruby
 class Car
 
