@@ -68,6 +68,7 @@ class Car
   # Option 1: specify the exact method(s) to add logging to
   include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
   
+  # To log all class method calls:
   extend DebugLogging::ClassLogger
   
   logged def self.make; new; end
