@@ -62,6 +62,12 @@ module DebugLogging
     debug_logger.send(debug_log_level, message)
   end
 
+  # There are times when the class will need access to the configuration object,
+  #   such as to override it per instance method
+  def debug_config
+    @debug_logging_configuration
+  end
+
   # For single statement global config in an initializer
   # e.g. DebugLogging.configuration.ellipsis = "..."
   def self.configuration
@@ -97,6 +103,12 @@ module DebugLogging
   end
   def debug_log_level=(log_level)
     @debug_logging_configuration.log_level = log_level
+  end
+  def debug_multiple_last_hashes
+    @debug_logging_configuration.multiple_last_hashes
+  end
+  def debug_multiple_last_hashes=(multiple_last_hashes)
+    @debug_logging_configuration.multiple_last_hashes = multiple_last_hashes
   end
   def debug_last_hash_to_s_proc
     @debug_logging_configuration.last_hash_to_s_proc

@@ -1,14 +1,14 @@
 module DebugLogging
   class InstanceLogger < Module
-    def initialize(i_methods: nil)
+    def initialize(i_methods: nil, config: nil)
+      @config = config
       @instance_methods_to_log = Array(i_methods) if i_methods
     end
     def included(base)
-      if @instance_methods_to_log
-        base.send(:include, ArgumentPrinter)
-        instance_method_logger = DebugLogging::InstanceLoggerModulizer.to_mod(@instance_methods_to_log)
-        base.send(:prepend, instance_method_logger)
-      end
+      return unless @instance_methods_to_log
+      base.send(:include, ArgumentPrinter)
+      instance_method_logger = DebugLogging::InstanceLoggerModulizer.to_mod(methods_to_log: @instance_methods_to_log, config_proxy: @config)
+      base.send(:prepend, instance_method_logger)
     end
   end
 end
