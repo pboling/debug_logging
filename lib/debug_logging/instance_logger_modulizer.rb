@@ -5,11 +5,11 @@ module DebugLogging
         Array(methods_to_log).each do |method_to_log|
           # method name must be a symbol
           define_method(method_to_log.to_sym) do |*args, &block|
-            config_proxy =  if config_proxy.is_a?(Hash)
-                              Configuration.new(**(self.class.debug_config.to_hash.merge(config_proxy)))
-                            else
-                              self.class
-                            end
+            config_proxy = if config_proxy.is_a?(Hash)
+                             Configuration.new(**(self.class.debug_config.to_hash.merge(config_proxy)))
+                           else
+                             self.class
+                           end
             method_return_value = nil
             log_prefix = "#{self.class}##{method_to_log}"
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if config_proxy.debug_add_invocation_id && args

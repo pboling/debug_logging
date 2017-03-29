@@ -423,17 +423,69 @@ RSpec.describe "DebugLogging" do
       end
     end
     context "last_hash_to_s_proc" do
-      before do
-        skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
-        allow(singleton_logged_klass).to receive(:debug_log) { logger }
-        singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
+      context "class level config" do
+        before do
+          skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
+          allow(singleton_logged_klass).to receive(:debug_log) { logger }
+          singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
+        end
+        it "logs" do
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+        end
+        it "has correct return value" do
+          expect(singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(30)
+        end
       end
-      it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
-        singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+      context "instance level config" do
+        before do
+          allow(instance_logged_klass_dynamic).to receive(:debug_log) { logger }
+          instance_logged_klass_dynamic.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
+        end
+        it "logs" do
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+        end
+        it "has correct return value" do
+          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(60)
+        end
       end
-      it "has correct return value" do
-        expect(singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(30)
+    end
+    context "multiple_last_hashes" do
+      context "class level config" do
+        before do
+          skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
+          allow(singleton_logged_klass).to receive(:debug_log) { logger }
+          singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
+          singleton_logged_klass.debug_multiple_last_hashes = true
+        end
+        it "logs" do
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+          singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+        end
+        it "has correct return value" do
+          expect(singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(20)
+          expect(singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(30)
+        end
+      end
+      context "instance level config" do
+        before do
+          allow(instance_logged_klass_dynamic).to receive(:debug_log) { logger }
+          instance_logged_klass_dynamic.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
+          instance_logged_klass_dynamic.debug_multiple_last_hashes = true
+        end
+        it "logs" do
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+          instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
+        end
+        it "has correct return value" do
+          expect(instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(50)
+          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})).to eq(60)
+        end
       end
     end
     context "last_hash_max_length" do

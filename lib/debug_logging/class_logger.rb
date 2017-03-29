@@ -13,11 +13,11 @@ module DebugLogging
         original_method = method(method_to_log)
         (class << self; self; end).class_eval do
           define_method(method_to_log) do |*args|
-            config_proxy =  if opts
-                              Configuration.new(**(debug_config.to_hash.merge(opts)))
-                            else
-                              self
-                            end
+            config_proxy = if opts
+                             Configuration.new(**(debug_config.to_hash.merge(opts)))
+                           else
+                             self
+                           end
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if config_proxy.debug_add_invocation_id
             debug_log "#{self}.#{method_to_log}#{debug_arguments_to_s(args: args, config_proxy: config_proxy)}#{invocation_id}"
