@@ -9,6 +9,8 @@ module DebugLogging
     attr_accessor :args_max_length
     attr_accessor :instance_benchmarks
     attr_accessor :class_benchmarks
+    attr_accessor :colorized_chain_for_method
+    attr_accessor :colorized_chain_for_class
     attr_accessor :add_invocation_id
     attr_accessor :ellipsis
     # alias the readers to the debug_* prefix so an instance of this class
@@ -37,6 +39,8 @@ module DebugLogging
     alias :debug_args_max_length :args_max_length
     alias :debug_instance_benchmarks :instance_benchmarks
     alias :debug_class_benchmarks :class_benchmarks
+    alias :debug_colorized_chain_for_method :colorized_chain_for_method
+    alias :debug_colorized_chain_for_class :colorized_chain_for_class
     alias :debug_add_invocation_id :add_invocation_id
     alias :debug_ellipsis :ellipsis
     def initialize(**options)
@@ -48,6 +52,8 @@ module DebugLogging
       @args_max_length = options.key?(:args_max_length) ? options[:args_max_length] : 1_000
       @instance_benchmarks = options.key?(:instance_benchmarks) ? options[:instance_benchmarks] : false
       @class_benchmarks = options.key?(:class_benchmarks) ? options[:class_benchmarks] : false
+      @colorized_chain_for_method = options.key?(:colorized_chain_for_method) ? options[:colorized_chain_for_method] : false
+      @colorized_chain_for_class = options.key?(:colorized_chain_for_class) ? options[:colorized_chain_for_class] : false
       @add_invocation_id = options.key?(:add_invocation_id) ? options[:add_invocation_id] : true
       @ellipsis = options.key?(:ellipsis) ? options[:ellipsis] : DEFAULT_ELLIPSIS
     end
@@ -69,6 +75,8 @@ module DebugLogging
           args_max_length: args_max_length,
           instance_benchmarks: instance_benchmarks,
           class_benchmarks: class_benchmarks,
+          colorized_chain_for_method: colorized_chain_for_method,
+          colorized_chain_for_class: colorized_chain_for_class,
           add_invocation_id: add_invocation_id,
           ellipsis: ellipsis
       }

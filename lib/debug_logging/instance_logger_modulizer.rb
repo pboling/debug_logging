@@ -11,14 +11,15 @@ module DebugLogging
                              self.class
                            end
             method_return_value = nil
-            log_prefix = "#{self.class}##{method_to_log}"
-            invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if config_proxy.debug_add_invocation_id && args
-            self.class.debug_log "#{log_prefix}#{self.class.debug_arguments_to_s(args: args, config_proxy: config_proxy)}#{invocation_id}"
+            log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: "#", method_to_log: method_to_log, config_proxy: config_proxy)
+            signature = self.class.debug_signature_to_s(args: args, config_proxy: config_proxy)
+            invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
+            self.class.debug_log "#{log_prefix}#{signature}#{invocation_id}"
             if config_proxy.debug_instance_benchmarks
-              elapsed = Benchmark.realtime do
+              tms = Benchmark.measure do
                 method_return_value = super(*args, &block)
               end
-              self.class.debug_log "#{log_prefix} completed in #{sprintf("%f", elapsed)}s#{invocation_id}"
+              self.class.debug_log "#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
             else
               method_return_value = super(*args, &block)
             end

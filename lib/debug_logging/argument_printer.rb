@@ -1,6 +1,35 @@
 module DebugLogging
   module ArgumentPrinter
-    def debug_arguments_to_s(args: nil, config_proxy: nil)
+    def debug_benchmark_to_s(tms: nil)
+      "completed in #{sprintf("%f", tms.real)}s (#{sprintf("%f", tms.total)}s CPU)"
+    end
+    def debug_invocation_id_to_s(args: nil, config_proxy: nil)
+      if config_proxy.debug_add_invocation_id
+        invocation = " ~#{args.object_id}@#{sprintf("%#-21a", Time.now.to_f)[4..(-4)]}~"
+        case config_proxy.debug_add_invocation_id
+        when true then
+          invocation
+        else
+          config_proxy.debug_add_invocation_id.call(ColorizedString[invocation])
+        end
+      else
+        ""
+      end
+    end
+    def debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: nil)
+      klass_string = if config_proxy.debug_colorized_chain_for_class
+                       config_proxy.debug_colorized_chain_for_class.call(ColorizedString[klass.to_s])
+                     else
+                       klass.to_s
+                     end
+      method_string = if config_proxy.debug_colorized_chain_for_method
+                        config_proxy.debug_colorized_chain_for_method.call(ColorizedString[method_to_log.to_s])
+                      else
+                        method_to_log.to_s
+                      end
+      "#{klass_string}#{separator}#{method_string}"
+    end
+    def debug_signature_to_s(args: nil, config_proxy: nil)
       printed_args = ""
       add_args_ellipsis = false
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)

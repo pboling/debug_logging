@@ -12,22 +12,24 @@ module DebugLogging
         method_to_log = method_to_log.to_sym
         original_method = method(method_to_log)
         (class << self; self; end).class_eval do
-          define_method(method_to_log) do |*args|
+          define_method(method_to_log) do |*args, &block|
             config_proxy = if opts
                              Configuration.new(**(debug_config.to_hash.merge(opts)))
                            else
                              self
                            end
             method_return_value = nil
-            invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if config_proxy.debug_add_invocation_id
-            debug_log "#{self}.#{method_to_log}#{debug_arguments_to_s(args: args, config_proxy: config_proxy)}#{invocation_id}"
+            log_prefix = debug_invocation_to_s(klass: self.to_s, separator: ".", method_to_log: method_to_log, config_proxy: config_proxy)
+            signature = debug_signature_to_s(args: args, config_proxy: config_proxy)
+            invocation_id = debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
+            debug_log "#{log_prefix}#{signature}#{invocation_id}"
             if config_proxy.debug_class_benchmarks
-              elapsed = Benchmark.realtime do
-                method_return_value = original_method.call(*args)
+              tms = Benchmark.measure do
+                method_return_value = original_method.call(*args, &block)
               end
-              debug_log "#{self}.#{method_to_log} completed in #{sprintf("%f", elapsed)}s#{invocation_id}"
+              debug_log "#{log_prefix} #{debug_benchmark_to_s(tms: tms)}#{invocation_id}"
             else
-              method_return_value = original_method.call(*args)
+              method_return_value = original_method.call(*args, &block)
             end
             method_return_value
           end

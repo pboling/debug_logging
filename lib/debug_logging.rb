@@ -1,4 +1,5 @@
 require "logger"
+require "colorized_string"
 require "debug_logging/version"
 require "debug_logging/configuration"
 require "debug_logging/argument_printer"
@@ -139,6 +140,18 @@ module DebugLogging
   end
   def debug_class_benchmarks=(class_benchmarks)
     @debug_logging_configuration.class_benchmarks = class_benchmarks
+  end
+  def debug_colorized_chain_for_method
+    @debug_logging_configuration.colorized_chain_for_method
+  end
+  def debug_colorized_chain_for_method=(colorized_chain_for_method)
+    @debug_logging_configuration.colorized_chain_for_method = colorized_chain_for_method
+  end
+  def debug_colorized_chain_for_class
+    @debug_logging_configuration.colorized_chain_for_class
+  end
+  def debug_colorized_chain_for_class=(colorized_chain_for_class)
+    @debug_logging_configuration.colorized_chain_for_class = colorized_chain_for_class
   end
   def debug_add_invocation_id
     @debug_logging_configuration.add_invocation_id
