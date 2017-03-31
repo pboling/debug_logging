@@ -7,7 +7,7 @@ module DebugLogging
     def included(base)
       return unless @instance_methods_to_log
       base.send(:include, ArgumentPrinter)
-      instance_method_logger = DebugLogging::InstanceLoggerModulizer.to_mod(methods_to_log: @instance_methods_to_log, config_proxy: @config)
+      instance_method_logger = DebugLogging::InstanceLoggerModulizer.to_mod(methods_to_log: @instance_methods_to_log, config: @config)
       base.send(:prepend, instance_method_logger)
     end
   end

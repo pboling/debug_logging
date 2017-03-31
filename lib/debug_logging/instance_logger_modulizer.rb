@@ -1,12 +1,12 @@
 module DebugLogging
   module InstanceLoggerModulizer
-    def self.to_mod(methods_to_log: nil, config_proxy: nil)
+    def self.to_mod(methods_to_log: nil, config: nil)
       Module.new do
         Array(methods_to_log).each do |method_to_log|
           # method name must be a symbol
           define_method(method_to_log.to_sym) do |*args, &block|
             config_proxy = if config_proxy.is_a?(Hash)
-                             Configuration.new(**(self.class.debug_config.to_hash.merge(config_proxy)))
+                             Configuration.new(**(self.class.debug_config.to_hash.merge(config)))
                            else
                              self.class
                            end
