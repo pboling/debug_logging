@@ -5,7 +5,7 @@ module DebugLogging
         Array(methods_to_log).each do |method_to_log|
           # method name must be a symbol
           define_method(method_to_log.to_sym) do |*args, &block|
-            config_proxy = if config_proxy.is_a?(Hash)
+            config_proxy = if config
                              Configuration.new(**(self.class.debug_config.to_hash.merge(config)))
                            else
                              self.class

@@ -340,6 +340,7 @@ RSpec.describe "DebugLogging" do
           def i; 40; end
           def i_with_ssplat(*args); 50; end
           def i_with_dsplat(**args); 60; end
+          def i_without_customization; 0; end
           def i_without_log; 0; end
         end
       }
@@ -373,12 +374,12 @@ RSpec.describe "DebugLogging" do
         end
         it "uses separate configs" do
           expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i\(\) ~\d+@.+~/, anything()).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i completed in/, anything()).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~\Z/, anything()).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~\Z/, anything()).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~\d+@.+~\Z/, anything()).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~\Z/, anything()).once
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i completed in/, anything()).never
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat completed in/, anything()).never
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~\Z/, anything()).once
           expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in/, anything()).never
           instance_logged_klass_explicit.new.i
           instance_logged_klass_explicit.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
