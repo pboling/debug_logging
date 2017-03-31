@@ -14,7 +14,7 @@ module DebugLogging
             log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: "#", method_to_log: method_to_log, config_proxy: config_proxy)
             signature = self.class.debug_signature_to_s(args: args, config_proxy: config_proxy)
             invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
-            self.class.debug_log "#{log_prefix}#{signature}#{invocation_id}"
+            self.class.debug_log("#{log_prefix}#{signature}#{invocation_id}", config_proxy)
             if config_proxy.debug_instance_benchmarks
               tms = Benchmark.measure do
                 method_return_value = super(*args, &block)
