@@ -19,7 +19,7 @@ module DebugLogging
               tms = Benchmark.measure do
                 method_return_value = super(*args, &block)
               end
-              self.class.debug_log "#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
+              self.class.debug_log("#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}", config_proxy)
             else
               method_return_value = super(*args, &block)
             end

@@ -82,12 +82,12 @@ RSpec.describe "DebugLogging" do
       allow(complete_logged_klass).to receive(:debug_log) { logger }
     end
     it "logs" do
-      expect(complete_logged_klass).to receive(:debug_log).with(/#i\(\)/).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/#i_with_ssplat\(\)/).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/#i_with_dsplat\(\)/).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/.k\(\)/).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\(\)/).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\)/).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/#i\(\)/, anything()).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/#i_with_ssplat\(\)/, anything()).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/#i_with_dsplat\(\)/, anything()).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/.k\(\)/, anything()).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\(\)/, anything()).once
+      expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\)/, anything()).once
       complete_logged_klass.new.i
       complete_logged_klass.new.i_with_ssplat
       complete_logged_klass.new.i_with_dsplat
@@ -103,9 +103,9 @@ RSpec.describe "DebugLogging" do
   context "an instance logged klass explicit" do
     before { allow(instance_logged_klass_explicit).to receive(:debug_log) { logger } }
     it "logs" do
-      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i\(\)/).once
-      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\(\)/).once
-      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\)/).once
+      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i\(\)/, anything()).once
+      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\(\)/, anything()).once
+      expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\)/, anything()).once
       instance_logged_klass_explicit.new.i
       instance_logged_klass_explicit.new.i_with_ssplat
       instance_logged_klass_explicit.new.i_with_dsplat
@@ -118,7 +118,7 @@ RSpec.describe "DebugLogging" do
     before { allow(instance_logged_klass_dynamic).to receive(:debug_log) { logger } }
     context "instance method without args" do
       it "logs" do
-        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i\(\)/).once
+        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i\(\)/, anything()).once
         instance_logged_klass_dynamic.new.i
       end
       it "has correct return value" do
@@ -127,7 +127,7 @@ RSpec.describe "DebugLogging" do
     end
     context "instance method with single splat args" do
       it "logs" do
-        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/).once
+        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
         instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -136,7 +136,7 @@ RSpec.describe "DebugLogging" do
     end
     context "instance method with double splat args" do
       it "logs" do
-        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/).once
+        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/, anything()).once
         instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -161,7 +161,7 @@ RSpec.describe "DebugLogging" do
     end
     context "class method without args" do
       it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/\.k\(\)/).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/\.k\(\)/, anything()).once
         singleton_logged_klass.k
       end
       it "has correct return value" do
@@ -170,7 +170,7 @@ RSpec.describe "DebugLogging" do
     end
     context "class method with single splat args" do
       it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
         singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -179,7 +179,7 @@ RSpec.describe "DebugLogging" do
     end
     context "class method with double splat args" do
       it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/, anything()).once
         singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -220,10 +220,10 @@ RSpec.describe "DebugLogging" do
             expect(instance_logged_klass_explicit.debug_add_invocation_id).to eq(false)
           end
           it "uses separate configs" do
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
-            expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-            expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).never
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
+            expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+            expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).never
             instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             instance_logged_klass_explicit.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
@@ -253,10 +253,10 @@ RSpec.describe "DebugLogging" do
             expect(complete_logged_klass.debug_add_invocation_id).to eq(false)
           end
           it "uses separate configs" do
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
-            expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-            expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).never
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
+            expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+            expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).never
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             complete_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
@@ -284,10 +284,10 @@ RSpec.describe "DebugLogging" do
           expect(instance_logged_klass_explicit.debug_add_invocation_id).to eq(false)
         end
         it "uses separate configs" do
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).never
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).never
           instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           instance_logged_klass_explicit.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
@@ -313,10 +313,10 @@ RSpec.describe "DebugLogging" do
           expect(complete_logged_klass.debug_add_invocation_id).to eq(false)
         end
         it "uses separate configs" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
-          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in/).never
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
+          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in/, anything()).never
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           complete_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
@@ -372,14 +372,14 @@ RSpec.describe "DebugLogging" do
           expect(instance_logged_klass_dynamic.debug_add_invocation_id).to eq(false)
         end
         it "uses separate configs" do
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i\(\) ~\d+@.+~/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i completed in/).never
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\)\Z/).once
-          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat completed in/).never
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in/).never
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i\(\) ~\d+@.+~/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i completed in/, anything()).never
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\)\Z/, anything()).once
+          expect(instance_logged_klass_explicit).to receive(:debug_log).with(/#i_with_dsplat completed in/, anything()).never
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in/, anything()).never
           instance_logged_klass_explicit.new.i
           instance_logged_klass_explicit.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           instance_logged_klass_explicit.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
@@ -409,10 +409,10 @@ RSpec.describe "DebugLogging" do
           expect(complete_logged_klass.debug_add_invocation_id).to eq(false)
         end
         it "uses separate configs" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
-          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in/).never
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
+          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+          expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in/, anything()).never
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           complete_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
@@ -430,7 +430,7 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
         end
         it "logs" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/, anything()).once
           singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -443,7 +443,7 @@ RSpec.describe "DebugLogging" do
           instance_logged_klass_dynamic.debug_last_hash_to_s_proc = ->(hash) { "#{hash.keys}" }
         end
         it "logs" do
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/, anything()).once
           instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -460,8 +460,8 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_multiple_last_hashes = true
         end
         it "logs" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/).once
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/, anything()).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/, anything()).once
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
@@ -477,8 +477,8 @@ RSpec.describe "DebugLogging" do
           instance_logged_klass_dynamic.debug_multiple_last_hashes = true
         end
         it "logs" do
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/).once
-          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/, anything()).once
+          expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/.i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/, anything()).once
           instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f}, a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           instance_logged_klass_dynamic.new.i_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
@@ -497,7 +497,7 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_last_hash_max_length = 3
         end
         it "logs ellipsis" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, ✂️ …\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\[:a, ✂️ …\) ~/, anything()).once
           singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -512,7 +512,7 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_last_hash_max_length = 3
         end
         it "logs full message" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/, anything()).once
           singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -529,11 +529,11 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_args_max_length = 20
         end
         it "logs full messages when under max" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \[:c, :e\]\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \[:c, :e\]\) ~/, anything()).once
           singleton_logged_klass.k_with_ssplat("a", 1, true, {c: :d, e: :f})
         end
         it "logs ellipsis" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \[\"b\", 2 ✂️ …, \[:c, :e\]\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \[\"b\", 2 ✂️ …, \[:c, :e\]\) ~/, anything()).once
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -548,11 +548,11 @@ RSpec.describe "DebugLogging" do
           singleton_logged_klass.debug_args_max_length = 20
         end
         it "logs full messages when under max" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, {:c=>:d}\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, {:c=>:d}\) ~/, anything()).once
           singleton_logged_klass.k_with_ssplat("a", 1, {c: :d})
         end
         it "logs ellipsis" do
-          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2 ✂️ …\) ~/).once
+          expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2 ✂️ …\) ~/, anything()).once
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
         it "has correct return value" do
@@ -566,8 +566,8 @@ RSpec.describe "DebugLogging" do
         instance_logged_klass_dynamic.debug_instance_benchmarks = true
       end
       it "logs benchmark" do
-        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/).once
-        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/).once
+        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
+        expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/, anything()).once
         instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -581,8 +581,8 @@ RSpec.describe "DebugLogging" do
         singleton_logged_klass.debug_class_benchmarks = true
       end
       it "logs benchmark" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/).once
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/, anything()).once
         singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -599,8 +599,8 @@ RSpec.describe "DebugLogging" do
             singleton_logged_klass.debug_add_invocation_id = true
           end
           it "logs benchmark" do
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
@@ -615,8 +615,8 @@ RSpec.describe "DebugLogging" do
             singleton_logged_klass.debug_add_invocation_id = false
           end
           it "logs benchmark" do
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/, anything()).once
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
@@ -631,8 +631,8 @@ RSpec.describe "DebugLogging" do
             singleton_logged_klass.debug_add_invocation_id = ->(colorized_string) { colorized_string.red }
           end
           it "logs benchmark" do
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\).*0;31;49m ~\d+@.+~.*0m\Z/).once
-            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\).*0;31;49m ~\d+@.+~.*0m\Z/).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\).*0;31;49m ~\d+@.+~.*0m\Z/, anything()).once
+            expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\).*0;31;49m ~\d+@.+~.*0m\Z/, anything()).once
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
@@ -648,8 +648,8 @@ RSpec.describe "DebugLogging" do
             instance_logged_klass_dynamic.debug_add_invocation_id = true
           end
           it "logs benchmark" do
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/).once
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~/, anything()).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/, anything()).once
             instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
@@ -663,8 +663,8 @@ RSpec.describe "DebugLogging" do
             instance_logged_klass_dynamic.debug_add_invocation_id = false
           end
           it "logs benchmark" do
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/).once
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)\Z/, anything()).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/, anything()).once
             instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
@@ -678,8 +678,8 @@ RSpec.describe "DebugLogging" do
             instance_logged_klass_dynamic.debug_add_invocation_id = ->(colorized_string) { colorized_string.red }
           end
           it "logs benchmark" do
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\).*0;31;49m ~\d+@.+~.*0m\Z/).once
-            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\).*0;31;49m ~\d+@.+~.*0m\Z/).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\).*0;31;49m ~\d+@.+~.*0m\Z/, anything()).once
+            expect(instance_logged_klass_dynamic).to receive(:debug_log).with(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\).*0;31;49m ~\d+@.+~.*0m\Z/, anything()).once
             instance_logged_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
           it "has correct return value" do
