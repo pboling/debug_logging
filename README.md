@@ -127,7 +127,7 @@ class Car
 
   # For instance methods:
   # Option 2: add logging to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceLogger.new(i_methods: debug_instance_methods(false))
+  include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
 
   # override options for any instance method(s)
   include DebugLogging::InstanceLogger.new(i_methods: [:stop], config: { multiple_last_hashes: true })
