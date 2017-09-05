@@ -10,7 +10,10 @@ Gem::Specification.new do |spec|
   spec.email         = ["peter.boling@gmail.com"]
 
   spec.summary       = %q{Drop-in debug logging useful when a call stack gets unruly}
-  spec.description   = %q{Automatically log Class.method(arguments) as they are called at runtime!}
+  spec.description   = %q{
+Unobtrusive debug logging for Ruby without the litter
+Automatically log selected methods and their arguments as they are called at runtime!
+}
   spec.homepage      = "https://github.com/pboling/debug_logging"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
