@@ -61,7 +61,7 @@ module DebugLogging
   #### API ####
   def debug_log(message, config_proxy = nil)
     config_proxy ||= self
-    config_proxy.debug_logger.send(config_proxy.debug_log_level, message)
+    config_proxy.debug_logger.send(config_proxy.debug_log_level, message) if config_proxy.debug_logger
   end
 
   # There are times when the class will need access to the configuration object,
