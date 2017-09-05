@@ -13,6 +13,7 @@ class SimpleDebugLogging < Module
   def included(base)
     instance_method_logger = InstanceMethodLoggerModulizer.to_mod(@instance_methods_to_log)
     base.send(:prepend, instance_method_logger)
+    base.send(:extend, ClassMethodLogger)
   end
   module ClassMethodLogger
     def logged(*methods_to_log)
