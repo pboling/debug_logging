@@ -44,7 +44,7 @@ require "debug_logging/class_logger"
 #
 #       # For instance methods:
 #       # Option 2: add logging to all instance methods defined above (but *not* defined below)
-#       include DebugLogging::InstanceLogger.new(i_methods: debug_instance_methods(false))
+#       include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
 #
 #       def will_not_be_logged; false; end
 #
