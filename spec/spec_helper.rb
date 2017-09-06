@@ -1,9 +1,11 @@
 require "bundler/setup"
-require "debug_logging"
 require "rspec/pending_for"
 require "byebug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby"
 require "coveralls"
 Coveralls.wear!
+
+# This gem!
+require "debug_logging"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
