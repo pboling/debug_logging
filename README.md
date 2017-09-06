@@ -1,5 +1,16 @@
 # DebugLogging
 
+Unobtrusive, inheritable-overrideable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
+
+### Gives you (all are optional):
+* *benchmarking*
+* *colorization by class/method*
+* *robust argument printer with customizable ellipsis*
+* *unique invocation identifiers*
+* *single line config*
+* *separate logger*
+* a free pony
+
 | Project                 |  DebugLogging     |
 |------------------------ | ----------------- |
 | gem name                |  debug_logging    |
