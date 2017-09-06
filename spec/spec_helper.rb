@@ -1,7 +1,7 @@
 require "bundler/setup"
 require "debug_logging"
 require "rspec/pending_for"
-require "byebug"
+require "byebug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

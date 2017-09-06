@@ -5,7 +5,7 @@ module DebugLogging
     end
     def debug_invocation_id_to_s(args: nil, config_proxy: nil)
       if config_proxy.debug_add_invocation_id
-        invocation = " ~#{args.object_id}@#{sprintf("%#-21a", Time.now.to_f)[4..(-4)]}~"
+        invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % '%#-21a')[4..(-4)]}~"
         case config_proxy.debug_add_invocation_id
         when true then
           invocation
