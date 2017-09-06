@@ -1,6 +1,6 @@
 # DebugLogging
 
-Unobtrusive, inheritable-overrideable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
+Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 
 ### Gives you (all are optional):
 * *benchmarking*
