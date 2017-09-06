@@ -32,6 +32,7 @@ require "debug_logging/class_logger"
 #       # Option 1: specify the exact method(s) to add logging to
 #       include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
 #
+#       # Provides the `logged` method decorator
 #       extend DebugLogging::ClassLogger
 #
 #       logged def debug_make; new; end

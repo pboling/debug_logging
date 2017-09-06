@@ -1,15 +1,34 @@
 # DebugLogging
 
+| Project                 |  FlagShihTzu      |
+|------------------------ | ----------------- |
+| gem name                |  debug_logging    |
+| license                 |  MIT              |
+| expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
+| download rank               |  [![Total Downloads](https://img.shields.io/gem/rt/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
+| version                 |  [![Gem Version](https://badge.fury.io/rb/debug_logging.png)](http://badge.fury.io/rb/debug_logging) |
+| dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/debug_logging.png)](https://gemnasium.com/pboling/debug_logging) |
+| code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/debug_logging.png)](https://codeclimate.com/github/pboling/debug_logging) |
+| inline documenation     |  [![Inline docs](http://inch-ci.org/github/pboling/debug_logging.png)](http://inch-ci.org/github/pboling/debug_logging) |
+| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/debug_logging.png?branch=master)](https://travis-ci.org/pboling/debug_logging) |
+| test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/debug_logging/badge.png)](https://coveralls.io/r/pboling/debug_logging) |
+| homepage                |  [https://github.com/pboling/debug_logging][homepage] |
+| documentation           |  [http://rdoc.info/github/pboling/debug_logging/frames][documentation] |
+| live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| Spread ~♡ⓛⓞⓥⓔ♡~      |  [on AngelList](https://angel.co/peter-boling), [on Coderwall](http://coderwall.com/pboling) |
+
 ## Next Level Magic
+
+
+Herein you will find:
 
 * Classes inheriting from Module.
 * Cats and dogs sleeping together.
-* Yet this gem monkey patches nothing.
-* 100% clean.
-* 0% obtrusive.
+* Zero tolerance policy on monkey patching.
+* 100% clean, 0% obtrusive.
 * 100% tested.
 * 50% Ruby 2.0+ compatible.
-* 100% Ruby 2.1+ compatible.
+* 100% Ruby 2.1+ compatible, and therefore also compatible with JRuby 9000 and later.
 * 10g Monosodium glutamate.
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
@@ -111,6 +130,7 @@ class Car
   # Option 1: specify the exact method(s) to add logging to
   include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
 
+  # Provides the `logged` method decorator
   extend DebugLogging::ClassLogger
 
   logged def make; new; end
@@ -120,7 +140,6 @@ class Car
   logged :design, :safety
   # override options for any instance method(s), by passing a hash as the last argument
   logged :dealer_options, { multiple_last_hashes: true }
-
 
   def drive(speed); speed; end
   def stop(**opts); 0; end
@@ -146,3 +165,62 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/pboling/debug_logging.
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
+6. Create new Pull Request
+
+## Versioning
+
+This library aims to adhere to [Semantic Versioning 2.0.0](http://semver.org/).
+Violations of this scheme should be reported as bugs. Specifically,
+if a minor or patch version is released that breaks backward
+compatibility, a new version should be immediately released that
+restores compatibility. Breaking changes to the public API will
+only be introduced with new major versions.
+
+As a result of this policy, you can (and should) specify a
+dependency on this gem using the [Pessimistic Version Constraint](http://docs.rubygems.org/read/chapter/16#page74) with two digits of precision.
+
+For example:
+
+```ruby
+spec.add_dependency 'debug_logging', '~> 1.0'
+```
+
+## License
+
+MIT License
+
+Copyright (c) 2017 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[semver]: http://semver.org/
+[pvc]: http://docs.rubygems.org/read/chapter/16#page74
+[railsbling]: http://www.railsbling.com
+[peterboling]: http://www.peterboling.com
+[documentation]: http://rdoc.info/github/pboling/flag_shih_tzu/frames
+[homepage]: https://github.com/pboling/flag_shih_tzu
+[bit_field]: http://en.wikipedia.org/wiki/Bit_field
+[bitwise_operation]: http://en.wikipedia.org/wiki/Bitwise_operation
