@@ -39,11 +39,12 @@ module DebugLogging
             last_hash_args, other_args = args.partition do |arg|
                                             arg.is_a?(Hash)
                                           end
-            other_args_string = other_args.map(&:inspect).join(", ").tap {|x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length}[0..(config_proxy.debug_args_max_length)]
+            other_args_string = other_args.map(&:inspect).join(", ")[0..(config_proxy.debug_args_max_length)]
+              # On the debug_multiple_last_hashes truthy branch we don't print the ellipsis after regular args
+              #   because it will go instead after the last hash (if needed)
+              #   ...join(", ").tap {|x| _add_args_ellipsis = x.length > config_proxy.debug_args_max_length}
             last_hash_args_string = last_hash_args.map do |arg|
-                                      String(config_proxy.
-                                          debug_last_hash_to_s_proc.
-                                          call(arg)).
+                                      config_proxy.debug_last_hash_to_s_proc.call(arg).to_s.
                                           tap {|x|
                                                 add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
                                               }[0..(config_proxy.debug_last_hash_max_length)].

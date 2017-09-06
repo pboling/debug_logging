@@ -21,14 +21,18 @@ RSpec.shared_context "with example classes" do
       # Needs to be at the top of the class, adds `logged` class method
       extend DebugLogging::ClassLogger
       # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceLogger.new(i_methods: [:i, :i_with_ssplat, :i_with_dsplat])
+      include DebugLogging::InstanceLogger.new(i_methods: [:i, :i_with_ssplat] )
+      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: { colorized_chain_for_method: ->(colorized_string) { colorized_string.red } } )
       logged def self.k; 10; end
       def self.k_with_ssplat(*args); 20; end
       def self.k_with_dsplat(**args); 30; end
       logged :k_with_ssplat, :k_with_dsplat
-      def self.k_with_ssplat_o(*args); 21; end
-      def self.k_with_dsplat_o(**args); 31; end
-      logged :k_with_ssplat_o, :k_with_dsplat_o, { last_hash_to_s_proc: ->(_) { 'LOL' } }
+      def self.k_with_ssplat_i(*args); 21; end
+      def self.k_with_dsplat_i(**args); 31; end
+      logged :k_with_ssplat_i, :k_with_dsplat_i, { last_hash_to_s_proc: ->(_) { 'LOLiii' } }
+      def self.k_with_ssplat_e(*args); 21; end
+      def self.k_with_dsplat_e(**args); 31; end
+      logged [:k_with_ssplat_e, :k_with_dsplat_e], { last_hash_to_s_proc: ->(_) { 'LOLeee' }, colorized_chain_for_class: ->(colorized_string) { colorized_string.red } }
       def self.k_without_log; 0; end
       def i; 40; end
       def i_with_ssplat(*args); 50; end
