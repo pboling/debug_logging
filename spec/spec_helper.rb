@@ -6,6 +6,7 @@ Coveralls.wear!
 
 # This gem!
 require "debug_logging"
+require "support/shared_context"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
