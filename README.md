@@ -1,6 +1,6 @@
 # DebugLogging
 
-| Project                 |  FlagShihTzu      |
+| Project                 |  DebugLogging     |
 |------------------------ | ----------------- |
 | gem name                |  debug_logging    |
 | license                 |  MIT              |
@@ -220,7 +220,5 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [pvc]: http://docs.rubygems.org/read/chapter/16#page74
 [railsbling]: http://www.railsbling.com
 [peterboling]: http://www.peterboling.com
-[documentation]: http://rdoc.info/github/pboling/flag_shih_tzu/frames
-[homepage]: https://github.com/pboling/flag_shih_tzu
-[bit_field]: http://en.wikipedia.org/wiki/Bit_field
-[bitwise_operation]: http://en.wikipedia.org/wiki/Bitwise_operation
+[documentation]: http://rdoc.info/github/pboling/debug_logging/frames
+[homepage]: https://github.com/pboling/debug_logging
