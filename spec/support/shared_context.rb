@@ -26,6 +26,9 @@ RSpec.shared_context "with example classes" do
       def self.k_with_ssplat(*args); 20; end
       def self.k_with_dsplat(**args); 30; end
       logged :k_with_ssplat, :k_with_dsplat
+      def self.k_with_ssplat_o(*args); 21; end
+      def self.k_with_dsplat_o(**args); 31; end
+      logged :k_with_ssplat_o, :k_with_dsplat_o, { last_hash_to_s_proc: ->(_) { 'LOL' } }
       def self.k_without_log; 0; end
       def i; 40; end
       def i_with_ssplat(*args); 50; end

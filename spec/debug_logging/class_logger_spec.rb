@@ -3,6 +3,13 @@ require "spec_helper"
 RSpec.describe DebugLogging::ClassLogger do
   include_context "with example classes"
 
+  context "logged macro" do
+    it "works with an array of methods and a configuration override hash" do
+      expect(complete_logged_klass).to receive(:debug_log).with(/.k_with_dsplat_o\(LOL\)/, anything()).once
+      complete_logged_klass.k_with_dsplat_o(a: 'a')
+    end
+  end
+
   context "a complete logged class" do
     before do
       skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
