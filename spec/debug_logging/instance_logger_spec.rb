@@ -74,7 +74,7 @@ RSpec.describe DebugLogging::InstanceLogger do
     end
     context "class method with single splat args" do
       it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/, anything()).once
         singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
       end
       it "has correct return value" do
@@ -83,7 +83,7 @@ RSpec.describe DebugLogging::InstanceLogger do
     end
     context "class method with double splat args" do
       it "logs" do
-        expect(singleton_logged_klass).to receive(:debug_log).with(/.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/, anything()).once
+        expect(singleton_logged_klass).to receive(:debug_log).with(/\.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/, anything()).once
         singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
       end
       it "has correct return value" do
