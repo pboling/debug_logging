@@ -1,3 +1,8 @@
+
+You are viewing the README for the unreleased version 2 of Dynamoid.
+  
+For version 1.3.x use the [1-3-stable branch](https://github.com/Dynamoid/Dynamoid/blob/1-3-stable/README.md)
+
 # DebugLogging
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
@@ -20,7 +25,6 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 | version                 |  [![Gem Version](https://badge.fury.io/rb/debug_logging.png)](http://badge.fury.io/rb/debug_logging) |
 | dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/debug_logging.png)](https://gemnasium.com/pboling/debug_logging) |
 | code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/debug_logging.png)](https://codeclimate.com/github/pboling/debug_logging) |
-| inline documenation     |  [![Inline docs](http://inch-ci.org/github/pboling/debug_logging.png)](http://inch-ci.org/github/pboling/debug_logging) |
 | continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/debug_logging.png?branch=master)](https://travis-ci.org/pboling/debug_logging) |
 | test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/debug_logging/badge.png)](https://coveralls.io/r/pboling/debug_logging) |
 | homepage                |  [https://github.com/pboling/debug_logging][homepage] |
