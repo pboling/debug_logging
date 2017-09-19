@@ -1,8 +1,3 @@
-
-You are viewing the README for the unreleased version 2 of Dynamoid.
-  
-For version 1.3.x use the [1-3-stable branch](https://github.com/Dynamoid/Dynamoid/blob/1-3-stable/README.md)
-
 # DebugLogging
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
