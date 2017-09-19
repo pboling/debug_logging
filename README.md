@@ -25,7 +25,7 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 | homepage                |  [https://github.com/pboling/debug_logging][homepage] |
 | documentation           |  [http://rdoc.info/github/pboling/debug_logging/frames][documentation] |
 | live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
-| Spread ~♡ⓛⓞⓥⓔ♡~      |  [on AngelList](https://angel.co/peter-boling), [on Coderwall](http://coderwall.com/pboling) |
+| Spread ~♡ⓛⓞⓥⓔ♡~      |  [on AngelList][angellist], [on Coderwall][coderwall] |
 
 ## Next Level Magic
 
@@ -230,5 +230,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [pvc]: http://docs.rubygems.org/read/chapter/16#page74
 [railsbling]: http://www.railsbling.com
 [peterboling]: http://www.peterboling.com
+[coderwall]: http://coderwall.com/pboling
+[angellist]: https://angel.co/peter-boling
 [documentation]: http://rdoc.info/github/pboling/debug_logging/frames
 [homepage]: https://github.com/pboling/debug_logging
