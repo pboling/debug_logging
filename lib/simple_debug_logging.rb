@@ -1,7 +1,7 @@
 # Simpler version of what the sibling DebugLogging library does.  Included as a bauble.
 #
 ############# THIS IS A BAUBLE
-############# FOR EXAMINGING SEVERAL OF THE WONDERS OF RUBY
+############# FOR EXAMINING SEVERAL OF THE WONDERS OF RUBY
 ############# TO ACCOMPLISH SOMETHING PRACTICAL
 ############# For a more robust implementation use the gem debug_logging itself, 
 #############   which makes use of these same principles.
