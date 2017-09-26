@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Drop-in debug logging useful when a call stack gets unruly}
   spec.description   = %q{
-Unobtrusive debug logging for Ruby without the litter
+Unobtrusive debug logging for Ruby.  NO LITTERING.
 Automatically log selected methods and their arguments as they are called at runtime!
 }
   spec.license       = "MIT"
