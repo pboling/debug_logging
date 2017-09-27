@@ -17,11 +17,11 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 | license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
 | expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
 | download rank               |  [![Total Downloads](https://img.shields.io/gem/rt/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
-| version                 |  [![Gem Version](https://badge.fury.io/rb/debug_logging.png)](http://badge.fury.io/rb/debug_logging) |
-| dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/debug_logging.png)](https://gemnasium.com/pboling/debug_logging) |
-| code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/debug_logging.png)](https://codeclimate.com/github/pboling/debug_logging) |
-| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/debug_logging.png?branch=master)](https://travis-ci.org/pboling/debug_logging) |
-| test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/debug_logging/badge.png)](https://coveralls.io/r/pboling/debug_logging) |
+| version                 |  [![Gem Version](https://badge.fury.io/rb/debug_logging.svg)](http://badge.fury.io/rb/debug_logging) |
+| dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/debug_logging.svg)](https://gemnasium.com/pboling/debug_logging) |
+| code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/debug_logging.svg)](https://codeclimate.com/github/pboling/debug_logging) |
+| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/debug_logging.svg?branch=master)](https://travis-ci.org/pboling/debug_logging) |
+| test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/debug_logging/badge.svg)](https://coveralls.io/r/pboling/debug_logging) |
 | homepage                |  [https://github.com/pboling/debug_logging][homepage] |
 | documentation           |  [http://rdoc.info/github/pboling/debug_logging/frames][documentation] |
 | live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
