@@ -13,12 +13,19 @@ module DebugLogging
         original_method = method(method_to_log)
         (class << self; self; end).class_eval do
           define_method(method_to_log) do |*args, &block|
-            config_proxy = if opts
-                             Configuration.new(**(debug_config.to_hash.merge(opts)))
+            config_proxy = if (proxy = instance_variable_get("@debug_config_proxy_for_k_#{method_to_log}".to_sym))
+                             proxy
                            else
-                             self
+                             proxy = if opts
+                                       Configuration.new(**(debug_config.to_hash.merge(opts)))
+                                     else
+                                       self
+                                     end
+                             instance_variable_set("@debug_config_proxy_for_k_#{method_to_log}".to_sym, proxy)
+                             proxy
                            end
             method_return_value = nil
+            # TODO: Put all the logic into a logger block, so it will never be computed at runtime if the log level is too high
             log_prefix = debug_invocation_to_s(klass: self.to_s, separator: ".", method_to_log: method_to_log, config_proxy: config_proxy)
             signature = debug_signature_to_s(args: args, config_proxy: config_proxy)
             invocation_id = debug_invocation_id_to_s(args: args, config_proxy: config_proxy)

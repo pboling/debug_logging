@@ -100,4 +100,35 @@ RSpec.describe DebugLogging::InstanceLogger do
       end
     end
   end
+  
+  describe "with config" do
+    context "logger's log_level" do
+      let(:logger) do
+        l = Logger.new(STDOUT)
+        l.level = Logger::INFO
+        l
+      end
+      it "is maintained" do
+        simple_klass.send(:include, DebugLogging::InstanceLogger.new(i_methods: %i( initialize ), config: { logger: logger, log_level: :debug }))
+        expect(simple_klass.debug_log_level).to eq(:debug)
+        instance = simple_klass.new
+        expect(instance.instance_variable_get(:@debug_config_proxy_for_initialize)).to be_a(DebugLogging::Configuration)
+        expect(logger.level).to eq(Logger::INFO)
+        expect(simple_klass.debug_logger.level).to eq(Logger::DEBUG)
+        expect(instance.instance_variable_get(:@debug_config_proxy_for_initialize).logger.level).to eq(Logger::INFO)
+      end
+      it "is used" do
+        expect(logger).to receive(:debug).once
+        expect(logger.level).to eq(Logger::INFO)
+        # The debug log will be skipped, because the logger's level is info
+        simple_klass.send(:include, DebugLogging::InstanceLogger.new(i_methods: %i( initialize ), config: { logger: logger, log_level: :debug }))
+        expect(simple_klass.debug_log_level).to eq(:debug)
+        instance = simple_klass.new
+        expect(instance.instance_variable_get(:@debug_config_proxy_for_initialize)).to be_a(DebugLogging::Configuration)
+        expect(simple_klass.debug_logger.level).to eq(Logger::DEBUG)
+        expect(instance.instance_variable_get(:@debug_config_proxy_for_initialize).logger.level).to eq(Logger::INFO)
+        expect(instance.instance_variable_get(:@debug_config_proxy_for_initialize).log_level).to eq(:debug)
+      end
+    end
+  end
 end
