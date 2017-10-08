@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "rspec/pending_for"
+require "active_support/testing/stream"
 require "byebug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby"
 require "coveralls"
 Coveralls.wear!

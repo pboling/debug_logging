@@ -1,6 +1,7 @@
 module DebugLogging
   class Configuration
     DEFAULT_ELLIPSIS = " ✂️ …".freeze
+    # LEVELS = { 0 => :debug, 1 => :info, 2 => :warn, 3 => :error, 4 => :fatal, 5 => :unknown }
     attr_accessor :logger
     attr_accessor :log_level
     attr_accessor :multiple_last_hashes
@@ -13,6 +14,7 @@ module DebugLogging
     attr_accessor :colorized_chain_for_class
     attr_accessor :add_invocation_id
     attr_accessor :ellipsis
+    attr_reader :methods_to_log
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
     #
@@ -56,6 +58,23 @@ module DebugLogging
       @colorized_chain_for_class = options.key?(:colorized_chain_for_class) ? options[:colorized_chain_for_class] : false
       @add_invocation_id = options.key?(:add_invocation_id) ? options[:add_invocation_id] : true
       @ellipsis = options.key?(:ellipsis) ? options[:ellipsis] : DEFAULT_ELLIPSIS
+      @methods_to_log = []
+    end
+    def log(message = nil, &block)
+      return unless logger
+      if block_given?
+        logger.send(log_level, &block)
+      else
+        logger.send(log_level, message)
+      end
+    end
+    def loggable?
+      return @loggable if defined?(@loggable)
+      @loggable = logger.send("#{log_level}?")
+    end
+    def benchmarkable_for?(benchmarks)
+      return @benchmarkable if defined?(@benchmarkable)
+      @benchmarkable = loggable? && self.send(benchmarks)
     end
     def instance_benchmarks=(instance_benchmarks)
       require "benchmark" if instance_benchmarks
@@ -80,6 +99,9 @@ module DebugLogging
           add_invocation_id: add_invocation_id,
           ellipsis: ellipsis
       }
+    end
+    def register(method_lo_log)
+      @methods_to_log << method_lo_log
     end
   end
 end

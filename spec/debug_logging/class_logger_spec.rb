@@ -1,15 +1,39 @@
 require "spec_helper"
 
 RSpec.describe DebugLogging::ClassLogger do
+  include ActiveSupport::Testing::Stream
   include_context "with example classes"
 
   context "logged macro" do
+    it "works witout configuration override hash" do
+      expect(complete_logged_klass.debug_config).to receive(:log).and_call_original
+      output = capture('stdout') do
+        complete_logged_klass.k_with_dsplat(a: 'a')
+      end
+      expect(output).to match(/.*\.k_with_dsplat/)
+      # Because without an options hash the class config is the same config object as the per method config
+      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat)).to receive(:log)
+      complete_logged_klass.k_with_dsplat(a: 'a')
+    end
+
     it "works with an implicit array of methods and a configuration override hash" do
-      expect(complete_logged_klass).to receive(:debug_log).with(/\.k_with_dsplat_i\(LOLiii\)/, anything()).once
+      # because the options to logged in the class definition cause the creation of a method specific config instance
+      expect(complete_logged_klass.debug_config).to_not receive(:log)
+      output = capture('stdout') do
+        complete_logged_klass.k_with_dsplat_i(a: 'a')
+      end
+      expect(output).to match(/\.k_with_dsplat_i\(LOLiii\)/)
+      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_i)).to receive(:log).and_call_original
       complete_logged_klass.k_with_dsplat_i(a: 'a')
     end
     it "works with an explicit array of methods and a configuration override hash" do
-      expect(complete_logged_klass).to receive(:debug_log).with(/.*0;31;49m#<Class.*0m\.k_with_dsplat_e\(LOLeee\)/, anything()).once
+      # because the options to logged in the class definition cause the creation of a method specific config instance
+      expect(complete_logged_klass.debug_config).to_not receive(:log)
+      output = capture('stdout') do
+        complete_logged_klass.k_with_dsplat_e(a: 'a')
+      end
+      expect(output).to match(/.*0;31;49m#<Class.*0m\.k_with_dsplat_e\(LOLeee\)/)
+      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_e)).to receive(:log).and_call_original
       complete_logged_klass.k_with_dsplat_e(a: 'a')
     end
   end
@@ -17,21 +41,23 @@ RSpec.describe DebugLogging::ClassLogger do
   context "a complete logged class" do
     before do
       skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
-      allow(complete_logged_klass).to receive(:debug_log) { logger }
+      allow(complete_logged_klass.debug_config).to receive(:debug_log) { logger }
     end
     it "logs" do
-      expect(complete_logged_klass).to receive(:debug_log).with(/#i\(\)/, anything()).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/#i_with_ssplat\(\)/, anything()).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/#.*0;31;49mi_with_dsplat.*0m\(\)/, anything()).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/\.k\(\)/, anything()).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/\.k_with_ssplat\(\)/, anything()).once
-      expect(complete_logged_klass).to receive(:debug_log).with(/\.k_with_dsplat\(\)/, anything()).once
-      complete_logged_klass.new.i
-      complete_logged_klass.new.i_with_ssplat
-      complete_logged_klass.new.i_with_dsplat
-      complete_logged_klass.k
-      complete_logged_klass.k_with_ssplat
-      complete_logged_klass.k_with_dsplat
+      output = capture('stdout') do
+        complete_logged_klass.new.i
+        complete_logged_klass.new.i_with_ssplat
+        complete_logged_klass.new.i_with_dsplat
+        complete_logged_klass.k
+        complete_logged_klass.k_with_ssplat
+        complete_logged_klass.k_with_dsplat
+      end
+      expect(output).to match(/#i\(\)/)
+      expect(output).to match(/#i_with_ssplat\(\)/)
+      expect(output).to match(/#.*0;31;49mi_with_dsplat.*0m\(\)/)
+      expect(output).to match(/\.k\(\)/)
+      expect(output).to match(/\.k_with_ssplat\(\)/)
+      expect(output).to match(/\.k_with_dsplat\(\)/)
     end
     it "has correct return value" do
       expect(complete_logged_klass.new.i).to eq(40)
