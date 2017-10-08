@@ -7,9 +7,11 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *colorization by class/method*
 * *robust argument printer with customizable ellipsis*
 * *unique invocation identifiers*
-* *single line config*
-* *separate logger*
-* a free pony
+* *single line config, per class/instance/method config*
+* *separate logger, if needed*
+* *log method calls, also when exit scope*
+* *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format.*
+* **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 | Project                 |  DebugLogging     |
 |------------------------ | ----------------- |
@@ -65,7 +67,9 @@ Or install it yourself as:
 
 ## Usage
 
-Crack open the specs for usage examples.
+NOTE: Starting with version `1.0.12` this gem utilizes the `logger.debug { "block format" }` to avoid heavy debug processing when the log level threshold is set higher than the level of the statements produced as a result of the configuration of this gem.
+
+Crack open the specs for more complex usage examples than the ones below.
 
 ### Without Rails
 
@@ -90,6 +94,7 @@ DebugLogging.configuration.colorized_chain_for_method = false # e.g. ->(colorize
 DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
 DebugLogging.configuration.ellipsis = " ✂️ …".freeze
+DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 ```
 
 If you prefer to use the block style:
@@ -108,14 +113,18 @@ DebugLogging.configure do |config|
   config.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
   config.ellipsis = " ✂️ …".freeze
+  config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 end
 ```
 
 **All** of the above **config** is **inheritable** and **configurable** at the **per-class** level as well!
 Just prepend `debug_` to any config value you want to override in a class.
 
+**All** of the above **config** is **inheritable** and **configurable** at the **per-instance** level as well!
+Just prepend `debug_` to any config value you want to override on an instance of a class.
+
 **All** of the above **config** is **inheritable** and **configurable** at the **per-method** level as well!
-Just send along a hash of the config options when you call `logged` or `include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])`.  See the example class below, and the specs.
+Just send along a hash of the config options when you call `logged` or `include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop], config: { ellipsis = " ✂️ 2 much" })`.  See the example class below, and the specs.
 
 **NOTE ON** `Rails.logger` - It will probably be nil in your initializer, so setting the `config.logger` to `Rails.logger` there will result in setting it to `nil`, which means the default will end up being used: `Logger.new(STDOUT)`. Instead just config the logger in your application.rb, or anytime later, but *before your classes get loaded* and start inheriting the config:
 
