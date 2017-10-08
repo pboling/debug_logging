@@ -33,6 +33,11 @@ module DebugLogging
               end
             else
               method_return_value = super(*args, &block)
+              if config_proxy.exit_scope_markable? && invocation_id && !invocation_id.empty?
+                config_proxy.log do
+                  "#{log_prefix} completed#{invocation_id}"
+                end
+              end
             end
             method_return_value
           end

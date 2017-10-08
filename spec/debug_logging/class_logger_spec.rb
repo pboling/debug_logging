@@ -5,7 +5,7 @@ RSpec.describe DebugLogging::ClassLogger do
 
   context "logged macro" do
     it "works witout configuration override hash" do
-      expect(complete_logged_klass.debug_config).to receive(:log).and_call_original
+      expect(complete_logged_klass.debug_config).to receive(:log).once.and_call_original
       output = capture('stdout') do
         complete_logged_klass.k_with_dsplat(a: 'a')
       end
@@ -24,7 +24,7 @@ RSpec.describe DebugLogging::ClassLogger do
       end
       expect(output).to match(/\.k_with_dsplat_i\(LOLiii\)/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
-      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_i)).to receive(:log).and_call_original
+      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_i)).to receive(:log).once.and_call_original
       complete_logged_klass.k_with_dsplat_i(a: 'a')
     end
     it "works with an explicit array of methods and a configuration override hash" do
@@ -35,7 +35,7 @@ RSpec.describe DebugLogging::ClassLogger do
       end
       expect(output).to match(/.*0;31;49m#<Class.*0m\.k_with_dsplat_e\(LOLeee\)/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
-      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_e)).to receive(:log).and_call_original
+      expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_e)).to receive(:log).once.and_call_original
       complete_logged_klass.k_with_dsplat_e(a: 'a')
     end
   end

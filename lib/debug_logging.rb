@@ -167,6 +167,12 @@ module DebugLogging
   def debug_add_invocation_id=(add_invocation_id)
     @debug_logging_configuration.add_invocation_id = add_invocation_id
   end
+  def debug_mark_scope_exit
+    @debug_logging_configuration.mark_scope_exit
+  end
+  def debug_mark_scope_exit=(mark_scope_exit)
+    @debug_logging_configuration.mark_scope_exit = mark_scope_exit
+  end
   def debug_ellipsis
     @debug_logging_configuration.ellipsis
   end

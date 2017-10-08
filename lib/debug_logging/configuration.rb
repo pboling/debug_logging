@@ -14,6 +14,7 @@ module DebugLogging
     attr_accessor :colorized_chain_for_class
     attr_accessor :add_invocation_id
     attr_accessor :ellipsis
+    attr_accessor :mark_scope_exit
     attr_reader :methods_to_log
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
@@ -45,6 +46,7 @@ module DebugLogging
     alias :debug_colorized_chain_for_class :colorized_chain_for_class
     alias :debug_add_invocation_id :add_invocation_id
     alias :debug_ellipsis :ellipsis
+    alias :debug_mark_scope_exit :mark_scope_exit
     def initialize(**options)
       @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
       @log_level = options.key?(:log_level) ? options[:log_level] : :debug
@@ -58,6 +60,7 @@ module DebugLogging
       @colorized_chain_for_class = options.key?(:colorized_chain_for_class) ? options[:colorized_chain_for_class] : false
       @add_invocation_id = options.key?(:add_invocation_id) ? options[:add_invocation_id] : true
       @ellipsis = options.key?(:ellipsis) ? options[:ellipsis] : DEFAULT_ELLIPSIS
+      @mark_scope_exit = options.key?(:mark_scope_exit) ? options[:mark_scope_exit] : false
       @methods_to_log = []
     end
     def log(message = nil, &block)
@@ -75,6 +78,10 @@ module DebugLogging
     def benchmarkable_for?(benchmarks)
       return @benchmarkable if defined?(@benchmarkable)
       @benchmarkable = loggable? && self.send(benchmarks)
+    end
+    def exit_scope_markable?
+      return @exit_scope_markable if defined?(@exit_scope_markable)
+      @exit_scope_markable = loggable? && mark_scope_exit
     end
     def instance_benchmarks=(instance_benchmarks)
       require "benchmark" if instance_benchmarks
