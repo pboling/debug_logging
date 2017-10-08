@@ -47,6 +47,15 @@ module DebugLogging
     alias :debug_add_invocation_id :add_invocation_id
     alias :debug_ellipsis :ellipsis
     alias :debug_mark_scope_exit :mark_scope_exit
+    
+    class << self
+      def config_pointer(type, method_to_log)
+        # Methods names that do not match the following regex can't be part of an ivar name
+        #   /[a-zA-Z_][a-zA-Z0-9_]*/
+        # Thus we have to use a different form of the method name that is compatible with ivar name conventions
+        "@debug_logging_config_#{type}_#{Digest::MD5.hexdigest(method_to_log.to_s)}".to_sym
+      end
+    end
     def initialize(**options)
       @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
       @log_level = options.key?(:log_level) ? options[:log_level] : :debug

@@ -175,6 +175,192 @@ RSpec.describe DebugLogging::Configuration do
           def i_without_log; 0; end
         end
       }
+      let(:double_trouble) {
+        Class.new do
+          # adds the helper methods to the class, all are prefixed with debug_*
+          extend DebugLogging
+          extend DebugLogging::ClassLogger
+          self.debug_instance_benchmarks = false
+          self.debug_add_invocation_id = false
+          LOG_C_W_CONFIG = [:double_trouble, :double_trouble!, :double_trouble?, :_double_trouble]
+          LOG_C_WO_CONFIG = [:uses_class_config, :uses_class_config!, :uses_class_config?, :_uses_class_config]
+          LOG_I_W_CONFIG = [:double_trouble, :double_trouble!, :double_trouble?, :_double_trouble]
+          LOG_I_WO_CONFIG = [:uses_class_config, :uses_class_config!, :uses_class_config?, :_uses_class_config]
+          class << self
+            def uses_class_config; 'config is c_pointer'; end
+            def uses_class_config!; 'config is c_pointer'; end
+            def uses_class_config?; 'config is c_pointer'; end
+            def _uses_class_config; 'config is c_pointer'; end
+            def double_trouble; 'config is k_pointer'; end
+            def double_trouble!; 'config is k_pointer'; end
+            def double_trouble?; 'config is k_pointer'; end
+            def _double_trouble; 'config is k_pointer'; end
+          end
+          logged LOG_C_W_CONFIG, { add_invocation_id: false, instance_benchmarks: true } # log the class method ^
+          logged LOG_C_WO_CONFIG
+          def uses_class_config; 'config is c_pointer'; end
+          def uses_class_config!; 'config is c_pointer'; end
+          def uses_class_config?; 'config is c_pointer'; end
+          def _uses_class_config; 'config is c_pointer'; end
+          def double_trouble; 'config is i_pointer'; end
+          def double_trouble!; 'config is i_pointer'; end
+          def double_trouble?; 'config is i_pointer'; end
+          def _double_trouble; 'config is i_pointer'; end
+          include DebugLogging::InstanceLogger.new(i_methods: LOG_I_WO_CONFIG)
+          include DebugLogging::InstanceLogger.new(i_methods: LOG_I_W_CONFIG, config: { add_invocation_id: true, instance_benchmarks: true })
+        end
+      }
+      context "instance and class logging" do
+        let(:instance) { double_trouble.new }
+        it "lazily initializes method level configs" do
+          c_pointer = DebugLogging::Configuration.config_pointer('k', :uses_class_config)
+          c_pointer_bang = DebugLogging::Configuration.config_pointer('k', :uses_class_config!)
+          c_pointer_q = DebugLogging::Configuration.config_pointer('k', :uses_class_config?)
+          c_pointer_u = DebugLogging::Configuration.config_pointer('k', :_uses_class_config)
+          k_pointer = DebugLogging::Configuration.config_pointer('k', :double_trouble)
+          k_pointer_bang = DebugLogging::Configuration.config_pointer('k', :double_trouble!)
+          k_pointer_q = DebugLogging::Configuration.config_pointer('k', :double_trouble?)
+          k_pointer_u = DebugLogging::Configuration.config_pointer('k', :_double_trouble)
+          ic_pointer = DebugLogging::Configuration.config_pointer('i', :uses_class_config)
+          ic_pointer_bang = DebugLogging::Configuration.config_pointer('i', :uses_class_config!)
+          ic_pointer_q = DebugLogging::Configuration.config_pointer('i', :uses_class_config?)
+          ic_pointer_u = DebugLogging::Configuration.config_pointer('i', :_uses_class_config)
+          i_pointer = DebugLogging::Configuration.config_pointer('i', :double_trouble)
+          i_pointer_bang = DebugLogging::Configuration.config_pointer('i', :double_trouble!)
+          i_pointer_q = DebugLogging::Configuration.config_pointer('i', :double_trouble?)
+          i_pointer_u = DebugLogging::Configuration.config_pointer('i', :_double_trouble)
+          
+          expect(double_trouble.instance_variable_get(c_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(c_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(c_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(c_pointer_u)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(k_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(k_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(k_pointer_u)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(ic_pointer)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(ic_pointer_bang)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(ic_pointer_q)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(ic_pointer_u)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(i_pointer)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(i_pointer_bang)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(i_pointer_q)).to be_nil # not initialized yet
+          expect(instance.instance_variable_get(i_pointer_u)).to be_nil # not initialized yet
+
+          double_trouble.uses_class_config
+          double_trouble.uses_class_config!
+          double_trouble.uses_class_config?
+          double_trouble._uses_class_config
+          double_trouble.double_trouble
+          double_trouble.double_trouble!
+          double_trouble.double_trouble?
+          double_trouble._double_trouble
+          instance.uses_class_config
+          instance.uses_class_config!
+          instance.uses_class_config?
+          instance._uses_class_config
+          instance.double_trouble
+          instance.double_trouble!
+          instance.double_trouble?
+          instance._double_trouble
+
+          expect(double_trouble.instance_variable_get(c_pointer)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(c_pointer_bang)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(c_pointer_q)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(c_pointer_u)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(k_pointer)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(k_pointer_q)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(double_trouble.instance_variable_get(k_pointer_u)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(ic_pointer)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(ic_pointer_bang)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(ic_pointer_q)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(ic_pointer_u)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(i_pointer)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(i_pointer_bang)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(i_pointer_q)).to be_a(DebugLogging::Configuration) # now initialized
+          expect(instance.instance_variable_get(i_pointer_u)).to be_a(DebugLogging::Configuration) # now initialized
+        end
+        it "keeps separate configs" do
+          c_pointer = DebugLogging::Configuration.config_pointer('k', :uses_class_config)
+          c_pointer_bang = DebugLogging::Configuration.config_pointer('k', :uses_class_config!)
+          c_pointer_q = DebugLogging::Configuration.config_pointer('k', :uses_class_config?)
+          c_pointer_u = DebugLogging::Configuration.config_pointer('k', :_uses_class_config)
+          c_pointers = [ c_pointer, c_pointer_bang, c_pointer_q, c_pointer_u ]
+          k_pointer = DebugLogging::Configuration.config_pointer('k', :double_trouble)
+          k_pointer_bang = DebugLogging::Configuration.config_pointer('k', :double_trouble!)
+          k_pointer_q = DebugLogging::Configuration.config_pointer('k', :double_trouble?)
+          k_pointer_u = DebugLogging::Configuration.config_pointer('k', :_double_trouble)
+          k_pointers = [ k_pointer, k_pointer_bang, k_pointer_q, k_pointer_u ]
+          ic_pointer = DebugLogging::Configuration.config_pointer('i', :uses_class_config)
+          ic_pointer_bang = DebugLogging::Configuration.config_pointer('i', :uses_class_config!)
+          ic_pointer_q = DebugLogging::Configuration.config_pointer('i', :uses_class_config?)
+          ic_pointer_u = DebugLogging::Configuration.config_pointer('i', :_uses_class_config)
+          ic_pointers = [ ic_pointer, ic_pointer_bang, ic_pointer_q, ic_pointer_u ]
+          i_pointer = DebugLogging::Configuration.config_pointer('i', :double_trouble)
+          i_pointer_bang = DebugLogging::Configuration.config_pointer('i', :double_trouble!)
+          i_pointer_q = DebugLogging::Configuration.config_pointer('i', :double_trouble?)
+          i_pointer_u = DebugLogging::Configuration.config_pointer('i', :_double_trouble)
+          i_pointers = [ i_pointer, i_pointer_bang, i_pointer_q, i_pointer_u ]
+
+          double_trouble.uses_class_config
+          double_trouble.uses_class_config!
+          double_trouble.uses_class_config?
+          double_trouble._uses_class_config
+          double_trouble.double_trouble
+          double_trouble.double_trouble!
+          double_trouble.double_trouble?
+          double_trouble._double_trouble
+          instance.uses_class_config
+          instance.uses_class_config!
+          instance.uses_class_config?
+          instance._uses_class_config
+          instance.double_trouble
+          instance.double_trouble!
+          instance.double_trouble?
+          instance._double_trouble
+
+          # add_invocation_id gets overridden in double_trouble's configs
+          c_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
+          end
+          k_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
+          end
+          ic_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(false)
+          end
+          i_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(true)
+          end
+          # debug_instance_benchmarks gets overridden in double_trouble's configs
+          c_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(false)
+          end
+          k_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(true)
+          end
+          ic_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(false)
+          end
+          i_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(true)
+          end
+          # mark_scope_exit defaults to false, and is never overridden in double_trouble's configs
+          c_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+          end
+          k_pointers.each do |pointer|
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+          end
+          ic_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+          end
+          i_pointers.each do |pointer|
+            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+          end
+        end
+      end
       context "instance logging" do
         it "keeps separate class-level configs" do
           expect(instance_logged_klass_explicit.debug_instance_benchmarks).to eq(true)

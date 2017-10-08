@@ -15,7 +15,7 @@ module DebugLogging
         original_method = method(method_to_log)
         (class << self; self; end).class_eval do
           define_method(method_to_log) do |*args, &block|
-            config_proxy = if (proxy = instance_variable_get("@debug_config_proxy_for_k_#{method_to_log}".to_sym))
+            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('k', method_to_log)))
                              proxy
                            else
                              proxy = if opts
@@ -24,7 +24,7 @@ module DebugLogging
                                        debug_config
                                      end
                              proxy.register(method_to_log)
-                             instance_variable_set("@debug_config_proxy_for_k_#{method_to_log}".to_sym, proxy)
+                             instance_variable_set(DebugLogging::Configuration.config_pointer('k', method_to_log), proxy)
                              proxy
                            end
             method_return_value = nil

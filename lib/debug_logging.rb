@@ -1,5 +1,7 @@
 require "logger"
 require "colorized_string"
+require "digest"
+
 require "debug_logging/version"
 require "debug_logging/configuration"
 require "debug_logging/argument_printer"
