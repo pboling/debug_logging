@@ -63,7 +63,7 @@ module DebugLogging
   # Not used by this gem internally, but provides an external interface for 
   #   classes to also use this logging tool directly,
   #   with configured options like benchmarking, colors, or leg level.
-  def debug_log(config_proxy = nil, message = nil, &block)
+  def debug_log(message = nil, config_proxy = nil, &block)
     # If a, instance-method-level, or class-method-level custom config is not
     #   passed in, then fall back to the class' default config, which is a 
     #   potentially customized copy of the default config for the whole app.

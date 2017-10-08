@@ -1,7 +1,6 @@
 require "spec_helper"
 
 RSpec.describe DebugLogging::ClassLogger do
-  include ActiveSupport::Testing::Stream
   include_context "with example classes"
 
   context "logged macro" do
@@ -11,7 +10,8 @@ RSpec.describe DebugLogging::ClassLogger do
         complete_logged_klass.k_with_dsplat(a: 'a')
       end
       expect(output).to match(/.*\.k_with_dsplat/)
-      # Because without an options hash the class config is the same config object as the per method config
+      # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
+      # Without an options hash the class config is the same config object as the per method config
       expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat)).to receive(:log)
       complete_logged_klass.k_with_dsplat(a: 'a')
     end
@@ -23,6 +23,7 @@ RSpec.describe DebugLogging::ClassLogger do
         complete_logged_klass.k_with_dsplat_i(a: 'a')
       end
       expect(output).to match(/\.k_with_dsplat_i\(LOLiii\)/)
+      # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_i)).to receive(:log).and_call_original
       complete_logged_klass.k_with_dsplat_i(a: 'a')
     end
@@ -33,6 +34,7 @@ RSpec.describe DebugLogging::ClassLogger do
         complete_logged_klass.k_with_dsplat_e(a: 'a')
       end
       expect(output).to match(/.*0;31;49m#<Class.*0m\.k_with_dsplat_e\(LOLeee\)/)
+      # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       expect(complete_logged_klass.instance_variable_get(:@debug_config_proxy_for_k_k_with_dsplat_e)).to receive(:log).and_call_original
       complete_logged_klass.k_with_dsplat_e(a: 'a')
     end

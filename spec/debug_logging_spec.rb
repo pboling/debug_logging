@@ -10,15 +10,22 @@ RSpec.describe DebugLogging do
   describe ".debug_log" do
     let(:message) { 'Marty McFly' }
     it "logs when a logger is set" do
-      expect(simple_klass).to receive(:debug_logger).and_return(logger).twice
-      expect(simple_klass).to receive(:debug_log_level).and_return(:debug)
-      expect(logger).to receive(:debug).with(message)
-      simple_klass.debug_log(message)
+      logger = Logger.new(STDOUT)
+      simple_klass.debug_logger = logger
+      expect(simple_klass.debug_config).to receive(:log).with(message).and_call_original
+      expect(logger).to receive(:debug).with(message).and_call_original
+      output = capture('stdout') do
+        simple_klass.debug_log(message)
+      end
+      expect(output).to match(/Marty McFly/)
     end
-    it "logs not when a logger is not set" do
-      expect(simple_klass).to receive(:debug_logger).and_return(nil)
-      expect(simple_klass).to_not receive(:debug_log_level)
-      simple_klass.debug_log(message)
+    it "does not log not when a logger is not set" do
+      simple_klass.debug_logger = nil
+      expect(simple_klass.debug_config).to receive(:log).with(message).and_call_original
+      output = capture('stdout') do
+        simple_klass.debug_log(message)
+      end
+      expect(output).to eq("")
     end
   end
 
