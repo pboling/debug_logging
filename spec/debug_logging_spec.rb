@@ -39,6 +39,9 @@ RSpec.describe DebugLogging do
     it "returns the global configuration with the same logger as the instance config" do
       expect(DebugLogging.configuration.logger).to eq(simple_klass.debug_config.logger)
     end
+    it "methods_to_log are not the same array" do
+      expect(DebugLogging.configuration.methods_to_log.object_id).to_not eq(simple_klass.debug_config.methods_to_log.object_id)
+    end
   end
 
   describe "#configure" do

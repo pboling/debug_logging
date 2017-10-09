@@ -58,7 +58,7 @@ require "debug_logging/class_logger"
 module DebugLogging
   def self.extended(base)
     base.send(:extend, ArgumentPrinter)
-    base.debug_config_reset(debug_logging_configuration.dup)
+    base.debug_config_reset(Configuration.new(**debug_logging_configuration.to_hash))
   end
 
   #### API ####
