@@ -113,7 +113,8 @@ module DebugLogging
           colorized_chain_for_method: colorized_chain_for_method,
           colorized_chain_for_class: colorized_chain_for_class,
           add_invocation_id: add_invocation_id,
-          ellipsis: ellipsis
+          ellipsis: ellipsis,
+          mark_scope_exit: mark_scope_exit
       }
     end
     def register(method_lo_log)
