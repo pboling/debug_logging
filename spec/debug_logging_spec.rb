@@ -27,6 +27,23 @@ RSpec.describe DebugLogging do
       end
       expect(output).to eq("")
     end
+    context 'disabled' do
+      describe ".debug_log" do
+        before { simple_klass.debug_config.enabled = false }
+        let(:message) { 'Marty McFly' }
+        it "does not log" do
+          logger = Logger.new(STDOUT)
+          simple_klass.debug_logger = logger
+          expect(simple_klass.debug_config.enabled).to eq(false)
+          expect(simple_klass.debug_config).to receive(:log).with(message).and_call_original
+          expect(logger).to_not receive(:debug)
+          output = capture('stdout') do
+            simple_klass.debug_log(message)
+          end
+          expect(output).to eq('')
+        end
+      end
+    end
   end
 
   describe ".debug_config" do
