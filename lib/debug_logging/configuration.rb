@@ -2,6 +2,7 @@ module DebugLogging
   class Configuration
     DEFAULT_ELLIPSIS = " ✂️ …".freeze
     # LEVELS = { 0 => :debug, 1 => :info, 2 => :warn, 3 => :error, 4 => :fatal, 5 => :unknown }
+    attr_accessor :enabled
     attr_accessor :logger
     attr_accessor :log_level
     attr_accessor :multiple_last_hashes
@@ -34,6 +35,7 @@ module DebugLogging
     #       }
     #     )
     #
+    alias :debug_enabled :enabled
     alias :debug_logger :logger
     alias :debug_log_level :log_level
     alias :debug_multiple_last_hashes :multiple_last_hashes
@@ -57,6 +59,7 @@ module DebugLogging
       end
     end
     def initialize(**options)
+      @enabled = options.key?(:enabled) ? options[:enabled] : true
       @logger = options.key?(:logger) ? options[:logger] : Logger.new(STDOUT)
       @log_level = options.key?(:log_level) ? options[:log_level] : :debug
       @multiple_last_hashes = options.key?(:multiple_last_hashes) ? options[:multiple_last_hashes] : false
@@ -73,6 +76,7 @@ module DebugLogging
       @methods_to_log = []
     end
     def log(message = nil, &block)
+      return unless enabled
       return unless logger
       if block_given?
         logger.send(log_level, &block)

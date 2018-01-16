@@ -103,6 +103,12 @@ module DebugLogging
   def debug_config_reset(config = Configuration.new)
     @debug_logging_configuration = config
   end
+  def debug_enabled
+    @debug_logging_configuration.enabled
+  end
+  def debug_enabled=(value)
+    @debug_logging_configuration.enabled = value
+  end
   def debug_logger
     @debug_logging_configuration.logger
   end
