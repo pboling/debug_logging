@@ -1,6 +1,7 @@
 module DebugLogging
   class Configuration
     DEFAULT_ELLIPSIS = " ✂️ …".freeze
+    # For reference, log levels as integers mapped to symbols:
     # LEVELS = { 0 => :debug, 1 => :info, 2 => :warn, 3 => :error, 4 => :fatal, 5 => :unknown }
     attr_accessor :enabled
     attr_accessor :logger
