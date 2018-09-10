@@ -2,6 +2,8 @@
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 
+NOTE: Septmeber 9, 2018 I discovered that some of the functionality of this gem is affected by the presence of the coveralls gem.  All specs pass when it is loaded, and about 35% fail when it is not.  I am going to figure out why this is.  The failures mean that some logging features won't work as configured until I decouple this gem from coveralls.
+
 | Project                 |  DebugLogging           |
 |------------------------ | ----------------------- |
 | gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
