@@ -2,7 +2,25 @@
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 
+| Project                 |  DebugLogging           |
+|------------------------ | ----------------------- |
+| gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
+| license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) |
+| download rank           |  [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging) |
+| version                 |  [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
+| dependencies            |  [![Depfu](https://badges.depfu.com/badges/d1a4cf43255916521fef1e3685c61faa/count.svg)](https://depfu.com/github/pboling/debug_logging?project_id=2675) |
+| continuous integration  |  [![Build Status](https://travis-ci.org/pboling/debug_logging.svg?branch=master)](https://travis-ci.org/pboling/debug_logging) |
+| test coverage           |  [![Test Coverage](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/test_coverage)](https://codeclimate.com/github/pboling/debug_logging/test_coverage) |
+| maintainability         |  [![Maintainability](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/maintainability)](https://codeclimate.com/github/pboling/debug_logging/maintainability) |
+| code triage             |  [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging) |
+| homepage                |  [on Github.com][homepage], [on Railsbling.com][blogpage] |
+| documentation           |  [on RDoc.info][documentation] |
+| live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
+| Spread ~♡ⓛⓞⓥⓔ♡~      |  [🌍 🌎 🌏](https://about.me/peter.boling), [🍚](https://www.crowdrise.com/helprefugeeswithhopefortomorrowliberia/fundraiser/peterboling), [➕](https://plus.google.com/+PeterBoling/posts), [👼](https://angel.co/peter-boling), [🐛](https://www.topcoder.com/members/pboling/), [:shipit:](http://coderwall.com/pboling), [![Tweet Peter](https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow)](http://twitter.com/galtzo) |
+
 ### Gives you (all are optional):
+
 * *benchmarking*
 * *colorization by class/method*
 * *robust argument printer with customizable ellipsis*
@@ -13,24 +31,7 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format.*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
-| Project                 |  DebugLogging     |
-|------------------------ | ----------------- |
-| gem name                |  debug_logging    |
-| license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) |
-| expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
-| download rank               |  [![Total Downloads](https://img.shields.io/gem/rt/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
-| version                 |  [![Gem Version](https://badge.fury.io/rb/debug_logging.svg)](http://badge.fury.io/rb/debug_logging) |
-| dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/debug_logging.svg)](https://gemnasium.com/pboling/debug_logging) |
-| code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/debug_logging.svg)](https://codeclimate.com/github/pboling/debug_logging) |
-| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/debug_logging.svg?branch=master)](https://travis-ci.org/pboling/debug_logging) |
-| test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/debug_logging/badge.svg)](https://coveralls.io/r/pboling/debug_logging) |
-| homepage                |  [https://github.com/pboling/debug_logging][homepage] |
-| documentation           |  [http://rdoc.info/github/pboling/debug_logging/frames][documentation] |
-| live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
-| Spread ~♡ⓛⓞⓥⓔ♡~      |  [on AngelList][angellist], [on Coderwall][coderwall] |
-
 ## Next Level Magic
-
 
 Herein you will find:
 
@@ -74,11 +75,11 @@ Crack open the specs for more complex usage examples than the ones below.
 ### Without Rails
 
 It just works. ;)
-Configuration can go anywhere you want.  It will look like the Rails config though; see below.
+Configuration can go anywhere you want.  Configuration is the same regardless; see below.
 
 ### With Rails
 
-Recommend creating `config/initializers/debug_logging.rb` with:
+Recommend creating `config/initializers/debug_logging.rb`, or adding to `config/application.rb` with:
 
 ```ruby
 # Showing the defaults
@@ -210,11 +211,11 @@ For example:
 spec.add_dependency 'debug_logging', '~> 1.0'
 ```
 
-## License
+## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 MIT License
 
-Copyright (c) 2017 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
+Copyright (c) 2017 - 2018 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -243,3 +244,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [angellist]: https://angel.co/peter-boling
 [documentation]: http://rdoc.info/github/pboling/debug_logging/frames
 [homepage]: https://github.com/pboling/debug_logging
+[blogpage]: http://www.railsbling.com/tags/debug_logging/
