@@ -6,7 +6,7 @@ group :test do
   ruby_version = Gem::Version.new(RUBY_VERSION)
   if ruby_version >= Gem::Version.new('2.1')
     gem 'rubocop', '~> 0.62.0'
-    gem 'rubocop-rspec', '~> 1.30.0'
+    gem 'rubocop-rspec', '~> 1.38.0'
   end
   if ruby_version >= Gem::Version.new('2.0')
     gem 'byebug', '~> 10', platform: :mri, require: false
