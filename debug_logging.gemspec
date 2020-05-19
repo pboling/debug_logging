@@ -30,5 +30,5 @@ Automatically log selected methods and their arguments as they are called at run
   spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "rake", "~> 12.2"
   spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "activesupport", "~> 5.1"
+  spec.add_development_dependency "activesupport", "~> 6.0"
 end
