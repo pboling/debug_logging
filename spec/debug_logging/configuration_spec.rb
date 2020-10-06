@@ -208,10 +208,12 @@ RSpec.describe DebugLogging::Configuration do
           extend DebugLogging::ClassLogger
           self.debug_instance_benchmarks = false
           self.debug_add_invocation_id = false
+          # rubocop:disable Lint/ConstantDefinitionInBlock
           LOG_C_W_CONFIG = %i[double_trouble double_trouble! double_trouble? _double_trouble].freeze
           LOG_C_WO_CONFIG = %i[uses_class_config uses_class_config! uses_class_config? _uses_class_config].freeze
           LOG_I_W_CONFIG = %i[double_trouble double_trouble! double_trouble? _double_trouble].freeze
           LOG_I_WO_CONFIG = %i[uses_class_config uses_class_config! uses_class_config? _uses_class_config].freeze
+          # rubocop:enable Lint/ConstantDefinitionInBlock
           class << self
             def uses_class_config
               'config is c_pointer'

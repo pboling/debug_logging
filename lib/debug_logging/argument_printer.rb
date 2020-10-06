@@ -34,7 +34,7 @@ module DebugLogging
       "#{klass_string}#{separator}#{method_string}"
     end
 
-    def debug_signature_to_s(args: nil, config_proxy: nil)
+    def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       printed_args = ''
 
       add_args_ellipsis = false
@@ -52,9 +52,9 @@ module DebugLogging
             last_hash_args_string = last_hash_args.map do |arg|
               arr = []
               arr << config_proxy.debug_last_hash_to_s_proc.call(arg).to_s
-                        .tap do |x|
-                          add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-                        end
+                                 .tap do |x|
+                add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
+              end
               if add_last_hash_ellipsis
                 arr[-1] = arr[-1][0..(config_proxy.debug_last_hash_max_length)]
                 arr << config_proxy.debug_ellipsis
@@ -67,7 +67,7 @@ module DebugLogging
           else
             printed_args += args[0..-2].map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length }[0..(config_proxy.debug_args_max_length)]
             printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
-            printed_args += ', ' + config_proxy.debug_last_hash_to_s_proc.call(args[-1]).tap { |x| add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length }[0..(config_proxy.debug_last_hash_max_length)]
+            printed_args += ", #{config_proxy.debug_last_hash_to_s_proc.call(args[-1]).tap { |x| add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length }[0..(config_proxy.debug_last_hash_max_length)]}"
             printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
           end
         else
@@ -77,7 +77,7 @@ module DebugLogging
       else
         if args.length == 1 && args[0].is_a?(Hash)
           # handle double splat
-          printed_args += ('**' + args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length })[0..(config_proxy.debug_args_max_length)]
+          printed_args += ("**#{args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length }}")[0..(config_proxy.debug_args_max_length)]
         else
           printed_args += args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length}[0..(config_proxy.debug_args_max_length)]
         end

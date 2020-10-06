@@ -3,7 +3,7 @@
 module DebugLogging
   class InstanceLogger < Module
     def initialize(i_methods: nil, config: nil)
-      # super() # There is no super class initialize when inheriting from Module.
+      super()
       @config = config
       @instance_methods_to_log = Array(i_methods) if i_methods
     end

@@ -41,6 +41,7 @@ require 'benchmark'
 
 class SimpleDebugLogging < Module
   def initialize(i_methods: nil)
+    super()
     @instance_methods_to_log = Array(i_methods) if i_methods
   end
 
