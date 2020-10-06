@@ -9,7 +9,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - bundle exec rubocop -DESP --config ./rubocop_todo.yml
+  - bundle exec rubocop -DESP --config ./.rubocop_todo.yml
   - bundle exec rspec
 
 after_script:
