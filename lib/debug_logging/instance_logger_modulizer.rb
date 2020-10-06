@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DebugLogging
   module InstanceLoggerModulizer
     def self.to_mod(methods_to_log: nil, config: nil)
@@ -10,7 +12,7 @@ module DebugLogging
                              proxy
                            else
                              proxy = if config
-                                       Configuration.new(**(self.class.debug_config.to_hash.merge(config))) 
+                                       Configuration.new(**self.class.debug_config.to_hash.merge(config))
                                      else
                                        self.class.debug_config
                                      end
@@ -18,7 +20,7 @@ module DebugLogging
                              instance_variable_set(DebugLogging::Configuration.config_pointer('i', method_to_log), proxy)
                              proxy
                            end
-            log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: "#", method_to_log: method_to_log, config_proxy: config_proxy)
+            log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: '#', method_to_log: method_to_log, config_proxy: config_proxy)
             invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
             config_proxy.log do
               signature = self.class.debug_signature_to_s(args: args, config_proxy: config_proxy)

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # Simpler version of what the sibling DebugLogging library does.  Included as a bauble.
 #
 ############# THIS IS A BAUBLE
 ############# FOR EXAMINING SEVERAL OF THE WONDERS OF RUBY
 ############# TO ACCOMPLISH SOMETHING PRACTICAL
-############# For a more robust implementation use the gem debug_logging itself, 
+############# For a more robust implementation use the gem debug_logging itself,
 #############   which makes use of these same principles.
 #
 # Automatically log Class.method(arguments) as they are called at runtime (instance or singleton)!
@@ -41,6 +43,7 @@ class SimpleDebugLogging < Module
   def initialize(i_methods: nil)
     @instance_methods_to_log = Array(i_methods) if i_methods
   end
+
   def included(base)
     instance_method_logger = InstanceMethodLoggerModulizer.to_mod(@instance_methods_to_log)
     base.send(:prepend, instance_method_logger)
@@ -54,7 +57,7 @@ class SimpleDebugLogging < Module
           define_method(method_to_log.to_sym) do |*args|
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self}.#{method_to_log}(#{args.map {|x| x.inspect}.join(", ")})#{invocation_id}"
+            puts "#{self}.#{method_to_log}(#{args.map(&:inspect).join(', ')})#{invocation_id}"
             elapsed = Benchmark.realtime do
               method_return_value = original_method.call(*args)
             end
@@ -72,7 +75,7 @@ class SimpleDebugLogging < Module
           define_method(method_to_log.to_sym) do |*args, &block|
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self.class}##{method_to_log}(#{args.map {|x| x.inspect}.join(", ")})#{invocation_id}"
+            puts "#{self.class}##{method_to_log}(#{args.map(&:inspect).join(', ')})#{invocation_id}"
             elapsed = Benchmark.realtime do
               method_return_value = super(*args, &block)
             end

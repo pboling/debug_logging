@@ -9,6 +9,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
+  - bundle exec rubocop -DESP --config ./rubocop_todo.yml
   - bundle exec rspec
 
 after_script:
@@ -29,7 +30,7 @@ language: ruby
 sudo: false
 
 rvm:
-  - ruby-2.3.7
-  - ruby-2.4.4
-  - ruby-2.5.1
+  - ruby-2.5.8
+  - ruby-2.6.6
+  - ruby-2.7.1
   - jruby-9.1.9.0

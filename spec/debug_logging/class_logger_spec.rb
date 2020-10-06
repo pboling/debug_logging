@@ -1,10 +1,12 @@
-require "spec_helper"
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 RSpec.describe DebugLogging::ClassLogger do
-  include_context "with example classes"
+  include_context 'with example classes'
 
-  context "logged macro" do
-    it "works witout configuration override hash" do
+  context 'logged macro' do
+    it 'works witout configuration override hash' do
       expect(complete_logged_klass.debug_config).to receive(:log).once.and_call_original
       output = capture('stdout') do
         complete_logged_klass.k_with_dsplat(a: 'a')
@@ -16,7 +18,7 @@ RSpec.describe DebugLogging::ClassLogger do
       complete_logged_klass.k_with_dsplat(a: 'a')
     end
 
-    it "works with an implicit array of methods and a configuration override hash" do
+    it 'works with an implicit array of methods and a configuration override hash' do
       # because the options to logged in the class definition cause the creation of a method specific config instance
       expect(complete_logged_klass.debug_config).to_not receive(:log)
       output = capture('stdout') do
@@ -27,7 +29,7 @@ RSpec.describe DebugLogging::ClassLogger do
       expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('k', :k_with_dsplat_i))).to receive(:log).once.and_call_original
       complete_logged_klass.k_with_dsplat_i(a: 'a')
     end
-    it "works with an explicit array of methods and a configuration override hash" do
+    it 'works with an explicit array of methods and a configuration override hash' do
       # because the options to logged in the class definition cause the creation of a method specific config instance
       expect(complete_logged_klass.debug_config).to_not receive(:log)
       output = capture('stdout') do
@@ -40,12 +42,12 @@ RSpec.describe DebugLogging::ClassLogger do
     end
   end
 
-  context "a complete logged class" do
+  context 'a complete logged class' do
     before do
-      skip_for(engine: "ruby", versions: ["2.0.0"], reason: "method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible")
+      skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
       allow(complete_logged_klass.debug_config).to receive(:debug_log) { logger }
     end
-    it "logs" do
+    it 'logs' do
       output = capture('stdout') do
         complete_logged_klass.new.i
         complete_logged_klass.new.i_with_ssplat
@@ -61,7 +63,7 @@ RSpec.describe DebugLogging::ClassLogger do
       expect(output).to match(/\.k_with_ssplat\(\)/)
       expect(output).to match(/\.k_with_dsplat\(\)/)
     end
-    it "has correct return value" do
+    it 'has correct return value' do
       expect(complete_logged_klass.new.i).to eq(40)
       expect(complete_logged_klass.k).to eq(10)
     end

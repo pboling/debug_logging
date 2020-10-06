@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DebugLogging
   module ClassLogger
     def logged(*methods_to_log)
@@ -19,7 +21,7 @@ module DebugLogging
                              proxy
                            else
                              proxy = if opts
-                                       Configuration.new(**(debug_config.to_hash.merge(opts)))
+                                       Configuration.new(**debug_config.to_hash.merge(opts))
                                      else
                                        debug_config
                                      end
@@ -31,7 +33,7 @@ module DebugLogging
             log_prefix = nil
             invocation_id = nil
             config_proxy.log do
-              log_prefix = debug_invocation_to_s(klass: to_s, separator: ".", method_to_log: method_to_log, config_proxy: config_proxy)
+              log_prefix = debug_invocation_to_s(klass: to_s, separator: '.', method_to_log: method_to_log, config_proxy: config_proxy)
               invocation_id = debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
               signature = debug_signature_to_s(args: args, config_proxy: config_proxy)
               "#{log_prefix}#{signature}#{invocation_id}"
