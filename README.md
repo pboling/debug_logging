@@ -36,11 +36,11 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 
 Herein you will find:
 
-* Classes inheriting from Module.
-* Zero tolerance policy on monkey patching.
-* 100% clean, 0% obtrusive.
-* 100% tested.
-* 100% Ruby 2.3+ compatible, and also with equivalent JRuby versions.
+* Classes inheriting from Module
+* Zero tolerance policy on monkey patching
+* 100% clean, 0% obtrusive
+* 100% tested
+* 100% Ruby 2.3+ compatible
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
 
