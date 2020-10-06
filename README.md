@@ -209,7 +209,7 @@ spec.add_dependency 'debug_logging', '~> 2.0'
 
 MIT License
 
-Copyright (c) 2017 - 2018 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
+Copyright (c) 2017 - 2020 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
