@@ -2,11 +2,10 @@
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 
-NOTE: Septmeber 9, 2018 I discovered that some of the functionality of this gem is affected by the presence of the coveralls gem.  All specs pass when it is loaded, and about 35% fail when it is not.  I am going to figure out why this is.  The failures mean that some logging features won't work as configured until I decouple this gem from coveralls.
-
 | Project                 |  DebugLogging           |
 |------------------------ | ----------------------- |
 | gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
+| compatibility           |  Ruby 2.3, 2.4, 2.5, 2.6, 2.7 |
 | license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) |
 | download rank           |  [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging) |
 | version                 |  [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
@@ -19,7 +18,7 @@ NOTE: Septmeber 9, 2018 I discovered that some of the functionality of this gem 
 | documentation           |  [on RDoc.info][documentation] |
 | live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 | expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
-| Spread ~♡ⓛⓞⓥⓔ♡~      |  [🌍 🌎 🌏](https://about.me/peter.boling), [🍚](https://www.crowdrise.com/helprefugeeswithhopefortomorrowliberia/fundraiser/peterboling), [➕](https://plus.google.com/+PeterBoling/posts), [👼](https://angel.co/peter-boling), [🐛](https://www.topcoder.com/members/pboling/), [:shipit:](http://coderwall.com/pboling), [![Tweet Peter](https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow)](http://twitter.com/galtzo) |
+| Spread ~♡ⓛⓞⓥⓔ♡~      |  [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [:shipit:](http://coderwall.com/pboling), [![Tweet Peter](https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow)](http://twitter.com/galtzo), [🌹](https://nationalprogressiveparty.org) |
 
 ### Gives you (all are optional):
 
@@ -38,19 +37,12 @@ NOTE: Septmeber 9, 2018 I discovered that some of the functionality of this gem 
 Herein you will find:
 
 * Classes inheriting from Module.
-* Cats and dogs sleeping together.
 * Zero tolerance policy on monkey patching.
 * 100% clean, 0% obtrusive.
 * 100% tested.
-* 50% Ruby 2.0+ compatible.
-* 100% Ruby 2.1+ compatible, and therefore also compatible with JRuby 9000 and later.
-* 10g Monosodium glutamate.
+* 100% Ruby 2.3+ compatible, and also with equivalent JRuby versions.
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
-
-NOTE: The instance method logging works on Ruby 2.0+
-
-NOTE: The class method logging works on Ruby 2.1+
 
 ## Installation
 
@@ -210,7 +202,7 @@ dependency on this gem using the [Pessimistic Version Constraint](http://docs.ru
 For example:
 
 ```ruby
-spec.add_dependency 'debug_logging', '~> 1.0'
+spec.add_dependency 'debug_logging', '~> 2.0'
 ```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
