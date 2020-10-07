@@ -5,7 +5,7 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 | Project                 |  DebugLogging           |
 |------------------------ | ----------------------- |
 | gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
-| compatibility           |  Ruby 2.3, 2.4, 2.5, 2.6, 2.7 |
+| compatibility           |  Ruby 2.4, 2.5, 2.6, 2.7 |
 | license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) |
 | download rank           |  [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging) |
 | version                 |  [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
