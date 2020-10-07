@@ -32,7 +32,7 @@ Automatically log selected methods and their arguments as they are called at run
   spec.add_development_dependency 'rake', '>= 13'
   spec.add_development_dependency 'rspec', '>= 3'
   spec.add_development_dependency 'rspec-pending_for', '>= 0'
-  spec.add_development_dependency 'rubocop', '>= 0'
+  spec.add_development_dependency 'rubocop', '>= 0.92'
   spec.add_development_dependency 'rubocop-rspec', '>= 1'
   spec.add_development_dependency 'silent_stream', '>= 1'
 end
