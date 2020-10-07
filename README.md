@@ -119,7 +119,7 @@ Just prepend `debug_` to any config value you want to override in a class.
 Just prepend `debug_` to any config value you want to override on an instance of a class.
 
 **All** of the above **config** is **inheritable** and **configurable** at the **per-method** level as well!
-Just send along a hash of the config options when you call `logged` or `include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop], config: { ellipsis = " ✂️ 2 much" })`.  See the example class below, and the specs.
+Just send along a hash of the config options when you call `logged` or `include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop], config: { ellipsis: " ✂️ 2 much" })`.  See the example class below, and the specs.
 
 **NOTE ON** `Rails.logger` - It will probably be nil in your initializer, so setting the `config.logger` to `Rails.logger` there will result in setting it to `nil`, which means the default will end up being used: `Logger.new(STDOUT)`. Instead just config the logger in your application.rb, or anytime later, but *before your classes get loaded* and start inheriting the config:
 
