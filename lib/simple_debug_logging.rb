@@ -21,8 +21,6 @@
 #       logged :a_class_method
 #     end
 #
-#   Make sure you have the latest debug_logging gem (>= 1.0.10) installed for this to work
-#
 #   In an irb session:
 #     >> require_relative 'unobtrusively_logged'
 #     => true
