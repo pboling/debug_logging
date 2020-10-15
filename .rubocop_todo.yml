@@ -87,9 +87,13 @@ Style/Documentation:
     - 'lib/debug_logging.rb'
     - 'lib/debug_logging/argument_printer.rb'
     - 'lib/debug_logging/class_logger.rb'
+    - 'lib/debug_logging/class_notifier.rb'
     - 'lib/debug_logging/configuration.rb'
     - 'lib/debug_logging/instance_logger.rb'
     - 'lib/debug_logging/instance_logger_modulizer.rb'
+    - 'lib/debug_logging/instance_notifier.rb'
+    - 'lib/debug_logging/instance_notifier_modulizer.rb'
+    - 'lib/debug_logging/log_subscriber.rb'
     - 'lib/simple_debug_logging.rb'
 
 # Offense count: 1
@@ -99,6 +103,7 @@ Style/Documentation:
 Style/EmptyElse:
   Exclude:
     - 'lib/debug_logging/class_logger.rb'
+    - 'lib/debug_logging/class_notifier.rb'
 
 # Offense count: 2
 # Configuration parameters: EnforcedStyle.
@@ -111,7 +116,9 @@ Style/FormatStringToken:
 Style/IdenticalConditionalBranches:
   Exclude:
     - 'lib/debug_logging/class_logger.rb'
+    - 'lib/debug_logging/class_notifier.rb'
     - 'lib/debug_logging/instance_logger_modulizer.rb'
+    - 'lib/debug_logging/instance_notifier_modulizer.rb'
 
 # Offense count: 1
 Style/MultilineBlockChain:
