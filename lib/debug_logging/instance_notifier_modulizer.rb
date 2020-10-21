@@ -26,6 +26,12 @@ module DebugLogging
                              instance_variable_set(DebugLogging::Configuration.config_pointer('i', method_to_notify), proxy)
                              proxy
                            end
+            if payload.key?(:instance_variables)
+              payload[:instance_variables].each do |k|
+                payload[k] = instance_variable_get("@#{k}") if instance_variable_get("@#{k}")
+              end
+              payload.delete(:instance_variables)
+            end
             ActiveSupport::Notifications.instrument(
               self.class.debug_event_name_to_s(method_to_notify: method_to_notify), { args: args }.merge(payload)
             ) do
