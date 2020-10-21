@@ -6,6 +6,10 @@ module DebugLogging
       "completed in #{format('%f', tms.real)}s (#{format('%f', tms.total)}s CPU)"
     end
 
+    def debug_event_name_to_s(method_to_notify: nil)
+      "#{method_to_notify}.log"
+    end
+
     def debug_invocation_id_to_s(args: nil, config_proxy: nil)
       if config_proxy.debug_add_invocation_id
         invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % '%#-21a')[4..-4]}~"
@@ -79,7 +83,7 @@ module DebugLogging
           # handle double splat
           printed_args += ("**#{args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length }}")[0..(config_proxy.debug_args_max_length)]
         else
-          printed_args += args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length}[0..(config_proxy.debug_args_max_length)]
+          printed_args += args.map(&:inspect).join(', ').tap { |x| add_args_ellipsis = x.length > config_proxy.debug_args_max_length }[0..(config_proxy.debug_args_max_length)]
         end
         printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
       end
