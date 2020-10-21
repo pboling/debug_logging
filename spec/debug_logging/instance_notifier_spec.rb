@@ -18,6 +18,7 @@ RSpec.describe DebugLogging::InstanceNotifier do
         instance_notified_klass_explicit.new.i
         instance_notified_klass_explicit.new.i_with_ssplat
         instance_notified_klass_explicit.new.i_with_dsplat
+        instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars
       end
       expect(output).to match(/i.log/)
       expect(output).to match(/payload={:args=>\[\]}/)
@@ -25,15 +26,21 @@ RSpec.describe DebugLogging::InstanceNotifier do
       expect(output).to match(/payload={:args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
       expect(output).to match(/i_with_dsplat.log/)
       expect(output).to match(/payload={:args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+      expect(output).to match(/i_with_instance_vars.log/)
+      expect(output).to match(/payload={:args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
       expect(@events).to contain_exactly(
         have_attributes(name: 'i.log', payload: { args: [] }),
         have_attributes(name: 'i_with_ssplat.log', payload: { args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'i_with_dsplat.log', payload: { args: [], salutation: 'Mr.', suffix: 'Jr.' })
+        have_attributes(name: 'i_with_dsplat.log', payload: { args: [], salutation: 'Mr.', suffix: 'Jr.' }),
+        have_attributes(name: 'i_with_instance_vars.log', payload: { args: [], action: 'Update', id: 1, msg: { greeting: 'hi' } })
       )
     end
 
     it 'has correct return value' do
       expect(instance_notified_klass_explicit.new.i).to eq(40)
+      expect(instance_notified_klass_explicit.new.i_with_ssplat).to eq(50)
+      expect(instance_notified_klass_explicit.new.i_with_dsplat).to eq(60)
+      expect(instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars).to eq(70)
     end
   end
 

@@ -207,12 +207,21 @@ RSpec.shared_context 'with example classes' do
 
   let(:instance_notified_klass_explicit) do
     Class.new do
+      attr_accessor :id, :action, :msg
+
+      def initialize(action: nil, id: nil, msg: {})
+        @action = action
+        @id = id
+        @msg = msg
+      end
+
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceNotifier.new(i_methods: [:i,
                                                              [:i_with_ssplat, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
-                                                             [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }]])
+                                                             [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
+                                                             [:i_with_instance_vars, { instance_variables: %i[action id msg] }]])
       def i
         40
       end
@@ -223,6 +232,10 @@ RSpec.shared_context 'with example classes' do
 
       def i_with_dsplat(**_args)
         60
+      end
+
+      def i_with_instance_vars
+        70
       end
 
       # Needs to be below any methods that will want logging when using self.instance_methods(false)
