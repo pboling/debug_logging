@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+DebugLogging.configuration.active_support_notifications = true
 
-describe DebugLogging::LogSubscriber do
+RSpec.describe DebugLogging::LogSubscriber do
   include_context 'with example classes'
 
   before do

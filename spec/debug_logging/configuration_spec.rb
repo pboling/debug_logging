@@ -48,6 +48,29 @@ RSpec.describe DebugLogging::Configuration do
             expect(instance_logged_klass_explicit.new.i_with_dsplat(c: :d, e: :f)).to eq(60)
           end
         end
+        context 'instance notification' do
+          before do
+            DebugLogging.configure do |config|
+              config.active_support_notifications = true
+            end
+          end
+          it 'notifies' do
+            output = capture('stdout') do
+              instance_notified_klass_explicit.new.i
+              instance_notified_klass_explicit.new.i_with_ssplat
+              instance_notified_klass_explicit.new.i_with_dsplat
+              instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars
+            end
+            expect(output).to match(/i.log/)
+            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/i_with_ssplat.log/)
+            expect(output).to match(/payload={:args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/i_with_dsplat.log/)
+            expect(output).to match(/payload={:args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/i_with_instance_vars.log/)
+            expect(output).to match(/payload={:args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
+          end
+        end
         context 'class logging' do
           before do
             skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
@@ -79,6 +102,35 @@ RSpec.describe DebugLogging::Configuration do
           it 'has correct return value' do
             expect(singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(20)
             expect(complete_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(20)
+          end
+        end
+        context 'class notification' do
+          before do
+            DebugLogging.configure do |config|
+              config.active_support_notifications = true
+            end
+          end
+          it 'notifies' do
+            output = capture('stdout') do
+              complete_notified_klass.new.i
+              complete_notified_klass.new.i_with_ssplat
+              complete_notified_klass.new.i_with_dsplat
+              complete_notified_klass.k
+              complete_notified_klass.k_with_ssplat
+              complete_notified_klass.k_with_dsplat
+            end
+            expect(output).to match(/i.log/)
+            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/i_with_ssplat.log/)
+            expect(output).to match(/payload={:args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/i_with_dsplat.log/)
+            expect(output).to match(/payload={:args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/k.log/)
+            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/k_with_ssplat.log/)
+            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/k_with_dsplat.log/)
+            expect(output).to match(/payload={:args=>\[\]}/)
           end
         end
       end
