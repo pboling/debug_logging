@@ -9,7 +9,7 @@ module DebugLogging
     attr_accessor :logger, :log_level, :multiple_last_hashes, :last_hash_to_s_proc, :last_hash_max_length,
                   :args_max_length, :colorized_chain_for_method, :colorized_chain_for_class, :add_invocation_id,
                   :ellipsis, :mark_scope_exit
-    attr_reader :instance_benchmarks, :class_benchmarks, :methods_to_log
+    attr_reader :instance_benchmarks, :class_benchmarks, :active_support_notifications, :methods_to_log
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
     #
@@ -59,13 +59,14 @@ module DebugLogging
       @last_hash_to_s_proc = options.key?(:last_hash_to_s_proc) ? options[:last_hash_to_s_proc] : nil
       @last_hash_max_length = options.key?(:last_hash_max_length) ? options[:last_hash_max_length] : 1_000
       @args_max_length = options.key?(:args_max_length) ? options[:args_max_length] : 1_000
-      @instance_benchmarks = options.key?(:instance_benchmarks) ? options[:instance_benchmarks] : false
-      @class_benchmarks = options.key?(:class_benchmarks) ? options[:class_benchmarks] : false
       @colorized_chain_for_method = options.key?(:colorized_chain_for_method) ? options[:colorized_chain_for_method] : false
       @colorized_chain_for_class = options.key?(:colorized_chain_for_class) ? options[:colorized_chain_for_class] : false
       @add_invocation_id = options.key?(:add_invocation_id) ? options[:add_invocation_id] : true
       @ellipsis = options.key?(:ellipsis) ? options[:ellipsis] : DEFAULT_ELLIPSIS
       @mark_scope_exit = options.key?(:mark_scope_exit) ? options[:mark_scope_exit] : false
+      self.instance_benchmarks = options.key?(:instance_benchmarks) ? options[:instance_benchmarks] : false
+      self.class_benchmarks = options.key?(:class_benchmarks) ? options[:class_benchmarks] : false
+      self.active_support_notifications = options.key?(:active_support_notifications) ? options[:active_support_notifications] : false
       @methods_to_log = []
     end
 
@@ -108,6 +109,11 @@ module DebugLogging
       @class_benchmarks = class_benchmarks
     end
 
+    def active_support_notifications=(active_support_notifications)
+      require 'debug_logging/active_support_notifications' if active_support_notifications
+      @active_support_notifications = active_support_notifications
+    end
+
     def to_hash
       {
         logger: logger,
@@ -122,7 +128,8 @@ module DebugLogging
         colorized_chain_for_class: colorized_chain_for_class,
         add_invocation_id: add_invocation_id,
         ellipsis: ellipsis,
-        mark_scope_exit: mark_scope_exit
+        mark_scope_exit: mark_scope_exit,
+        active_support_notifications: active_support_notifications
       }
     end
 
