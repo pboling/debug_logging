@@ -31,6 +31,7 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *log method calls, also when exit scope*
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format.*
 * *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods*
+* *Optional instance variable logging*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
@@ -41,7 +42,10 @@ Herein you will find:
 * Zero tolerance policy on monkey patching
 * 100% clean, 0% obtrusive
 * 100% tested
-* 100% Ruby 2.3+ compatible
+* 100% Ruby 2.1+ compatible
+  - use version ~1.0 for Ruby < 2.3
+  - use version ~2.0 for Ruby 2.3
+  - use version ~3.0 for Ruby 2.4+
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
 
@@ -130,7 +134,7 @@ Just send along a hash of the config options when you call `logged` or `include 
 DebugLogging.configuration.logger = Rails.logger
 ```
 
-Every time a method is called, get logs, optionally with arguments, a benchmark, and a unique invocation identifier:
+Every time a method is called, you can now get logs, optionally with arguments, a benchmark, and a unique invocation identifier:
 
 ```ruby
 class Car
@@ -259,7 +263,7 @@ dependency on this gem using the [Pessimistic Version Constraint](http://docs.ru
 For example:
 
 ```ruby
-spec.add_dependency 'debug_logging', '~> 2.0'
+spec.add_dependency 'debug_logging', '~> 3.0'
 ```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
