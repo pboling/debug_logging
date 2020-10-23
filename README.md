@@ -30,6 +30,7 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *separate logger, if needed*
 * *log method calls, also when exit scope*
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format.*
+* *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
@@ -85,6 +86,7 @@ DebugLogging.configuration.last_hash_max_length = 1_000
 DebugLogging.configuration.args_max_length = 1_000
 DebugLogging.configuration.instance_benchmarks = false
 DebugLogging.configuration.class_benchmarks = false
+DebugLogging.configuration.active_support_notifications = false
 DebugLogging.configuration.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
 DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
@@ -104,6 +106,7 @@ DebugLogging.configure do |config|
   config.args_max_length = 1_000
   config.instance_benchmarks = false
   config.class_benchmarks = false
+  config.active_support_notifications = false
   config.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
   config.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
@@ -127,7 +130,7 @@ Just send along a hash of the config options when you call `logged` or `include 
 DebugLogging.configuration.logger = Rails.logger
 ```
 
-Every time a method is called, get logs, optionally with arguments, a benchmarck, and a unique invocation identifier:
+Every time a method is called, get logs, optionally with arguments, a benchmark, and a unique invocation identifier:
 
 ```ruby
 class Car
@@ -164,6 +167,60 @@ class Car
 
   # override options for any instance method(s)
   include DebugLogging::InstanceLogger.new(i_methods: [:stop], config: { multiple_last_hashes: true })
+
+  def will_not_be_logged; false; end
+
+end
+```
+
+### ActiveSupport::Notifications integration
+
+To use `ActiveSupport::Notifications` integration, enable `active_support_notifications` in the config, either single line or block style:
+
+```ruby
+DebugLogging.configuration.active_support_notifications = true
+```
+
+or
+
+```ruby
+DebugLogging.configure do |config|
+  config.active_support_notifications = true
+end
+```
+
+Every time a method is called, class and instance method events are instrumented, consumed and logged:
+
+```ruby
+class Car
+
+  # adds the helper methods to the class, all are prefixed with debug_*,
+  #   except for the instrumented class method, which comes from extending DebugLogging::ClassNotifier
+  extend DebugLogging
+
+  # For instance methods:
+  # Option 1: specify the exact method(s) to add instrumentation to (including capturing instance variable values as part of the event payload)
+  include DebugLogging::InstanceNotifier.new(i_methods: [:drive,
+                                                         :stop,
+                                                         [:turn, { instance_variables: %i[direction angle] }]])
+
+  # Provides the `notifies` method decorator
+  extend DebugLogging::ClassNotifier
+
+  notifies def make; new; end
+  def design(*args); new; end
+  def safety(*args); new; end
+  def dealer_options(*args); new; end
+  notifies :design, :safety
+  # adding additional event payload options for any instance method(s), by passing a hash as the last argument
+  notifies :dealer_options, { sport_package: true }
+
+  def drive(speed); speed; end
+  def stop(**opts); 0; end
+
+  # For instance methods:
+  # Option 2: add instrumentation to all instance methods defined above (but *not* defined below)
+  include DebugLogging::InstanceNotifier.new(i_methods: self.instance_methods(false))
 
   def will_not_be_logged; false; end
 
