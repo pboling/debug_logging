@@ -261,7 +261,7 @@ dependency on this gem using the [Pessimistic Version Constraint](http://docs.ru
 For example:
 
 ```ruby
-spec.add_dependency 'debug_logging', '~> 3.0'
+spec.add_dependency 'debug_logging', '~> 3.1'
 ```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
