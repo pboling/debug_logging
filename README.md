@@ -29,9 +29,9 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *single line config, per class/instance/method config*
 * *separate logger, if needed*
 * *log method calls, also when exit scope*
-* *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format.*
-* *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods*
-* *Optional instance variable logging*
+* *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format, since v1.0.12*
+* *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods, since v3.1*
+* *Optional instance variable logging, sine v3.1*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
