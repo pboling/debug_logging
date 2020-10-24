@@ -67,8 +67,6 @@ Or install it yourself as:
 
 ## Usage
 
-NOTE: Starting with version `1.0.12` this gem utilizes the `logger.debug { "block format" }` to avoid heavy debug processing when the log level threshold is set higher than the level of the statements produced as a result of the configuration of this gem.
-
 Crack open the specs for more complex usage examples than the ones below.
 
 ### Without Rails
