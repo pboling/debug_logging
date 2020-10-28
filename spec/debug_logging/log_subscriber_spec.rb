@@ -21,7 +21,7 @@ RSpec.describe DebugLogging::LogSubscriber do
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to eq('k_with_dsplat.log')
-        expect(@log_subscriber.event.payload).to eq({ args: [{ a: 'a' }] })
+        expect(@log_subscriber.event.payload).to eq({ debug_args: [{ a: 'a' }] })
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe DebugLogging::LogSubscriber do
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to eq('k_with_dsplat_payload.log')
-        expect(@log_subscriber.event.payload).to eq({ args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
+        expect(@log_subscriber.event.payload).to eq({ debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe DebugLogging::LogSubscriber do
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to eq('k_with_ssplat_error.log')
-        expect(@log_subscriber.event.payload).to include({ args: [{ a: 'a' }], exception: ['StandardError', 'bad method!'] })
+        expect(@log_subscriber.event.payload).to include({ debug_args: [{ a: 'a' }], exception: ['StandardError', 'bad method!'] })
       end
     end
   end

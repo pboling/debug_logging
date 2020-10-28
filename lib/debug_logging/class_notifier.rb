@@ -29,7 +29,7 @@ module DebugLogging
                              proxy
                            end
             ActiveSupport::Notifications.instrument(
-              debug_event_name_to_s(method_to_notify: method_to_notify), { args: args }.merge(payload)
+              debug_event_name_to_s(method_to_notify: method_to_notify), { debug_args: args }.merge(payload)
             ) do
               original_method.call(*args, &block)
             end
