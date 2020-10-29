@@ -6,8 +6,8 @@ module DebugLogging
       "completed in #{format('%f', tms.real)}s (#{format('%f', tms.total)}s CPU)"
     end
 
-    def debug_event_name_to_s(method_to_notify: nil)
-      "#{method_to_notify}.log"
+    def debug_event_name_to_s(method_to_notify: nil, separator: nil, invocation_id: nil)
+      "#{method_to_notify}.log#{separator}#{invocation_id}"
     end
 
     def debug_invocation_id_to_s(args: nil, config_proxy: nil)
