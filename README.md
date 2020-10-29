@@ -217,7 +217,7 @@ class Car
   def dealer_options(*args); new; end
   notifies :design, :safety
   # adding additional event payload options for any instance method(s), by passing a hash as the last argument
-  notifies :dealer_options, { sport_package: true }
+  notifies [:dealer_options, { sport_package: true }]
 
   def drive(speed); speed; end
   def stop(**opts); 0; end
