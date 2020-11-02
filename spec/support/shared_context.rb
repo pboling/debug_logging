@@ -107,7 +107,7 @@ RSpec.shared_context 'with example classes' do
         30
       end
       notifies :k_with_ssplat, :k_with_dsplat, :k_with_ssplat_error
-      notifies [:k_with_dsplat_payload, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }]
+      notifies :k_with_dsplat_payload, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }
 
       def self.k_without_log
         0

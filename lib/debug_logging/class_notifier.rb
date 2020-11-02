@@ -5,14 +5,15 @@ module DebugLogging
     def notifies(*methods_to_notify)
       config_proxy = nil
 
+      payload = methods_to_notify.last.is_a?(Hash) && methods_to_notify.pop || {}
+      if methods_to_notify.first.is_a?(Array)
+        methods_to_notify = methods_to_notify.shift
+      else
+        # logged :meth1, :meth2, :meth3 without options is valid too
+      end
       methods_to_notify.each do |method_to_notify|
         # method name must be a symbol
-        payload = method_to_notify.is_a?(Array) && method_to_notify.last.is_a?(Hash) && method_to_notify.pop || {}
-        if method_to_notify.is_a?(Array)
-          method_to_notify = method_to_notify.first&.to_sym
-        else
-          method_to_notify.to_sym
-        end
+        method_to_notify = method_to_notify.to_sym
         original_method = method(method_to_notify)
         (class << self; self; end).class_eval do
           define_method(method_to_notify) do |*args, &block|
