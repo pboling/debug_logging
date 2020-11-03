@@ -62,13 +62,13 @@ RSpec.describe DebugLogging::Configuration do
               instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars
             end
             expect(output).to match(/i.log/)
-            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/payload={:debug_args=>\[\]}/)
             expect(output).to match(/i_with_ssplat.log/)
-            expect(output).to match(/payload={:args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
             expect(output).to match(/i_with_dsplat.log/)
-            expect(output).to match(/payload={:args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
             expect(output).to match(/i_with_instance_vars.log/)
-            expect(output).to match(/payload={:args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
+            expect(output).to match(/payload={:debug_args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
           end
         end
         context 'class logging' do
@@ -120,17 +120,17 @@ RSpec.describe DebugLogging::Configuration do
               complete_notified_klass.k_with_dsplat
             end
             expect(output).to match(/i.log/)
-            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/payload={:debug_args=>\[\]}/)
             expect(output).to match(/i_with_ssplat.log/)
-            expect(output).to match(/payload={:args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
             expect(output).to match(/i_with_dsplat.log/)
-            expect(output).to match(/payload={:args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
             expect(output).to match(/k.log/)
-            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/payload={:debug_args=>\[\]}/)
             expect(output).to match(/k_with_ssplat.log/)
-            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/payload={:debug_args=>\[\]}/)
             expect(output).to match(/k_with_dsplat.log/)
-            expect(output).to match(/payload={:args=>\[\]}/)
+            expect(output).to match(/payload={:debug_args=>\[\]}/)
           end
         end
       end
