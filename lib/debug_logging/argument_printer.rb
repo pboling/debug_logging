@@ -86,6 +86,19 @@ module DebugLogging
       "(#{printed_args})"
     end
 
+    def debug_payload_to_s(payload: nil, config_proxy: nil)
+      if payload
+        case config_proxy.debug_add_payload
+        when true
+          payload.inspect
+        else
+          config_proxy.debug_add_payload.call(**payload)
+        end
+      else
+        ''
+      end
+    end
+
     module_function
 
     def debug_event_name_to_s(method_to_notify: nil)

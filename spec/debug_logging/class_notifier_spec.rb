@@ -29,17 +29,31 @@ RSpec.describe DebugLogging::ClassNotifier do
     end
 
     it 'works with a payload override hash' do
-      expect(complete_notified_klass.debug_config).to_not receive(:log)
+      expect(complete_notified_klass.debug_config).to receive(:log).once.and_call_original
       output = capture('stdout') do
         complete_notified_klass.k_with_dsplat_payload(a: 'a')
       end
       expect(output).to match('k_with_dsplat_payload.log')
       expect(output).to match('payload={:debug_args=>\[{:a=>"a"}\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
-      expect(complete_notified_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('k', :k_with_dsplat_payload))).to receive(:log).once.and_call_original
       expect(@events).to contain_exactly(
         have_attributes(name: 'k_with_dsplat_payload.log', payload: { debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
       )
-      complete_notified_klass.k_with_dsplat_payload(a: 'a')
+    end
+
+    it 'works with a config override hash' do
+      expect(complete_notified_klass.debug_config).to_not receive(:log)
+      output = capture('stdout') do
+        complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
+      end
+      expect(output).to match('ERROR')
+      expect(output).to match('k_with_dsplat_payload_and_config.log')
+      expect(output).to match('payload={:debug_args=>\[{:a=>"a"}\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      config_proxy = complete_notified_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('k', :k_with_dsplat_payload_and_config))
+      expect(config_proxy).to receive(:log).once.and_call_original
+      expect(@events).to contain_exactly(
+                           have_attributes(name: 'k_with_dsplat_payload_and_config.log', payload: { debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
+                         )
+      complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
     end
   end
 

@@ -3,13 +3,34 @@
 module DebugLogging
   class Configuration
     DEFAULT_ELLIPSIS = ' ✂️ …'
+    CONFIG_ATTRS_DEFAULTS = {
+      enabled: true,
+      logger: Logger.new($stdout),
+      log_level: :debug,
+      multiple_last_hashes: false,
+      last_hash_to_s_proc: nil,
+      last_hash_max_length: 1_000,
+      args_max_length: 1_000,
+      colorized_chain_for_method: false,
+      colorized_chain_for_class: false,
+      add_invocation_id: true,
+      ellipsis: DEFAULT_ELLIPSIS,
+      mark_scope_exit: false,
+      add_payload: true
+    }
+    CONFIG_ATTRS = CONFIG_ATTRS_DEFAULTS.keys
+    CONFIG_READERS_DEFAULTS = {
+      instance_benchmarks: false,
+      class_benchmarks: false,
+      active_support_notifications: false
+    }
+    CONFIG_READERS = CONFIG_READERS_DEFAULTS.keys
+    CONFIG_KEYS = CONFIG_ATTRS + CONFIG_READERS
+
     # For reference, log levels as integers mapped to symbols:
     # LEVELS = { 0 => :debug, 1 => :info, 2 => :warn, 3 => :error, 4 => :fatal, 5 => :unknown }
-    attr_accessor :enabled
-    attr_accessor :logger, :log_level, :multiple_last_hashes, :last_hash_to_s_proc, :last_hash_max_length,
-                  :args_max_length, :colorized_chain_for_method, :colorized_chain_for_class, :add_invocation_id,
-                  :ellipsis, :mark_scope_exit
-    attr_reader :instance_benchmarks, :class_benchmarks, :active_support_notifications, :methods_to_log
+    attr_accessor *CONFIG_ATTRS
+    attr_reader :methods_to_log, *CONFIG_READERS
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
     #
@@ -28,20 +49,9 @@ module DebugLogging
     #       }
     #     )
     #
-    alias debug_enabled enabled
-    alias debug_logger logger
-    alias debug_log_level log_level
-    alias debug_multiple_last_hashes multiple_last_hashes
-    alias debug_last_hash_to_s_proc last_hash_to_s_proc
-    alias debug_last_hash_max_length last_hash_max_length
-    alias debug_args_max_length args_max_length
-    alias debug_instance_benchmarks instance_benchmarks
-    alias debug_class_benchmarks class_benchmarks
-    alias debug_colorized_chain_for_method colorized_chain_for_method
-    alias debug_colorized_chain_for_class colorized_chain_for_class
-    alias debug_add_invocation_id add_invocation_id
-    alias debug_ellipsis ellipsis
-    alias debug_mark_scope_exit mark_scope_exit
+    CONFIG_KEYS.each do |key|
+      alias :"debug_#{key}" :"#{key}"
+    end
 
     class << self
       def config_pointer(type, method_to_log)
@@ -52,21 +62,12 @@ module DebugLogging
       end
     end
     def initialize(**options)
-      @enabled = options.key?(:enabled) ? options[:enabled] : true
-      @logger = options.key?(:logger) ? options[:logger] : Logger.new($stdout)
-      @log_level = options.key?(:log_level) ? options[:log_level] : :debug
-      @multiple_last_hashes = options.key?(:multiple_last_hashes) ? options[:multiple_last_hashes] : false
-      @last_hash_to_s_proc = options.key?(:last_hash_to_s_proc) ? options[:last_hash_to_s_proc] : nil
-      @last_hash_max_length = options.key?(:last_hash_max_length) ? options[:last_hash_max_length] : 1_000
-      @args_max_length = options.key?(:args_max_length) ? options[:args_max_length] : 1_000
-      @colorized_chain_for_method = options.key?(:colorized_chain_for_method) ? options[:colorized_chain_for_method] : false
-      @colorized_chain_for_class = options.key?(:colorized_chain_for_class) ? options[:colorized_chain_for_class] : false
-      @add_invocation_id = options.key?(:add_invocation_id) ? options[:add_invocation_id] : true
-      @ellipsis = options.key?(:ellipsis) ? options[:ellipsis] : DEFAULT_ELLIPSIS
-      @mark_scope_exit = options.key?(:mark_scope_exit) ? options[:mark_scope_exit] : false
-      self.instance_benchmarks = options.key?(:instance_benchmarks) ? options[:instance_benchmarks] : false
-      self.class_benchmarks = options.key?(:class_benchmarks) ? options[:class_benchmarks] : false
-      self.active_support_notifications = options.key?(:active_support_notifications) ? options[:active_support_notifications] : false
+      CONFIG_ATTRS.each do |key|
+        self.send("#{key}=", get_attr_from_options(options, key))
+      end
+      CONFIG_READERS.each do |key|
+        self.send("#{key}=", get_reader_from_options(options, key))
+      end
       @methods_to_log = []
     end
 
@@ -115,26 +116,23 @@ module DebugLogging
     end
 
     def to_hash
-      {
-        logger: logger,
-        log_level: log_level,
-        multiple_last_hashes: multiple_last_hashes,
-        last_hash_to_s_proc: last_hash_to_s_proc,
-        last_hash_max_length: last_hash_max_length,
-        args_max_length: args_max_length,
-        instance_benchmarks: instance_benchmarks,
-        class_benchmarks: class_benchmarks,
-        colorized_chain_for_method: colorized_chain_for_method,
-        colorized_chain_for_class: colorized_chain_for_class,
-        add_invocation_id: add_invocation_id,
-        ellipsis: ellipsis,
-        mark_scope_exit: mark_scope_exit,
-        active_support_notifications: active_support_notifications
-      }
+      CONFIG_KEYS.each_with_object({}) do |key, hash|
+        hash[key] = self.instance_variable_get("@#{key}")
+      end
     end
 
     def register(method_lo_log)
       @methods_to_log << method_lo_log
+    end
+
+    private
+
+    def get_attr_from_options(options, key)
+      options.key?(key) ? options[key] : CONFIG_ATTRS_DEFAULTS[key]
+    end
+
+    def get_reader_from_options(options, key)
+      options.key?(key) ? options[key] : CONFIG_READERS_DEFAULTS[key]
     end
   end
 end
