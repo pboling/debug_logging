@@ -41,18 +41,21 @@ RSpec.describe DebugLogging::InstanceLogger do
         expect(output).to match(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/)
       end
       it 'has correct return value' do
-        expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+        expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                               { c: :d, e: :f })).to eq(50)
       end
     end
     context 'instance method with double splat args' do
       it 'logs' do
         output = capture('stdout') do
-          instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+          instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                          e: { c: :d, e: :f })
         end
         expect(output).to match(/#i_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
       end
       it 'has correct return value' do
-        expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(60)
+        expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                               e: { c: :d, e: :f })).to eq(60)
       end
     end
     context 'instance method not logged' do
@@ -70,7 +73,8 @@ RSpec.describe DebugLogging::InstanceLogger do
 
   context 'a singleton logged klass' do
     before do
-      skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+      skip_for(engine: 'ruby', versions: ['2.0.0'],
+               reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
     end
     context 'class method without args' do
       it 'logs' do
@@ -102,7 +106,8 @@ RSpec.describe DebugLogging::InstanceLogger do
         expect(output).to match(/\.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
       end
       it 'has correct return value' do
-        expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(30)
+        expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                    e: { c: :d, e: :f })).to eq(30)
       end
     end
     context 'class method not logged' do
@@ -126,7 +131,9 @@ RSpec.describe DebugLogging::InstanceLogger do
         l
       end
       it 'is maintained' do
-        simple_klass.send(:include, DebugLogging::InstanceLogger.new(i_methods: %i[initialize], config: { logger: logger, log_level: :debug }))
+        simple_klass.send(:include,
+                          DebugLogging::InstanceLogger.new(i_methods: %i[initialize],
+                                                           config: { logger: logger, log_level: :debug }))
         expect(simple_klass.debug_log_level).to eq(:debug)
         instance = simple_klass.new
         config_proxy = instance.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))
@@ -139,7 +146,9 @@ RSpec.describe DebugLogging::InstanceLogger do
         expect(logger).to receive(:debug).once
         expect(logger.level).to eq(Logger::INFO)
         # The debug log will be skipped, because the logger's level is info
-        simple_klass.send(:include, DebugLogging::InstanceLogger.new(i_methods: %i[initialize], config: { logger: logger, log_level: :debug }))
+        simple_klass.send(:include,
+                          DebugLogging::InstanceLogger.new(i_methods: %i[initialize],
+                                                           config: { logger: logger, log_level: :debug }))
         expect(simple_klass.debug_log_level).to eq(:debug)
         instance = simple_klass.new
         config_proxy = instance.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))

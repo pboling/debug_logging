@@ -7,7 +7,9 @@ module DebugLogging
       # When opts are not present it will reuse the class' configuration object
       payload = methods_to_log.last.is_a?(Hash) && methods_to_log.pop.dup || {}
       config_opts = {}
-      DebugLogging::Configuration::CONFIG_KEYS.each {|k| config_opts[k] = payload.delete(k) if payload.key?(k)} unless payload.empty?
+      unless payload.empty?
+        DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
+      end
       if methods_to_log.first.is_a?(Array)
         methods_to_log = methods_to_log.shift
       else
@@ -19,16 +21,18 @@ module DebugLogging
         original_method = method(method_to_log)
         (class << self; self; end).class_eval do
           define_method(method_to_log) do |*args, &block|
-            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('kl', method_to_log)))
+            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('kl',
+                                                                                                        method_to_log)))
                              proxy
                            else
-                             proxy = if !config_opts.empty?
-                                       DebugLogging::Configuration.new(**debug_config.to_hash.merge(config_opts))
-                                     else
+                             proxy = if config_opts.empty?
                                        debug_config
+                                     else
+                                       DebugLogging::Configuration.new(**debug_config.to_hash.merge(config_opts))
                                      end
                              proxy.register(method_to_log)
-                             instance_variable_set(DebugLogging::Configuration.config_pointer('kl', method_to_log), proxy)
+                             instance_variable_set(DebugLogging::Configuration.config_pointer('kl', method_to_log),
+                                                   proxy)
                              proxy
                            end
             method_return_value = nil
@@ -45,7 +49,8 @@ module DebugLogging
               else
                 paydirt.merge!(payload)
               end
-              log_prefix = debug_invocation_to_s(klass: to_s, separator: '.', method_to_log: method_to_log, config_proxy: config_proxy)
+              log_prefix = debug_invocation_to_s(klass: to_s, separator: '.', method_to_log: method_to_log,
+                                                 config_proxy: config_proxy)
               invocation_id = debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
               signature = debug_signature_to_s(args: args, config_proxy: config_proxy)
               paymud = debug_payload_to_s(payload: paydirt, config_proxy: config_proxy)

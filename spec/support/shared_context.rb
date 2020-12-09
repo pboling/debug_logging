@@ -24,7 +24,9 @@ RSpec.shared_context 'with example classes' do
       extend DebugLogging::ClassLogger
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceLogger.new(i_methods: %i[i i_with_ssplat])
-      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: { colorized_chain_for_method: ->(colorized_string) { colorized_string.red } })
+      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: { colorized_chain_for_method: lambda { |colorized_string|
+                                                                                                                    colorized_string.red
+                                                                                                                  } })
       logged def self.k
         10
       end
@@ -51,7 +53,11 @@ RSpec.shared_context 'with example classes' do
       def self.k_with_dsplat_e(**_args)
         31
       end
-      logged %i[k_with_ssplat_e k_with_dsplat_e], { last_hash_to_s_proc: ->(_) { 'LOLeee' }, colorized_chain_for_class: ->(colorized_string) { colorized_string.red } }
+      logged %i[k_with_ssplat_e k_with_dsplat_e], { last_hash_to_s_proc: lambda { |_|
+                                                                           'LOLeee'
+                                                                         }, colorized_chain_for_class: lambda { |colorized_string|
+                                                                                                         colorized_string.red
+                                                                                                       } }
       def self.k_without_log
         0
       end
@@ -85,12 +91,13 @@ RSpec.shared_context 'with example classes' do
       extend DebugLogging::ClassNotifier
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceNotifier.new(i_methods: [
-        :i,
-        [:i_with_ssplat, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
-        [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
-        [:i_with_dsplat_payload, { tags: ["blue", "green"] }],
-        [:i_with_dsplat_payload_and_config, { tags: ["yellow", "red"], add_invocation_id: true }],
-      ])
+                                                   :i,
+                                                   [:i_with_ssplat, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
+                                                   [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
+                                                   [:i_with_dsplat_payload, { tags: %w[blue green] }],
+                                                   [:i_with_dsplat_payload_and_config,
+                                                    { tags: %w[yellow red], add_invocation_id: true }]
+                                                 ])
       notifies def self.k
         10
       end
@@ -238,9 +245,11 @@ RSpec.shared_context 'with example classes' do
       extend DebugLogging
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceNotifier.new(i_methods: [:i,
-                                                             [:i_with_ssplat, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
+                                                             [:i_with_ssplat,
+                                                              { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
                                                              [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
-                                                             [:i_with_instance_vars, { instance_variables: %i[action id msg] }]])
+                                                             [:i_with_instance_vars,
+                                                              { instance_variables: %i[action id msg] }]])
       def i
         40
       end
