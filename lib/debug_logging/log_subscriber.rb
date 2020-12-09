@@ -4,7 +4,7 @@ require 'active_support/log_subscriber'
 
 module DebugLogging
   class LogSubscriber < ActiveSupport::LogSubscriber
-    EXCLUDE_FROM_PAYLOAD = %i(debug_args config_proxy)
+    EXCLUDE_FROM_PAYLOAD = %i[debug_args config_proxy].freeze
     extend DebugLogging::ArgumentPrinter
 
     class << self
@@ -29,7 +29,7 @@ module DebugLogging
     def self.event_to_format_options(event)
       args = event.payload[:debug_args]
       config_proxy = event.payload[:config_proxy]
-      payload = event.payload.reject { |k,_| EXCLUDE_FROM_PAYLOAD.include?(k) }
+      payload = event.payload.reject { |k, _| EXCLUDE_FROM_PAYLOAD.include?(k) }
       {
         name: event.name,
         duration: Rational(event.duration, 1000).to_f,

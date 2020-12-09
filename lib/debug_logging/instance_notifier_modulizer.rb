@@ -10,23 +10,28 @@ module DebugLogging
           # method name must be a symbol
           payload = (method_to_notify.is_a?(Array) && method_to_notify.last.is_a?(Hash) && method_to_notify.pop.dup) || {}
           config_opts = {}
-          DebugLogging::Configuration::CONFIG_KEYS.each {|k| config_opts[k] = payload.delete(k) if payload.key?(k)} unless payload.empty?
+          unless payload.empty?
+            DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
+          end
           method_to_notify = if method_to_notify.is_a?(Array)
                                method_to_notify.first&.to_sym
                              else
                                method_to_notify.to_sym
                              end
           define_method(method_to_notify) do |*args, &block|
-            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('inm', method_to_notify)))
+            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('inm',
+                                                                                                        method_to_notify)))
                              proxy
                            else
-                             proxy = if !config_opts.empty?
-                                       Configuration.new(**self.class.debug_config.to_hash.merge(config_opts))
-                                     else
+                             proxy = if config_opts.empty?
                                        self.class.debug_config
+                                     else
+                                       Configuration.new(**self.class.debug_config.to_hash.merge(config_opts))
                                      end
                              proxy.register(method_to_notify)
-                             instance_variable_set(DebugLogging::Configuration.config_pointer('inm', method_to_notify), proxy)
+                             instance_variable_set(
+                               DebugLogging::Configuration.config_pointer('inm', method_to_notify), proxy
+                             )
                              proxy
                            end
             paydirt = {}

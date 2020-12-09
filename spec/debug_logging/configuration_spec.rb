@@ -44,8 +44,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(output).to_not match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
           end
           it 'has correct return value' do
-            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
-            expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                   { c: :d, e: :f })).to eq(50)
+            expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                    { c: :d, e: :f })).to eq(50)
             expect(instance_logged_klass_dynamic.new.i_with_dsplat(c: :d, e: :f)).to eq(60)
             expect(instance_logged_klass_explicit.new.i_with_dsplat(c: :d, e: :f)).to eq(60)
           end
@@ -61,7 +63,8 @@ RSpec.describe DebugLogging::Configuration do
               instance_notified_klass_explicit.new.i
               instance_notified_klass_explicit.new.i_with_ssplat
               instance_notified_klass_explicit.new.i_with_dsplat
-              instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars
+              instance_notified_klass_explicit.new(action: 'Update', id: 1,
+                                                   msg: { greeting: 'hi' }).i_with_instance_vars
             end
             expect(output).to match(/i.log/)
             expect(output).to match(Regexp.escape('args=() payload={}'))
@@ -75,7 +78,8 @@ RSpec.describe DebugLogging::Configuration do
         end
         context 'class logging' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+            skip_for(engine: 'ruby', versions: ['2.0.0'],
+                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             DebugLogging.configure do |config|
               config.class_benchmarks = true
               config.add_invocation_id = false # invocation id allows you to identify a method call uniquely in a log
@@ -162,13 +166,16 @@ RSpec.describe DebugLogging::Configuration do
           expect(output).to_not match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
         end
         it 'has correct return value' do
-          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
-          expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                 { c: :d, e: :f })).to eq(50)
+          expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                  { c: :d, e: :f })).to eq(50)
         end
       end
       context 'class logging' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           singleton_logged_klass.debug_class_benchmarks = true
           singleton_logged_klass.debug_add_invocation_id = false
           complete_logged_klass.debug_class_benchmarks = false
@@ -206,7 +213,8 @@ RSpec.describe DebugLogging::Configuration do
           # Includes a new anonymous module each time, so can include multiple times, each with a different config!
           include DebugLogging::InstanceLogger.new(i_methods: [:i], config: { instance_benchmarks: false })
           include DebugLogging::InstanceLogger.new(i_methods: [:i_with_ssplat], config: { add_invocation_id: false })
-          include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: { instance_benchmarks: false, add_invocation_id: false })
+          include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat],
+                                                   config: { instance_benchmarks: false, add_invocation_id: false })
           def i
             40
           end
@@ -249,7 +257,8 @@ RSpec.describe DebugLogging::Configuration do
           # A bit redundant - but you can override the class settings above,
           #   which would apply to singleton and instance methods for this class,
           #   for all *instance* methods, like this:
-          include DebugLogging::InstanceLogger.new(i_methods: instance_methods(false), config: { add_invocation_id: true })
+          include DebugLogging::InstanceLogger.new(i_methods: instance_methods(false),
+                                                   config: { add_invocation_id: true })
           def i_without_log
             0
           end
@@ -335,7 +344,8 @@ RSpec.describe DebugLogging::Configuration do
             'config is i_pointer'
           end
           include DebugLogging::InstanceLogger.new(i_methods: LOG_I_WO_CONFIG)
-          include DebugLogging::InstanceLogger.new(i_methods: LOG_I_W_CONFIG, config: { add_invocation_id: true, instance_benchmarks: true })
+          include DebugLogging::InstanceLogger.new(i_methods: LOG_I_W_CONFIG,
+                                                   config: { add_invocation_id: true, instance_benchmarks: true })
         end
       end
       context 'instance and class logging' do
@@ -500,7 +510,8 @@ RSpec.describe DebugLogging::Configuration do
           output = capture('stdout') do
             instance_logged_klass_explicit.new.i
             instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
-            instance_logged_klass_explicit.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+            instance_logged_klass_explicit.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                             e: { c: :d, e: :f })
             instance_logged_klass_dynamic.new.i_with_ssplat('z', 1, true, ['y', 2, false], { c: :d, e: :f })
           end
           expect(output).to match(/#i\(\) ~\d+@.+~/)
@@ -514,14 +525,18 @@ RSpec.describe DebugLogging::Configuration do
         end
         it 'has correct return value' do
           expect(instance_logged_klass_explicit.new.i).to eq(40)
-          expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
-          expect(instance_logged_klass_explicit.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(60)
-          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+          expect(instance_logged_klass_explicit.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                  { c: :d, e: :f })).to eq(50)
+          expect(instance_logged_klass_explicit.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                                  e: { c: :d, e: :f })).to eq(60)
+          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                 { c: :d, e: :f })).to eq(50)
         end
       end
       context 'class logging' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           singleton_logged_klass.debug_class_benchmarks = true
           singleton_logged_klass.debug_add_invocation_id = false
           complete_logged_klass.debug_class_benchmarks = false
@@ -552,7 +567,8 @@ RSpec.describe DebugLogging::Configuration do
     context 'last_hash_to_s_proc' do
       context 'class level config' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
         end
@@ -563,7 +579,8 @@ RSpec.describe DebugLogging::Configuration do
           expect(output).to match(/\.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
         it 'has correct return value' do
-          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(30)
+          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                      e: { c: :d, e: :f })).to eq(30)
         end
       end
       context 'instance level config' do
@@ -573,34 +590,40 @@ RSpec.describe DebugLogging::Configuration do
         end
         it 'logs' do
           output = capture('stdout') do
-            instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+            instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                            e: { c: :d, e: :f })
           end
           expect(output).to match(/#i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
         it 'has correct return value' do
-          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(60)
+          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                                 e: { c: :d, e: :f })).to eq(60)
         end
       end
     end
     context 'multiple_last_hashes' do
       context 'class level config' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_multiple_last_hashes = true
         end
         it 'logs' do
           output = capture('stdout') do
-            singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+            singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1,
+                                                                                                  c: true, d: ['b', 2, false], e: { c: :d, e: :f })
             singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
           end
           expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/)
           expect(output).to match(/\.k_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
         it 'has correct return value' do
-          expect(singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(20)
-          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(30)
+          expect(singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1,
+                                                                                                       c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(20)
+          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                      e: { c: :d, e: :f })).to eq(30)
         end
       end
       context 'instance level config' do
@@ -611,22 +634,27 @@ RSpec.describe DebugLogging::Configuration do
         end
         it 'logs' do
           output = capture('stdout') do
-            instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
-            instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+            instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a',
+                                                                                                             b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
+            instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                            e: { c: :d, e: :f })
           end
           expect(output).to match(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/)
           expect(output).to match(/#i_with_dsplat\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
         it 'has correct return value' do
-          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f }, a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(50)
-          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(60)
+          expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f },
+                                                                 a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(50)
+          expect(instance_logged_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                                 e: { c: :d, e: :f })).to eq(60)
         end
       end
     end
     context 'last_hash_max_length' do
       context 'when last_hash_to_s_proc is set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_last_hash_max_length = 3
@@ -638,12 +666,14 @@ RSpec.describe DebugLogging::Configuration do
           expect(output).to match(/\.k_with_dsplat\(\[:a, ✂️ …\) ~/)
         end
         it 'has correct return value' do
-          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(30)
+          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                      e: { c: :d, e: :f })).to eq(30)
         end
       end
       context 'when last_hash_to_s_proc is not set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = nil
           singleton_logged_klass.debug_last_hash_max_length = 3
@@ -655,14 +685,16 @@ RSpec.describe DebugLogging::Configuration do
           expect(output).to match(/\.k_with_dsplat\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
         end
         it 'has correct return value' do
-          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })).to eq(30)
+          expect(singleton_logged_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false],
+                                                      e: { c: :d, e: :f })).to eq(30)
         end
       end
     end
     context 'args_max_length' do
       context 'when last_hash_to_s_proc is set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_args_max_length = 20
@@ -685,7 +717,8 @@ RSpec.describe DebugLogging::Configuration do
       end
       context 'when last_hash_to_s_proc is not set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+          skip_for(engine: 'ruby', versions: ['2.0.0'],
+                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = nil
           singleton_logged_klass.debug_args_max_length = 20
@@ -720,12 +753,14 @@ RSpec.describe DebugLogging::Configuration do
         expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/)
       end
       it 'has correct return value' do
-        expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+        expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                               { c: :d, e: :f })).to eq(50)
       end
     end
     context 'class_benchamrks' do
       before do
-        skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+        skip_for(engine: 'ruby', versions: ['2.0.0'],
+                 reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
         allow(singleton_logged_klass).to receive(:debug_log) { logger }
         singleton_logged_klass.debug_class_benchmarks = true
       end
@@ -744,7 +779,8 @@ RSpec.describe DebugLogging::Configuration do
       context 'singleton' do
         context 'add_invocation_id is true' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+            skip_for(engine: 'ruby', versions: ['2.0.0'],
+                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = true
@@ -762,7 +798,8 @@ RSpec.describe DebugLogging::Configuration do
         end
         context 'add_invocation_id is false' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+            skip_for(engine: 'ruby', versions: ['2.0.0'],
+                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = false
@@ -780,7 +817,8 @@ RSpec.describe DebugLogging::Configuration do
         end
         context 'add_invocation_id is proc' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'], reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
+            skip_for(engine: 'ruby', versions: ['2.0.0'],
+                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = ->(colorized_string) { colorized_string.red }
@@ -812,7 +850,8 @@ RSpec.describe DebugLogging::Configuration do
             expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
           end
           it 'has correct return value' do
-            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                   { c: :d, e: :f })).to eq(50)
           end
         end
         context 'add_invocation_id is false' do
@@ -829,7 +868,8 @@ RSpec.describe DebugLogging::Configuration do
             expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)\Z/)
           end
           it 'has correct return value' do
-            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                   { c: :d, e: :f })).to eq(50)
           end
         end
         context 'add_invocation_id is proc' do
@@ -846,7 +886,8 @@ RSpec.describe DebugLogging::Configuration do
             expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\).*0;31;49m ~\d+@.+~.*0m\Z/)
           end
           it 'has correct return value' do
-            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })).to eq(50)
+            expect(instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false],
+                                                                   { c: :d, e: :f })).to eq(50)
           end
         end
       end

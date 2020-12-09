@@ -48,6 +48,7 @@ class SimpleDebugLogging < Module
     base.send(:prepend, instance_method_logger)
     base.send(:extend, ClassMethodLogger)
   end
+
   module ClassMethodLogger
     def logged(*methods_to_log)
       methods_to_log.each do |method_to_log|
@@ -67,6 +68,7 @@ class SimpleDebugLogging < Module
       end
     end
   end
+
   module InstanceMethodLoggerModulizer
     def self.to_mod(methods_to_log = [])
       Module.new do

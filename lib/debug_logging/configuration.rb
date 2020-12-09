@@ -17,20 +17,21 @@ module DebugLogging
       ellipsis: DEFAULT_ELLIPSIS,
       mark_scope_exit: false,
       add_payload: true
-    }
+    }.freeze
     CONFIG_ATTRS = CONFIG_ATTRS_DEFAULTS.keys
     CONFIG_READERS_DEFAULTS = {
       instance_benchmarks: false,
       class_benchmarks: false,
       active_support_notifications: false
-    }
+    }.freeze
     CONFIG_READERS = CONFIG_READERS_DEFAULTS.keys
     CONFIG_KEYS = CONFIG_ATTRS + CONFIG_READERS
 
     # For reference, log levels as integers mapped to symbols:
     # LEVELS = { 0 => :debug, 1 => :info, 2 => :warn, 3 => :error, 4 => :fatal, 5 => :unknown }
-    attr_accessor *CONFIG_ATTRS
+    attr_accessor(*CONFIG_ATTRS)
     attr_reader :methods_to_log, *CONFIG_READERS
+
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
     #
@@ -63,10 +64,10 @@ module DebugLogging
     end
     def initialize(**options)
       CONFIG_ATTRS.each do |key|
-        self.send("#{key}=", get_attr_from_options(options, key))
+        send("#{key}=", get_attr_from_options(options, key))
       end
       CONFIG_READERS.each do |key|
-        self.send("#{key}=", get_reader_from_options(options, key))
+        send("#{key}=", get_reader_from_options(options, key))
       end
       @methods_to_log = []
     end
@@ -117,7 +118,7 @@ module DebugLogging
 
     def to_hash
       CONFIG_KEYS.each_with_object({}) do |key, hash|
-        hash[key] = self.instance_variable_get("@#{key}")
+        hash[key] = instance_variable_get("@#{key}")
       end
     end
 

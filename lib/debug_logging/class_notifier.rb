@@ -7,8 +7,9 @@ module DebugLogging
       # When opts are not present it will reuse the class' configuration object
       payload = methods_to_notify.last.is_a?(Hash) && methods_to_notify.pop.dup || {}
       config_opts = {}
-      DebugLogging::Configuration::CONFIG_KEYS.each {|k| config_opts[k] = payload.delete(k) if payload.key?(k)} unless payload.empty?
-
+      unless payload.empty?
+        DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
+      end
       if methods_to_notify.first.is_a?(Array)
         methods_to_notify = methods_to_notify.shift
       else
@@ -20,16 +21,18 @@ module DebugLogging
         original_method = method(method_to_notify)
         (class << self; self; end).class_eval do
           define_method(method_to_notify) do |*args, &block|
-            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('kn', method_to_notify)))
+            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('kn',
+                                                                                                        method_to_notify)))
                              proxy
                            else
-                             proxy = if !config_opts.empty?
-                                       DebugLogging::Configuration.new(**debug_config.to_hash.merge(config_opts))
-                                     else
+                             proxy = if config_opts.empty?
                                        debug_config
+                                     else
+                                       DebugLogging::Configuration.new(**debug_config.to_hash.merge(config_opts))
                                      end
                              proxy.register(method_to_notify)
-                             instance_variable_set(DebugLogging::Configuration.config_pointer('kn', method_to_notify), proxy)
+                             instance_variable_set(DebugLogging::Configuration.config_pointer('kn', method_to_notify),
+                                                   proxy)
                              ActiveSupport::Notifications.subscribe(
                                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify)
                              ) do |*debug_args|
