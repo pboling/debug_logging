@@ -13,6 +13,18 @@ RSpec.describe DebugLogging::ClassNotifier do
     end
   end
 
+  after do
+    @events.clear
+  end
+
+  it 'logs through the config proxy' do
+    # Have to call it twice to test, because before the first call the config proxy isn't prepared yet
+    complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
+    config_proxy = complete_notified_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('kn', :k_with_dsplat_payload_and_config))
+    expect(config_proxy).to receive(:log).once.and_call_original
+    complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
+  end
+
   context 'notifies macro' do
     it 'works without payload override hash' do
       expect(complete_notified_klass.debug_config).to receive(:log).once.and_call_original
@@ -20,12 +32,15 @@ RSpec.describe DebugLogging::ClassNotifier do
         complete_notified_klass.k_with_dsplat(a: 'a')
       end
       expect(output).to match('k_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[{:a=>"a"}\]}')
-      expect(complete_notified_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('k', :k_with_dsplat))).to receive(:log)
-      expect(@events).to contain_exactly(
-        have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [{ a: 'a' }] })
-      )
-      complete_notified_klass.k_with_dsplat(a: 'a')
+      expect(output).to match('args=\(\*\*{:a=>"a"}\) payload={}')
+      expect(@events.length).to eq(1)
+      event = @events.first
+      expect(event).to have_attributes(
+                         name: 'k_with_dsplat.log',
+                         payload: {
+                           config_proxy: instance_of(DebugLogging::Configuration),
+                           debug_args: [{ a: 'a' }] }
+                       )
     end
 
     it 'works with a payload override hash' do
@@ -33,11 +48,17 @@ RSpec.describe DebugLogging::ClassNotifier do
       output = capture('stdout') do
         complete_notified_klass.k_with_dsplat_payload(a: 'a')
       end
+      expect(@events.first).to have_attributes(
+                                 name: 'k_with_dsplat_payload.log',
+                                 payload: {
+                                   config_proxy: instance_of(DebugLogging::Configuration),
+                                   debug_args: [{ a: 'a' }],
+                                   id: 2,
+                                   first_name: 'Bae',
+                                   last_name: 'Fae'
+                                 })
       expect(output).to match('k_with_dsplat_payload.log')
-      expect(output).to match('payload={:debug_args=>\[{:a=>"a"}\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
-      expect(@events).to contain_exactly(
-        have_attributes(name: 'k_with_dsplat_payload.log', payload: { debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
-      )
+      expect(output).to match('args=\(\*\*{:a=>"a"}\) payload={:id=>2, :first_name=>"Bae", :last_name=>"Fae"}')
     end
 
     it 'works with a config override hash' do
@@ -45,15 +66,19 @@ RSpec.describe DebugLogging::ClassNotifier do
       output = capture('stdout') do
         complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
       end
+      expect(@events.first).to have_attributes(
+                                 name: 'k_with_dsplat_payload_and_config.log',
+                                 payload: {
+                                   config_proxy: instance_of(DebugLogging::Configuration),
+                                   debug_args: [{ a: 'a' }],
+                                   id: 3,
+                                   first_name: 'Jae',
+                                   last_name: 'Tae'
+                                 })
       expect(output).to match('ERROR')
-      expect(output).to match('k_with_dsplat_payload_and_config.log')
-      expect(output).to match('payload={:debug_args=>\[{:a=>"a"}\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
-      config_proxy = complete_notified_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('k', :k_with_dsplat_payload_and_config))
-      expect(config_proxy).to receive(:log).once.and_call_original
-      expect(@events).to contain_exactly(
-                           have_attributes(name: 'k_with_dsplat_payload_and_config.log', payload: { debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
-                         )
-      complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
+      expect(output).to match(Regexp.escape('k_with_dsplat_payload_and_config.log'))
+      expect(output).to match(Regexp.escape('args=(**{:a=>"a"})'))
+      expect(output).to match(Regexp.escape('payload={:id=>3, :first_name=>"Jae", :last_name=>"Tae"}'))
     end
   end
 
@@ -68,30 +93,46 @@ RSpec.describe DebugLogging::ClassNotifier do
         complete_notified_klass.new.i
         complete_notified_klass.new.i_with_ssplat
         complete_notified_klass.new.i_with_dsplat
+        complete_notified_klass.new.i_with_dsplat_payload
+        complete_notified_klass.new.i_with_dsplat_payload_and_config
         complete_notified_klass.k
         complete_notified_klass.k_with_ssplat
         complete_notified_klass.k_with_dsplat
+        complete_notified_klass.k_with_dsplat_payload
+        complete_notified_klass.k_with_dsplat_payload_and_config
       end
       expect(output).to match('i.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
+      expect(output).to match(Regexp.escape('args=() payload={}'))
       expect(output).to match('i_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      expect(output).to match('payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
       expect(output).to match('i_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}')
+      expect(output).to match('payload={:salutation=>"Mr.", :suffix=>"Jr."}')
+      expect(output).to match('i_with_dsplat_payload.log')
+      expect(output).to match('["blue", "green"]')
+      expect(output).to match('i_with_dsplat_payload_and_config.log')
+      expect(output).to match('["yellow", "red"]')
+      # Config options do not bleed through
+      expect(output).not_to match('add_invocation_id')
       expect(output).to match('k.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
       expect(output).to match('k_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
       expect(output).to match('k_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
-      expect(@events).to contain_exactly(
-        have_attributes(name: 'i.log', payload: { debug_args: [] }),
-        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.' }),
-        have_attributes(name: 'k.log', payload: { debug_args: [] }),
-        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [] }),
-        have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [] })
-      )
+      expect(output).to match('k_with_dsplat_payload.log')
+      expect(output).to match('payload={:id=>2, :first_name=>"Bae", :last_name=>"Fae"}')
+      expect(output).to match('k_with_dsplat_payload_and_config.log')
+      expect(output).to match('payload={:id=>3, :first_name=>"Jae", :last_name=>"Tae"}')
+      # Config options do not bleed through
+      expect(output).not_to match('log_level')
+      expect(@events[0]).to have_attributes(name: 'i.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[1]).to have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[2]).to have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[3]).to have_attributes(name: 'i_with_dsplat_payload.log', payload: { debug_args: [], tags: ["blue", "green"], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[4]).to have_attributes(name: 'i_with_dsplat_payload_and_config.log', payload: { debug_args: [], tags: ["yellow", "red"], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[5]).to have_attributes(name: 'k.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[6]).to have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[7]).to have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[8]).to have_attributes(name: 'k_with_dsplat_payload.log', payload: { debug_args: [], id: 2, first_name: 'Bae', last_name: 'Fae', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[9]).to have_attributes(name: 'k_with_dsplat_payload_and_config.log', payload: { debug_args: [], id: 3, first_name: 'Jae', last_name: 'Tae', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events.length).to eq(10)
     end
 
     it 'notifies class methods' do
@@ -101,15 +142,13 @@ RSpec.describe DebugLogging::ClassNotifier do
         complete_notified_klass.k_with_dsplat
       end
       expect(output).to match('k.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
+      expect(output).to match(Regexp.escape('args=() payload={}'))
       expect(output).to match('k_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
       expect(output).to match('k_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
       expect(@events).to contain_exactly(
-        have_attributes(name: 'k.log', payload: { debug_args: [] }),
-        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [] }),
-        have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [] })
+        have_attributes(name: 'k.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
       )
     end
 
@@ -120,15 +159,15 @@ RSpec.describe DebugLogging::ClassNotifier do
         complete_notified_klass.new.i_with_dsplat
       end
       expect(output).to match('i.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
+      expect(output).to match(Regexp.escape('args=() payload={}'))
       expect(output).to match('i_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      expect(output).to match('payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
       expect(output).to match('i_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}')
+      expect(output).to match('payload={:salutation=>"Mr.", :suffix=>"Jr."}')
       expect(@events).to contain_exactly(
-        have_attributes(name: 'i.log', payload: { debug_args: [] }),
-        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.' })
+        have_attributes(name: 'i.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe', config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.', config_proxy: instance_of(DebugLogging::Configuration) })
       )
     end
 
@@ -140,18 +179,17 @@ RSpec.describe DebugLogging::ClassNotifier do
         complete_notified_klass.k_with_ssplat
       end
       expect(output).to match('i_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      expect(output).to match('payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
       expect(output).to match('i_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      expect(output).to match('payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
       expect(output).to match('k_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
+      expect(output).to match(Regexp.escape('args=() payload={}'))
       expect(output).to match('k_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
       expect(@events).to contain_exactly(
-        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [] }),
-        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [] })
+        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe', config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe', config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) }),
+        have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
       )
     end
 

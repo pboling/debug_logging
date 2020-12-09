@@ -21,7 +21,8 @@ RSpec.describe DebugLogging::LogSubscriber do
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to match('k_with_dsplat.log')
-        expect(@log_subscriber.event.payload).to eq({ debug_args: [{ a: 'a' }] })
+        expect(@log_subscriber.event.payload[:config_proxy]).to match(instance_of(DebugLogging::Configuration))
+        expect(@log_subscriber.event.payload[:debug_args]).to match([{ a: 'a' }])
       end
     end
 
@@ -32,7 +33,11 @@ RSpec.describe DebugLogging::LogSubscriber do
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to match('k_with_dsplat_payload_and_config.log')
-        expect(@log_subscriber.event.payload).to eq({ debug_args: [{ a: 'a' }], id: 1, first_name: 'Joe', last_name: 'Schmoe' })
+        expect(@log_subscriber.event.payload[:config_proxy]).to match(instance_of(DebugLogging::Configuration))
+        expect(@log_subscriber.event.payload[:debug_args]).to match([{ a: 'a' }])
+        expect(@log_subscriber.event.payload[:id]).to eq(3)
+        expect(@log_subscriber.event.payload[:first_name]).to eq('Jae')
+        expect(@log_subscriber.event.payload[:last_name]).to eq('Tae')
       end
     end
 
@@ -41,11 +46,14 @@ RSpec.describe DebugLogging::LogSubscriber do
         expect(complete_notified_klass.debug_config).to receive(:log).once.and_call_original
         expect do
           complete_notified_klass.k_with_ssplat_error(a: 'a')
-        end.to raise_error(StandardError)
+        end.to raise_error(StandardError, 'bad method!')
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
         expect(@log_subscriber.event.name).to match('k_with_ssplat_error.log')
-        expect(@log_subscriber.event.payload).to include({ debug_args: [{ a: 'a' }], exception: ['StandardError', 'bad method!'] })
+        expect(@log_subscriber.event.payload[:config_proxy]).to match(instance_of(DebugLogging::Configuration))
+        expect(@log_subscriber.event.payload[:debug_args]).to match([{ a: 'a' }])
+        expect(@log_subscriber.event.payload[:exception]).to match(['StandardError', 'bad method!'])
+        expect(@log_subscriber.event.payload[:exception_object]).to be_a(StandardError)
       end
     end
   end
