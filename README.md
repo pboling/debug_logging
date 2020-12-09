@@ -2,6 +2,12 @@
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 
+## What do I mean by "unobtrusive"?
+
+**Ugly** debug logging is added inside the body of a method, so it runs when a method is called. This can create a mess of your git history, and can even introduce new bugs to your code.
+
+**Unobtrusive** debug logging stays out of the method, changes no logic, can't break your code, and yet it still runs when your method is called, and tells you everything you wanted to know. It doesn't mess with the git history of the method at all!
+
 | Project                 |  DebugLogging           |
 |------------------------ | ----------------------- |
 | gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
@@ -43,9 +49,9 @@ Herein you will find:
 * 100% clean, 0% obtrusive
 * 100% tested
 * 100% Ruby 2.1+ compatible
-  - use version ~1.0 for Ruby < 2.3
-  - use version ~2.0 for Ruby 2.3
-  - use version ~3.0 for Ruby 2.4+
+  - use version `gem "debug_logging", "~> 1.0"` for Ruby < 2.3
+  - use version `gem "debug_logging", "~> 2.0"` for Ruby 2.3
+  - use version `gem "debug_logging", "~> 3.0"` for Ruby 2.4+
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
 
@@ -136,29 +142,45 @@ Every time a method is called, you can now get logs, optionally with arguments, 
 
 ```ruby
 class Car
-
-  # adds the helper methods to the class, all are prefixed with debug_*,
-  #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
+  # Adds the helper methods to the class.
+  #   All helpers prefixed with debug_*,
+  #   except for the *logged* decorator, which comes from extending DebugLogging::ClassLogger
   extend DebugLogging
 
   # per class configuration overrides!
   self.debug_class_benchmarks = true
   self.debug_instance_benchmarks = true
 
+  # For class methods
+  #   Provides the versatile `logged` method decorator / macro
+  # For instance methods
+  #   Provides the versatile `i_logged` method decorator / macro
+  extend DebugLogging::ClassLogger
+
+  # == BEGIN CLASS METHODS ==
+  # For class methods:
+  # Option 1: Use *logged* as a method decorator
+  logged def self.make; new; end
+  def self.design(*args); new; end
+  def self.safety(*args); new; end
+  def self.dealer_options(*args); new; end
+
+  # Option 2: Use *logged* as a macro
+  logged :design, :safety
+  # Override configuration options for any class method(s), by passing a hash as the last argument
+  # In the last hash any non-Configuration keys will be data that gets logged,
+  #     and also made available to last_hash_to_s_proc
+  logged :dealer_options, {
+    something: 'here', # <= will be logged, and available to last_hash_to_s_proc
+    multiple_last_hashes: true # <= Overrides config
+  }
+  def self.will_not_be_logged; false; end
+  # == END CLASS METHODS ==
+
+  # == BEGIN INSTANCE METHODS ==
   # For instance methods:
   # Option 1: specify the exact method(s) to add logging to
   include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
-
-  # Provides the `logged` method decorator
-  extend DebugLogging::ClassLogger
-
-  logged def make; new; end
-  def design(*args); new; end
-  def safety(*args); new; end
-  def dealer_options(*args); new; end
-  logged :design, :safety
-  # override options for any instance method(s), by passing a hash as the last argument
-  logged :dealer_options, { multiple_last_hashes: true }
 
   def drive(speed); speed; end
   def stop(**opts); 0; end
@@ -167,11 +189,15 @@ class Car
   # Option 2: add logging to all instance methods defined above (but *not* defined below)
   include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
 
-  # override options for any instance method(s)
-  include DebugLogging::InstanceLogger.new(i_methods: [:stop], config: { multiple_last_hashes: true })
+  def faster(**opts); 0; end
+
+  # Override configuration options for any instance method(s), by passing a hash as the last argument
+  # In the last hash any non-Configuration keys will be data that gets logged,
+  #     and also made available to last_hash_to_s_proc
+  include DebugLogging::InstanceLogger.new(i_methods: [:faster], config: { add_invocation_id: false })
 
   def will_not_be_logged; false; end
-
+  # == END INSTANCE METHODS ==
 end
 ```
 
@@ -195,28 +221,45 @@ Every time a method is called, class and instance method events are instrumented
 
 ```ruby
 class Car
-
-  # adds the helper methods to the class, all are prefixed with debug_*,
-  #   except for the instrumented class method, which comes from extending DebugLogging::ClassNotifier
+  # Adds the helper methods to the class.
+  #   All helpers prefixed with debug_*,
+  #   except for the *notifies* decorator, which comes from extending DebugLogging::ClassNotifier
   extend DebugLogging
 
   # For instance methods:
-  # Option 1: specify the exact method(s) to add instrumentation to (including capturing instance variable values as part of the event payload)
+  # Option 1: specify the exact method(s) to add instrumentation to
+  #   NOTE: You can capture instance variable values as part of the event payload
   include DebugLogging::InstanceNotifier.new(i_methods: [:drive,
                                                          :stop,
                                                          [:turn, { instance_variables: %i[direction angle] }]])
 
-  # Provides the `notifies` method decorator
+  # For class methods
+  #   Provides the versatile `notifies` method decorator / macro
+  # For instance methods
+  #   Provides the versatile `i_notifies` method decorator / macro
   extend DebugLogging::ClassNotifier
 
-  notifies def make; new; end
-  def design(*args); new; end
-  def safety(*args); new; end
-  def dealer_options(*args); new; end
-  notifies :design, :safety
-  # adding additional event payload options for any instance method(s), by passing a hash as the last argument
-  notifies :dealer_options, { sport_package: true }
+  # == BEGIN CLASS METHODS ==
+  # For class methods:
+  # Option 1: Use *notifies* as a method decorator
+  notifies def self.make; new; end
+  def self.design(*args); new; end
+  def self.safety(*args); new; end
+  def self.dealer_options(*args); new; end
 
+  # Option 2: Use *logged* as a macro
+  notifies :design, :safety
+  # Override configuration options for any class method(s), by passing a hash as the last argument
+  # In the last hash any non-Configuration keys will be data that gets added to the event payload,
+  #     and also made available to last_hash_to_s_proc
+  notifies :dealer_options, {
+    something: 'here', # <= will be added to the event payload, and be available to last_hash_to_s_proc
+    add_invocation_id: false # <= Overrides config
+  }
+  def self.will_not_be_notified; false; end
+  # == END CLASS METHODS ==
+
+  # == BEGIN INSTANCE METHODS ==
   def drive(speed); speed; end
   def stop(**opts); 0; end
 
@@ -224,8 +267,15 @@ class Car
   # Option 2: add instrumentation to all instance methods defined above (but *not* defined below)
   include DebugLogging::InstanceNotifier.new(i_methods: self.instance_methods(false))
 
-  def will_not_be_logged; false; end
+  def faster(**opts); 0; end
 
+  # Override options for any instance method(s), by passing a hash as the last argument
+  # In the last hash any non-Configuration keys will be data that gets added to the event payload,
+  #     and also made available to last_hash_to_s_proc
+  include DebugLogging::InstanceNotifier.new(i_methods: [:faster], config: { add_invocation_id: false })
+
+  def will_not_be_notified; false; end
+  # == END INSTANCE METHODS ==
 end
 ```
 

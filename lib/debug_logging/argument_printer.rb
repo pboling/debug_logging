@@ -7,6 +7,8 @@ module DebugLogging
     end
 
     def debug_invocation_id_to_s(args: nil, config_proxy: nil)
+      return '' unless args && config_proxy
+
       if config_proxy.debug_add_invocation_id
         invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % '%#-21a')[4..-4]}~"
         case config_proxy.debug_add_invocation_id
@@ -21,6 +23,7 @@ module DebugLogging
     end
 
     def debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: nil)
+      return '' unless config_proxy
       klass_string = if config_proxy.debug_colorized_chain_for_class
                        config_proxy.debug_colorized_chain_for_class.call(ColorizedString[klass.to_s])
                      else
@@ -35,6 +38,8 @@ module DebugLogging
     end
 
     def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      return '' unless args && config_proxy
+
       printed_args = ''
 
       add_args_ellipsis = false
@@ -84,6 +89,21 @@ module DebugLogging
         printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
       end
       "(#{printed_args})"
+    end
+
+    def debug_payload_to_s(payload: nil, config_proxy: nil)
+      return '' unless payload && config_proxy
+
+      if payload
+        case config_proxy.debug_add_payload
+        when true
+          payload.inspect
+        else
+          config_proxy.debug_add_payload.call(**payload)
+        end
+      else
+        ''
+      end
     end
 
     module_function

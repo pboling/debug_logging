@@ -23,22 +23,21 @@ RSpec.describe DebugLogging::InstanceNotifier do
         instance_notified_klass_explicit.new(action: 'Create', id: 2, msg: { greeting: 'bye' }).i_with_instance_vars
       end
       expect(output).to match('i.log')
-      expect(output).to match('payload={:debug_args=>\[\]}')
+      expect(output).to match(Regexp.escape('args=() payload={}'))
       expect(output).to match('i_with_ssplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
+      expect(output).to match('payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}')
       expect(output).to match('i_with_dsplat.log')
-      expect(output).to match('payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}')
+      expect(output).to match('payload={:salutation=>"Mr.", :suffix=>"Jr."}')
       expect(output).to match('i_with_instance_vars.log')
-      expect(output).to match('payload={:debug_args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}')
+      expect(output).to match('payload={:action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}')
       expect(output).to match('i_with_instance_vars.log')
-      expect(output).to match('payload={:debug_args=>\[\], :action=>"Create", :id=>2, :msg=>{:greeting=>"bye"}}')
-      expect(@events).to contain_exactly(
-        have_attributes(name: 'i.log', payload: { debug_args: [] }),
-        have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe' }),
-        have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.' }),
-        have_attributes(name: 'i_with_instance_vars.log', payload: { debug_args: [], action: 'Update', id: 1, msg: { greeting: 'hi' } }),
-        have_attributes(name: 'i_with_instance_vars.log', payload: { debug_args: [], action: 'Create', id: 2, msg: { greeting: 'bye' } })
-      )
+      expect(output).to match('payload={:action=>"Create", :id=>2, :msg=>{:greeting=>"bye"}}')
+      expect(@events[0]).to have_attributes(name: 'i.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[1]).to have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: [], id: 1, first_name: 'Joe', last_name: 'Schmoe', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[2]).to have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [], salutation: 'Mr.', suffix: 'Jr.', config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[3]).to have_attributes(name: 'i_with_instance_vars.log', payload: { debug_args: [], action: 'Update', id: 1, msg: { greeting: 'hi' }, config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events[4]).to have_attributes(name: 'i_with_instance_vars.log', payload: { debug_args: [], action: 'Create', id: 2, msg: { greeting: 'bye' }, config_proxy: instance_of(DebugLogging::Configuration) })
+      expect(@events.length).to eq(5)
     end
 
     it 'has correct return value' do
@@ -56,9 +55,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           instance_notified_klass_dynamic.new.i
         end
         expect(output).to match('i.log')
-        expect(output).to match('payload={:debug_args=>\[\]}')
+        expect(output).to match(Regexp.escape('args=() payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'i.log', payload: { debug_args: [] })
+          have_attributes(name: 'i.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 
@@ -73,9 +72,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           instance_notified_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
         end
         expect(output).to match('i_with_ssplat.log')
-        expect(output).to match('payload={:debug_args=>\["a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\]}')
+        expect(output).to match(Regexp.escape('args=("a", 1, true, ["b", 2, false], {:c=>:d, :e=>:f}) payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: ['a', 1, true, ['b', 2, false], { c: :d, e: :f }] })
+          have_attributes(name: 'i_with_ssplat.log', payload: { debug_args: ['a', 1, true, ['b', 2, false], { c: :d, e: :f }], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 
@@ -90,9 +89,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           instance_notified_klass_dynamic.new.i_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
         end
         expect(output).to match('i_with_dsplat.log')
-        expect(output).to match('payload={:debug_args=>\[{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\]}')
+        expect(output).to match(Regexp.escape('args=(**{:a=>"a", :b=>1, :c=>true, :d=>["b", 2, false], :e=>{:c=>:d, :e=>:f}}) payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [{ a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f } }] })
+          have_attributes(name: 'i_with_dsplat.log', payload: { debug_args: [{ a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f } }], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 
@@ -127,9 +126,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           singleton_notified_klass.k
         end
         expect(output).to match('k.log')
-        expect(output).to match('payload={:debug_args=>\[\]}')
+        expect(output).to match(Regexp.escape('args=() payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'k.log', payload: { debug_args: [] })
+          have_attributes(name: 'k.log', payload: { debug_args: [], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 
@@ -144,9 +143,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           singleton_notified_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
         end
         expect(output).to match('k_with_ssplat.log')
-        expect(output).to match('payload={:debug_args=>\["a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\]}')
+        expect(output).to match(Regexp.escape('args=("a", 1, true, ["b", 2, false], {:c=>:d, :e=>:f}) payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: ['a', 1, true, ['b', 2, false], { c: :d, e: :f }] })
+          have_attributes(name: 'k_with_ssplat.log', payload: { debug_args: ['a', 1, true, ['b', 2, false], { c: :d, e: :f }], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 
@@ -161,9 +160,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
           singleton_notified_klass.k_with_dsplat(a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f })
         end
         expect(output).to match('k_with_dsplat.log')
-        expect(output).to match('payload={:debug_args=>\[{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\]}')
+        expect(output).to match(Regexp.escape('args=(**{:a=>"a", :b=>1, :c=>true, :d=>["b", 2, false], :e=>{:c=>:d, :e=>:f}}) payload={}'))
         expect(@events).to contain_exactly(
-          have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [{ a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f } }] })
+          have_attributes(name: 'k_with_dsplat.log', payload: { debug_args: [{ a: 'a', b: 1, c: true, d: ['b', 2, false], e: { c: :d, e: :f } }], config_proxy: instance_of(DebugLogging::Configuration) })
         )
       end
 

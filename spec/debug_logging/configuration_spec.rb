@@ -30,15 +30,17 @@ RSpec.describe DebugLogging::Configuration do
             # No options hashes on either, so same methods use class-level config
             instance_logged_klass_dynamic.debug_add_invocation_id = false
             instance_logged_klass_explicit.debug_add_invocation_id = true
+            expect(instance_logged_klass_dynamic.debug_instance_benchmarks).to eq(true)
+            expect(instance_logged_klass_explicit.debug_instance_benchmarks).to eq(false)
             expect(instance_logged_klass_dynamic.debug_config).to receive(:log).twice.and_call_original
             expect(instance_logged_klass_explicit.debug_config).to receive(:log).once.and_call_original
             output = capture('stdout') do
               instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
               instance_logged_klass_explicit.new.i_with_ssplat('z', 1, true, ['y', 2, false], { t: :t, p: :p })
             end
-            expect(output).to match(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)$/)
+            expect(output).to match(Regexp.escape('#i_with_ssplat("a", 1, true, ["b", 2, false], {:c=>:d, :e=>:f}) debug: {}'))
             expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)$/)
-            expect(output).to match(/#i_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+@.+~\Z/)
+            expect(output).to match(/#i_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+@.+~ debug: {}\Z/)
             expect(output).to_not match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
           end
           it 'has correct return value' do
@@ -62,13 +64,13 @@ RSpec.describe DebugLogging::Configuration do
               instance_notified_klass_explicit.new(action: 'Update', id: 1, msg: { greeting: 'hi' }).i_with_instance_vars
             end
             expect(output).to match(/i.log/)
-            expect(output).to match(/payload={:debug_args=>\[\]}/)
+            expect(output).to match(Regexp.escape('args=() payload={}'))
             expect(output).to match(/i_with_ssplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
             expect(output).to match(/i_with_dsplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/payload={:salutation=>"Mr.", :suffix=>"Jr."}/)
             expect(output).to match(/i_with_instance_vars.log/)
-            expect(output).to match(/payload={:debug_args=>\[\], :action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
+            expect(output).to match(/payload={:action=>"Update", :id=>1, :msg=>{:greeting=>"hi"}}/)
           end
         end
         context 'class logging' do
@@ -94,9 +96,9 @@ RSpec.describe DebugLogging::Configuration do
               singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
               complete_logged_klass.k_with_ssplat('z', 1, true, ['y', 2, false], { t: :t, p: :p })
             end
-            expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
+            expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) debug: \{\}/)
             expect(output).to match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
-            expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+@.+~\Z/)
+            expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+@.+~ debug: \{\}\Z/)
             expect(output).to_not match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
           end
           it 'has correct return value' do
@@ -120,17 +122,17 @@ RSpec.describe DebugLogging::Configuration do
               complete_notified_klass.k_with_dsplat
             end
             expect(output).to match(/i.log/)
-            expect(output).to match(/payload={:debug_args=>\[\]}/)
+            expect(output).to match(Regexp.escape('args=() payload={}'))
             expect(output).to match(/i_with_ssplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\], :id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
+            expect(output).to match(/payload={:id=>1, :first_name=>"Joe", :last_name=>"Schmoe"}/)
             expect(output).to match(/i_with_dsplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\], :salutation=>"Mr.", :suffix=>"Jr."}/)
+            expect(output).to match(/payload={:salutation=>"Mr.", :suffix=>"Jr."}/)
             expect(output).to match(/k.log/)
-            expect(output).to match(/payload={:debug_args=>\[\]}/)
+            expect(output).to match(/payload={}/)
             expect(output).to match(/k_with_ssplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\]}/)
+            expect(output).to match(/payload={}/)
             expect(output).to match(/k_with_dsplat.log/)
-            expect(output).to match(/payload={:debug_args=>\[\]}/)
+            expect(output).to match(/payload={}/)
           end
         end
       end
@@ -154,9 +156,9 @@ RSpec.describe DebugLogging::Configuration do
             instance_logged_klass_dynamic.new.i_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
             instance_logged_klass_explicit.new.i_with_ssplat('z', 1, true, ['y', 2, false], { c: :d, e: :f })
           end
-          expect(output).to match(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
+          expect(output).to match(/#i_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) debug: \{\}/)
           expect(output).to match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
-          expect(output).to match(/#i_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~\Z/)
+          expect(output).to match(/#i_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~ debug: \{\}\Z/)
           expect(output).to_not match(/#i_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
         end
         it 'has correct return value' do
@@ -183,9 +185,9 @@ RSpec.describe DebugLogging::Configuration do
             singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
             complete_logged_klass.k_with_ssplat('z', 1, true, ['y', 2, false], { c: :d, e: :f })
           end
-          expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
+          expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) debug: \{\}/)
           expect(output).to match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
-          expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~\Z/)
+          expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~ debug: \{\}\Z/)
           expect(output).to_not match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
         end
         it 'has correct return value' do
@@ -339,22 +341,22 @@ RSpec.describe DebugLogging::Configuration do
       context 'instance and class logging' do
         let(:instance) { double_trouble.new }
         it 'lazily initializes method level configs' do
-          c_pointer = DebugLogging::Configuration.config_pointer('k', :uses_class_config)
-          c_pointer_bang = DebugLogging::Configuration.config_pointer('k', :uses_class_config!)
-          c_pointer_q = DebugLogging::Configuration.config_pointer('k', :uses_class_config?)
-          c_pointer_u = DebugLogging::Configuration.config_pointer('k', :_uses_class_config)
-          k_pointer = DebugLogging::Configuration.config_pointer('k', :double_trouble)
-          k_pointer_bang = DebugLogging::Configuration.config_pointer('k', :double_trouble!)
-          k_pointer_q = DebugLogging::Configuration.config_pointer('k', :double_trouble?)
-          k_pointer_u = DebugLogging::Configuration.config_pointer('k', :_double_trouble)
-          ic_pointer = DebugLogging::Configuration.config_pointer('i', :uses_class_config)
-          ic_pointer_bang = DebugLogging::Configuration.config_pointer('i', :uses_class_config!)
-          ic_pointer_q = DebugLogging::Configuration.config_pointer('i', :uses_class_config?)
-          ic_pointer_u = DebugLogging::Configuration.config_pointer('i', :_uses_class_config)
-          i_pointer = DebugLogging::Configuration.config_pointer('i', :double_trouble)
-          i_pointer_bang = DebugLogging::Configuration.config_pointer('i', :double_trouble!)
-          i_pointer_q = DebugLogging::Configuration.config_pointer('i', :double_trouble?)
-          i_pointer_u = DebugLogging::Configuration.config_pointer('i', :_double_trouble)
+          c_pointer = DebugLogging::Configuration.config_pointer('kl', :uses_class_config)
+          c_pointer_bang = DebugLogging::Configuration.config_pointer('kl', :uses_class_config!)
+          c_pointer_q = DebugLogging::Configuration.config_pointer('kl', :uses_class_config?)
+          c_pointer_u = DebugLogging::Configuration.config_pointer('kl', :_uses_class_config)
+          k_pointer = DebugLogging::Configuration.config_pointer('kl', :double_trouble)
+          k_pointer_bang = DebugLogging::Configuration.config_pointer('kl', :double_trouble!)
+          k_pointer_q = DebugLogging::Configuration.config_pointer('kl', :double_trouble?)
+          k_pointer_u = DebugLogging::Configuration.config_pointer('kl', :_double_trouble)
+          ic_pointer = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config)
+          ic_pointer_bang = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config!)
+          ic_pointer_q = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config?)
+          ic_pointer_u = DebugLogging::Configuration.config_pointer('ilm', :_uses_class_config)
+          i_pointer = DebugLogging::Configuration.config_pointer('ilm', :double_trouble)
+          i_pointer_bang = DebugLogging::Configuration.config_pointer('ilm', :double_trouble!)
+          i_pointer_q = DebugLogging::Configuration.config_pointer('ilm', :double_trouble?)
+          i_pointer_u = DebugLogging::Configuration.config_pointer('ilm', :_double_trouble)
 
           expect(double_trouble.instance_variable_get(c_pointer)).to be_nil # not initialized yet
           expect(double_trouble.instance_variable_get(c_pointer_bang)).to be_nil # not initialized yet
@@ -408,25 +410,25 @@ RSpec.describe DebugLogging::Configuration do
           expect(instance.instance_variable_get(i_pointer_u)).to be_a(DebugLogging::Configuration) # now initialized
         end
         it 'keeps separate configs' do
-          c_pointer = DebugLogging::Configuration.config_pointer('k', :uses_class_config)
-          c_pointer_bang = DebugLogging::Configuration.config_pointer('k', :uses_class_config!)
-          c_pointer_q = DebugLogging::Configuration.config_pointer('k', :uses_class_config?)
-          c_pointer_u = DebugLogging::Configuration.config_pointer('k', :_uses_class_config)
+          c_pointer = DebugLogging::Configuration.config_pointer('kl', :uses_class_config)
+          c_pointer_bang = DebugLogging::Configuration.config_pointer('kl', :uses_class_config!)
+          c_pointer_q = DebugLogging::Configuration.config_pointer('kl', :uses_class_config?)
+          c_pointer_u = DebugLogging::Configuration.config_pointer('kl', :_uses_class_config)
           c_pointers = [c_pointer, c_pointer_bang, c_pointer_q, c_pointer_u]
-          k_pointer = DebugLogging::Configuration.config_pointer('k', :double_trouble)
-          k_pointer_bang = DebugLogging::Configuration.config_pointer('k', :double_trouble!)
-          k_pointer_q = DebugLogging::Configuration.config_pointer('k', :double_trouble?)
-          k_pointer_u = DebugLogging::Configuration.config_pointer('k', :_double_trouble)
+          k_pointer = DebugLogging::Configuration.config_pointer('kl', :double_trouble)
+          k_pointer_bang = DebugLogging::Configuration.config_pointer('kl', :double_trouble!)
+          k_pointer_q = DebugLogging::Configuration.config_pointer('kl', :double_trouble?)
+          k_pointer_u = DebugLogging::Configuration.config_pointer('kl', :_double_trouble)
           k_pointers = [k_pointer, k_pointer_bang, k_pointer_q, k_pointer_u]
-          ic_pointer = DebugLogging::Configuration.config_pointer('i', :uses_class_config)
-          ic_pointer_bang = DebugLogging::Configuration.config_pointer('i', :uses_class_config!)
-          ic_pointer_q = DebugLogging::Configuration.config_pointer('i', :uses_class_config?)
-          ic_pointer_u = DebugLogging::Configuration.config_pointer('i', :_uses_class_config)
+          ic_pointer = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config)
+          ic_pointer_bang = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config!)
+          ic_pointer_q = DebugLogging::Configuration.config_pointer('ilm', :uses_class_config?)
+          ic_pointer_u = DebugLogging::Configuration.config_pointer('ilm', :_uses_class_config)
           ic_pointers = [ic_pointer, ic_pointer_bang, ic_pointer_q, ic_pointer_u]
-          i_pointer = DebugLogging::Configuration.config_pointer('i', :double_trouble)
-          i_pointer_bang = DebugLogging::Configuration.config_pointer('i', :double_trouble!)
-          i_pointer_q = DebugLogging::Configuration.config_pointer('i', :double_trouble?)
-          i_pointer_u = DebugLogging::Configuration.config_pointer('i', :_double_trouble)
+          i_pointer = DebugLogging::Configuration.config_pointer('ilm', :double_trouble)
+          i_pointer_bang = DebugLogging::Configuration.config_pointer('ilm', :double_trouble!)
+          i_pointer_q = DebugLogging::Configuration.config_pointer('ilm', :double_trouble?)
+          i_pointer_u = DebugLogging::Configuration.config_pointer('ilm', :_double_trouble)
           i_pointers = [i_pointer, i_pointer_bang, i_pointer_q, i_pointer_u]
 
           double_trouble.uses_class_config
@@ -536,9 +538,9 @@ RSpec.describe DebugLogging::Configuration do
             singleton_logged_klass.k_with_ssplat('a', 1, true, ['b', 2, false], { c: :d, e: :f })
             complete_logged_klass.k_with_ssplat('x', 1, true, ['y', 2, false], { c: :d, e: :f })
           end
-          expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
+          expect(output).to match(/\.k_with_ssplat\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) debug: \{\}/)
           expect(output).to match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
-          expect(output).to match(/\.k_with_ssplat\("x", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~\Z/)
+          expect(output).to match(/\.k_with_ssplat\("x", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+@.+~ debug: \{\}\Z/)
           expect(output).to_not match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+@.+~/)
         end
         it 'has correct return value' do
