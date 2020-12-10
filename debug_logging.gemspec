@@ -7,7 +7,7 @@ require 'debug_logging/version'
 Gem::Specification.new do |spec|
   spec.name          = 'debug_logging'
   spec.version       = DebugLogging::VERSION
-  spec.authors       = ['Peter Boling']
+  spec.authors       = ['Peter Boling', 'guckin']
   spec.email         = ['peter.boling@gmail.com']
 
   spec.summary       = 'Drop-in debug logging useful when a call stack gets unruly'
