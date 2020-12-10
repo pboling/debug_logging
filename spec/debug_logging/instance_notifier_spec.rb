@@ -124,7 +124,7 @@ RSpec.describe DebugLogging::InstanceNotifier do
         output = capture('stdout') do
           instance_notified_klass_dynamic.new.i_without_log
         end
-        expect(output).to_not receive(:debug_log)
+        expect(output).not_to receive(:debug_log)
         expect(@events).to be_empty
       end
 

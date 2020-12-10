@@ -65,7 +65,7 @@ RSpec.describe DebugLogging::ClassNotifier do
     end
 
     it 'works with a config override hash' do
-      expect(complete_notified_klass.debug_config).to_not receive(:log)
+      expect(complete_notified_klass.debug_config).not_to receive(:log)
       output = capture('stdout') do
         complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
       end

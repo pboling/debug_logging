@@ -28,7 +28,7 @@ RSpec.describe DebugLogging::LogSubscriber do
 
     context 'with payload override hash' do
       it 'logs the event' do
-        expect(complete_notified_klass.debug_config).to_not receive(:log)
+        expect(complete_notified_klass.debug_config).not_to receive(:log)
         complete_notified_klass.k_with_dsplat_payload_and_config(a: 'a')
 
         expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)

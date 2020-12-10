@@ -11,6 +11,7 @@ RSpec.describe DebugLogging do
 
   describe '.debug_log' do
     let(:message) { 'Marty McFly' }
+
     it 'logs when a logger is set' do
       logger = Logger.new($stdout)
       simple_klass.debug_logger = logger
@@ -21,6 +22,7 @@ RSpec.describe DebugLogging do
       end
       expect(output).to match(/Marty McFly/)
     end
+
     it 'does not log not when a logger is not set' do
       simple_klass.debug_logger = nil
       expect(simple_klass.debug_config).to receive(:log).with(message).and_call_original
@@ -29,16 +31,19 @@ RSpec.describe DebugLogging do
       end
       expect(output).to eq('')
     end
+
     context 'disabled' do
       describe '.debug_log' do
         before { simple_klass.debug_config.enabled = false }
+
         let(:message) { 'Marty McFly' }
+
         it 'does not log' do
           logger = Logger.new($stdout)
           simple_klass.debug_logger = logger
           expect(simple_klass.debug_config.enabled).to eq(false)
           expect(simple_klass.debug_config).to receive(:log).with(message).and_call_original
-          expect(logger).to_not receive(:debug)
+          expect(logger).not_to receive(:debug)
           output = capture('stdout') do
             simple_klass.debug_log(message)
           end
@@ -50,55 +55,58 @@ RSpec.describe DebugLogging do
 
   describe '.debug_config' do
     it 'returns a duplicate of the global configuration with the same logger' do
-      expect(simple_klass.debug_config.logger).to eq(DebugLogging.configuration.logger)
+      expect(simple_klass.debug_config.logger).to eq(described_class.configuration.logger)
     end
   end
 
   describe '#configuration' do
     it 'returns the global configuration with the same logger as the instance config' do
-      expect(DebugLogging.configuration.logger).to eq(simple_klass.debug_config.logger)
+      expect(described_class.configuration.logger).to eq(simple_klass.debug_config.logger)
     end
+
     it 'methods_to_log are not the same array' do
-      expect(DebugLogging.configuration.methods_to_log.object_id).to_not eq(simple_klass.debug_config.methods_to_log.object_id)
+      expect(described_class.configuration.methods_to_log.object_id).not_to eq(simple_klass.debug_config.methods_to_log.object_id)
     end
   end
 
   describe '#configure' do
     it 'allows setting global config in a block' do
       expect do
-        DebugLogging.configure do |config|
+        described_class.configure do |config|
           config.logger = nil
         end
-      end.to_not raise_error
-      expect(DebugLogging.configuration.logger).to be_nil
+      end.not_to raise_error
+      expect(described_class.configuration.logger).to be_nil
     end
   end
 
   describe '.debug_logging_configure' do
     let(:message) { 'Marty McFly' }
+
     it 'allows setting config in a block for a class' do
-      expect(DebugLogging.configuration.logger).to_not be_nil
+      expect(described_class.configuration.logger).not_to be_nil
       expect do
         simple_klass.debug_logging_configure do |config|
           config.logger = nil
         end
-      end.to_not raise_error
-      expect(DebugLogging.configuration.logger).to_not be_nil
+      end.not_to raise_error
+      expect(described_class.configuration.logger).not_to be_nil
       expect(simple_klass.debug_config.logger).to be_nil
     end
   end
 
   describe '.debug_config_reset' do
     let(:message) { 'Marty McFly' }
+
     it 'allows setting config in a block for a class' do
       expect do
         simple_klass.debug_logging_configure do |config|
           config.logger = nil
         end
-      end.to_not raise_error
+      end.not_to raise_error
       expect(simple_klass.debug_config.logger).to be_nil
       expect(simple_klass.debug_config_reset).to be_a(DebugLogging::Configuration)
-      expect(simple_klass.debug_config.logger).to_not be_nil
+      expect(simple_klass.debug_config.logger).not_to be_nil
     end
   end
 
@@ -110,7 +118,7 @@ RSpec.describe DebugLogging do
 
   describe '.debug_logger=' do
     it 'sets the logger' do
-      expect(simple_klass.debug_logger).to_not be_nil
+      expect(simple_klass.debug_logger).not_to be_nil
       simple_klass.debug_logger = nil
       expect(simple_klass.debug_logger).to be_nil
     end

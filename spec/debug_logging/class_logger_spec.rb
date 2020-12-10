@@ -21,7 +21,7 @@ RSpec.describe DebugLogging::ClassLogger do
 
     it 'works with an implicit array of methods and a configuration override hash' do
       # because the options to logged in the class definition cause the creation of a method specific config instance
-      expect(complete_logged_klass.debug_config).to_not receive(:log)
+      expect(complete_logged_klass.debug_config).not_to receive(:log)
       output = capture('stdout') do
         complete_logged_klass.k_with_dsplat_i(a: 'a')
       end
@@ -31,9 +31,10 @@ RSpec.describe DebugLogging::ClassLogger do
                                                                                                     :k_with_dsplat_i))).to receive(:log).once.and_call_original
       complete_logged_klass.k_with_dsplat_i(a: 'a')
     end
+
     it 'works with an explicit array of methods and a configuration override hash' do
       # because the options to logged in the class definition cause the creation of a method specific config instance
-      expect(complete_logged_klass.debug_config).to_not receive(:log)
+      expect(complete_logged_klass.debug_config).not_to receive(:log)
       output = capture('stdout') do
         complete_logged_klass.k_with_dsplat_e(a: 'a')
       end
@@ -51,6 +52,7 @@ RSpec.describe DebugLogging::ClassLogger do
                reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
       allow(complete_logged_klass.debug_config).to receive(:debug_log) { logger }
     end
+
     it 'logs' do
       output = capture('stdout') do
         complete_logged_klass.new.i
@@ -67,6 +69,7 @@ RSpec.describe DebugLogging::ClassLogger do
       expect(output).to match(/\.k_with_ssplat\(\)/)
       expect(output).to match(/\.k_with_dsplat\(\)/)
     end
+
     it 'has correct return value' do
       expect(complete_logged_klass.new.i).to eq(40)
       expect(complete_logged_klass.k).to eq(10)

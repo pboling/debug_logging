@@ -38,7 +38,7 @@ module DebugLogging
       "#{klass_string}#{separator}#{method_string}"
     end
 
-    def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity
       return '' unless args && config_proxy
 
       printed_args = ''

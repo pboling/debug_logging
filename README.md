@@ -86,7 +86,7 @@ Recommend creating `config/initializers/debug_logging.rb`, or adding to `config/
 
 ```ruby
 # Showing the defaults
-DebugLogging.configuration.logger = Logger.new(STDOUT) # you probably want to override to be the Rails.logger, and if so you can't set it in the initializer, as it needs to be set after Rails.logger is set.
+DebugLogging.configuration.logger = Logger.new($stdout) # you probably want to override to be the Rails.logger, and if so you can't set it in the initializer, as it needs to be set after Rails.logger is set.
 DebugLogging.configuration.log_level = :debug # at what level do the messages created by this gem sent at?
 DebugLogging.configuration.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
 DebugLogging.configuration.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
@@ -98,7 +98,7 @@ DebugLogging.configuration.active_support_notifications = false
 DebugLogging.configuration.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
 DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
-DebugLogging.configuration.ellipsis = " ✂️ …".freeze
+DebugLogging.configuration.ellipsis = ' ✂️ …'.freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 ```
 
@@ -106,7 +106,7 @@ If you prefer to use the block style:
 
 ```ruby
 DebugLogging.configure do |config|
-  config.logger = Logger.new(STDOUT) # probably want to override to be the Rails.logger, and if so you can't set it in the initializer, as it needs to be set after Rails.logger is set.
+  config.logger = Logger.new($stdout) # probably want to override to be the Rails.logger, and if so you can't set it in the initializer, as it needs to be set after Rails.logger is set.
   config.log_level = :debug # at what level do the messages created by this gem sent at?
   config.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
   config.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
@@ -118,7 +118,7 @@ DebugLogging.configure do |config|
   config.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
   config.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
-  config.ellipsis = " ✂️ …".freeze
+  config.ellipsis = ' ✂️ …'.freeze
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 end
 ```
@@ -160,10 +160,20 @@ class Car
   # == BEGIN CLASS METHODS ==
   # For class methods:
   # Option 1: Use *logged* as a method decorator
-  logged def self.make; new; end
-  def self.design(*args); new; end
-  def self.safety(*args); new; end
-  def self.dealer_options(*args); new; end
+  logged def self.make
+    new
+  end
+  def self.design(*_args)
+    new
+  end
+
+  def self.safety(*_args)
+    new
+  end
+
+  def self.dealer_options(*_args)
+    new
+  end
 
   # Option 2: Use *logged* as a macro
   logged :design, :safety
@@ -174,29 +184,40 @@ class Car
     something: 'here', # <= will be logged, and available to last_hash_to_s_proc
     multiple_last_hashes: true # <= Overrides config
   }
-  def self.will_not_be_logged; false; end
+  def self.will_not_be_logged
+    false
+  end
   # == END CLASS METHODS ==
 
   # == BEGIN INSTANCE METHODS ==
   # For instance methods:
   # Option 1: specify the exact method(s) to add logging to
-  include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
+  include DebugLogging::InstanceLogger.new(i_methods: %i[drive stop])
 
-  def drive(speed); speed; end
-  def stop(**opts); 0; end
+  def drive(speed)
+    speed
+  end
+
+  def stop(**_opts)
+    0
+  end
 
   # For instance methods:
   # Option 2: add logging to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
+  include DebugLogging::InstanceLogger.new(i_methods: instance_methods(false))
 
-  def faster(**opts); 0; end
+  def faster(**_opts)
+    0
+  end
 
   # Override configuration options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
   include DebugLogging::InstanceLogger.new(i_methods: [:faster], config: { add_invocation_id: false })
 
-  def will_not_be_logged; false; end
+  def will_not_be_logged
+    false
+  end
   # == END INSTANCE METHODS ==
 end
 ```
@@ -242,10 +263,20 @@ class Car
   # == BEGIN CLASS METHODS ==
   # For class methods:
   # Option 1: Use *notifies* as a method decorator
-  notifies def self.make; new; end
-  def self.design(*args); new; end
-  def self.safety(*args); new; end
-  def self.dealer_options(*args); new; end
+  notifies def self.make
+    new
+  end
+  def self.design(*_args)
+    new
+  end
+
+  def self.safety(*_args)
+    new
+  end
+
+  def self.dealer_options(*_args)
+    new
+  end
 
   # Option 2: Use *logged* as a macro
   notifies :design, :safety
@@ -256,25 +287,36 @@ class Car
     something: 'here', # <= will be added to the event payload, and be available to last_hash_to_s_proc
     add_invocation_id: false # <= Overrides config
   }
-  def self.will_not_be_notified; false; end
+  def self.will_not_be_notified
+    false
+  end
   # == END CLASS METHODS ==
 
   # == BEGIN INSTANCE METHODS ==
-  def drive(speed); speed; end
-  def stop(**opts); 0; end
+  def drive(speed)
+    speed
+  end
+
+  def stop(**_opts)
+    0
+  end
 
   # For instance methods:
   # Option 2: add instrumentation to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceNotifier.new(i_methods: self.instance_methods(false))
+  include DebugLogging::InstanceNotifier.new(i_methods: instance_methods(false))
 
-  def faster(**opts); 0; end
+  def faster(**_opts)
+    0
+  end
 
   # Override options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
   include DebugLogging::InstanceNotifier.new(i_methods: [:faster], config: { add_invocation_id: false })
 
-  def will_not_be_notified; false; end
+  def will_not_be_notified
+    false
+  end
   # == END INSTANCE METHODS ==
 end
 ```

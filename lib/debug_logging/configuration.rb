@@ -51,7 +51,7 @@ module DebugLogging
     #     )
     #
     CONFIG_KEYS.each do |key|
-      alias :"debug_#{key}" :"#{key}"
+      alias_method :"debug_#{key}", :"#{key}"
     end
 
     class << self
@@ -76,7 +76,7 @@ module DebugLogging
       return unless enabled
       return unless logger
 
-      if block_given?
+      if block
         logger.send(log_level, &block)
       else
         logger.send(log_level, message)
