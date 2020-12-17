@@ -2,52 +2,32 @@
 
 module DebugLogging
   module InstanceLoggerModulizer
-    def self.to_mod(methods_to_log: nil, config: nil)
+    def self.to_mod(methods_to_log: nil, payload: nil, config: nil)
       Module.new do
+        methods_to_log, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
+          method_names: Array(methods_to_log),
+          payload: payload,
+          config: config
+        )
         Array(methods_to_log).each do |method_to_log|
-          payload = (method_to_log.is_a?(Array) && method_to_log.last.is_a?(Hash) && method_to_log.pop.dup) || {}
-          config_opts = {}
-          unless payload.empty?
-            DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
-          end
-          # method name must be a symbol
-          method_to_log = if method_to_log.is_a?(Array)
-                            method_to_log.first&.to_sym
-                          else
-                            method_to_log.to_sym
-                          end
+          method_to_log, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
+            method_names: method_to_log,
+            payload: payload,
+            config: config_opts
+          )
           define_method(method_to_log) do |*args, &block|
             method_return_value = nil
-            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('ilm',
-                                                                                                        method_to_log)))
-                             proxy
-                           else
-                             proxy = if config
-                                       Configuration.new(**self.class.debug_config.to_hash.merge(config.merge(config_opts)))
-                                     elsif !config_opts.empty?
-                                       Configuration.new(**self.class.debug_config.to_hash.merge(config_opts))
-                                     else
-                                       self.class.debug_config
-                                     end
-                             proxy.register(method_to_log)
-                             instance_variable_set(DebugLogging::Configuration.config_pointer('ilm', method_to_log),
-                                                   proxy)
-                             proxy
-                           end
+            config_proxy = DebugLogging::Util.config_proxy_finder(
+              scope: self.class,
+              config_opts: method_config_opts,
+              method_name: method_to_log,
+              proxy_ref: 'ilm'
+            )
             log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: '#',
                                                           method_to_log: method_to_log, config_proxy: config_proxy)
             invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
             config_proxy.log do
-              paydirt = {}
-              # TODO: Could make instance variable introspection configurable before or after method execution
-              if payload.key?(:instance_variables)
-                paydirt.merge!(payload.reject { |k| k == :instance_variables })
-                payload[:instance_variables].each do |k|
-                  paydirt[k] = instance_variable_get("@#{k}") if instance_variable_defined?("@#{k}")
-                end
-              else
-                paydirt.merge!(payload)
-              end
+              paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)
               signature = self.class.debug_signature_to_s(args: args, config_proxy: config_proxy)
               paymud = debug_payload_to_s(payload: paydirt, config_proxy: config_proxy)
               "#{log_prefix}#{signature}#{invocation_id} debug: #{paymud}"

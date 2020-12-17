@@ -398,14 +398,14 @@ RSpec.describe DebugLogging::Configuration do
           expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_nil # not initialized yet
           expect(double_trouble.instance_variable_get(k_pointer_q)).to be_nil # not initialized yet
           expect(double_trouble.instance_variable_get(k_pointer_u)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_bang)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_q)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_u)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_bang)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_q)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_u)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_u)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_u)).to be_nil # not initialized yet
 
           double_trouble.uses_class_config
           double_trouble.uses_class_config!
@@ -432,14 +432,14 @@ RSpec.describe DebugLogging::Configuration do
           expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_a(described_class) # now initialized
           expect(double_trouble.instance_variable_get(k_pointer_q)).to be_a(described_class) # now initialized
           expect(double_trouble.instance_variable_get(k_pointer_u)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_bang)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_q)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_u)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_bang)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_q)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_u)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_bang)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_q)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_u)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_bang)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_q)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_u)).to be_a(described_class) # now initialized
         end
 
         it 'keeps separate configs' do
@@ -489,10 +489,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(true)
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(true)
           end
           # debug_instance_benchmarks gets overridden in double_trouble's configs
           c_pointers.each do |pointer|
@@ -502,10 +502,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(true)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(true)
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(true)
           end
           # mark_scope_exit defaults to false, and is never overridden in double_trouble's configs
           c_pointers.each do |pointer|
@@ -515,10 +515,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
         end
       end

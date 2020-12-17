@@ -153,7 +153,7 @@ RSpec.describe DebugLogging::InstanceLogger do
                                               config: { logger: logger, log_level: :debug }))
         expect(simple_klass.debug_log_level).to eq(:debug)
         instance = simple_klass.new
-        config_proxy = instance.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))
+        config_proxy = simple_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))
         expect(config_proxy).to be_a(DebugLogging::Configuration)
         expect(logger.level).to eq(Logger::INFO)
         expect(simple_klass.debug_logger.level).to eq(Logger::DEBUG)
@@ -169,7 +169,7 @@ RSpec.describe DebugLogging::InstanceLogger do
                                               config: { logger: logger, log_level: :debug }))
         expect(simple_klass.debug_log_level).to eq(:debug)
         instance = simple_klass.new
-        config_proxy = instance.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))
+        config_proxy = simple_klass.instance_variable_get(DebugLogging::Configuration.config_pointer('ilm', :initialize))
         expect(config_proxy).to be_a(DebugLogging::Configuration)
         expect(simple_klass.debug_logger.level).to eq(Logger::DEBUG)
         expect(config_proxy.logger.level).to eq(Logger::INFO)
