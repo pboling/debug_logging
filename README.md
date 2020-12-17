@@ -1,6 +1,7 @@
 # DebugLogging
 
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
+Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgillson)).  Optional ActiveRecord callback-style hooks that you can decorate your methods with. Hooks logic was taken from the [`slippy_method_hooks` gem](https://github.com/guckin/slippy_method_hooks), (thanks [@guckin](https://github.com/guckin)), and prefaced with `debug_` for this implementation.
 
 ## What do I mean by "unobtrusive"?
 
@@ -37,7 +38,8 @@ Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that w
 * *log method calls, also when exit scope*
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format, since v1.0.12*
 * *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods, since v3.1*
-* *Optional instance variable logging, sine v3.1*
+* *Optional instance, and class-instance, variable logging, sine v3.1*
+* *ActiveRecord style callback-hooks*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
