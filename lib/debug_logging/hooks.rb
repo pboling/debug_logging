@@ -22,7 +22,7 @@ module DebugLogging
               end
             rescue Timeout::Error
               error_args = [TimeoutError, 'execution expired', caller]
-              raise(*error_args) unless block_given?
+              raise(*error_args) unless blk
 
               instance_exec(*error_args, &blk)
             end

@@ -1,16 +1,18 @@
 module DebugLogging
   module Util
+    module_function
+
     # methods_to_log may be an array of a single method name, followed by config options and payload,
     #   or it could be an array of method names followed by config options and payload to be shared by the whole set.
     def extract_payload_and_config(method_names:, payload: nil, config: nil)
       # When scoped config is present it will always be a new configuration instance per method
       # When scoped config is not present it will reuse the class' configuration object
       scoped_payload = (method_names.is_a?(Array) && method_names.last.is_a?(Hash) && method_names.pop.clone(freeze: false)) || {}
-      if payload
-        payload = payload.merge(scoped_payload)
-      else
-        payload = scoped_payload
-      end
+      payload = if payload
+                  payload.merge(scoped_payload)
+                else
+                  scoped_payload
+                end
       config_opts = config&.clone(freeze: false) || {}
       unless payload.empty?
         DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
@@ -36,7 +38,6 @@ module DebugLogging
         end
       [method_names, payload, config_opts]
     end
-    module_function :extract_payload_and_config
 
     def payload_instance_vaiable_hydration(scope:, payload:)
       paydirt = {}
@@ -51,11 +52,10 @@ module DebugLogging
       end
       paydirt
     end
-    module_function :payload_instance_vaiable_hydration
 
-    def config_proxy_finder(scope:, config_opts: {}, method_name:, proxy_ref:, &block)
+    def config_proxy_finder(scope:, method_name:, proxy_ref:, config_opts: {}, &block)
       if (proxy = scope.send(:instance_variable_get, DebugLogging::Configuration.config_pointer(proxy_ref,
-                                                                                   method_name)))
+                                                                                                method_name)))
         proxy
       else
         base = scope.respond_to?(:debug_config) ? scope.debug_config : DebugLogging.debug_logging_configuration
@@ -66,11 +66,10 @@ module DebugLogging
                 end
         proxy.register(method_name)
         scope.send(:instance_variable_set, DebugLogging::Configuration.config_pointer(proxy_ref, method_name),
-                              proxy)
+                   proxy)
         yield proxy if block
         proxy
       end
     end
-    module_function :config_proxy_finder
   end
 end
