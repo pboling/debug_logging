@@ -2,29 +2,18 @@
 
 module DebugLogging
   module InstanceLoggerModulizer
-    def self.to_mod(methods_to_log: nil, config: nil)
+    def self.to_mod(methods_to_log: nil, config: nil, payload: nil)
       Module.new do
         Array(methods_to_log).each do |method_to_log|
-          payload = (method_to_log.is_a?(Array) && method_to_log.last.is_a?(Hash) && method_to_log.pop.dup) || {}
-          config_opts = {}
-          unless payload.empty?
-            DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
-          end
-          # method name must be a symbol
-          method_to_log = if method_to_log.is_a?(Array)
-                            method_to_log.first&.to_sym
-                          else
-                            method_to_log.to_sym
-                          end
+          methods_to_log, payload, config_opts =
+            DebugLogging::Util.extract_payload_and_config(methods_to_log, config, payload)
           define_method(method_to_log) do |*args, &block|
             method_return_value = nil
             config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('ilm',
                                                                                                         method_to_log)))
                              proxy
                            else
-                             proxy = if config
-                                       Configuration.new(**self.class.debug_config.to_hash.merge(config.merge(config_opts)))
-                                     elsif !config_opts.empty?
+                             proxy = if !config_opts.empty?
                                        Configuration.new(**self.class.debug_config.to_hash.merge(config_opts))
                                      else
                                        self.class.debug_config
