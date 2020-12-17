@@ -2,7 +2,7 @@
 
 module DebugLogging
   module ArgumentPrinter
-    def debug_benchmark_to_s(tms: nil)
+    def debug_benchmark_to_s(tms:)
       "completed in #{format('%f', tms.real)}s (#{format('%f', tms.total)}s CPU)"
     end
 
@@ -73,17 +73,17 @@ module DebugLogging
           else
             printed_args += args[0..-2].map(&:inspect).join(', ').tap do |x|
                               add_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                            end [0..(config_proxy.debug_args_max_length)]
+                            end[0..(config_proxy.debug_args_max_length)]
             printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
             printed_args += ", #{config_proxy.debug_last_hash_to_s_proc.call(args[-1]).tap do |x|
                                    add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-                                 end [0..(config_proxy.debug_last_hash_max_length)]}"
+                                 end[0..(config_proxy.debug_last_hash_max_length)]}"
             printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
           end
         else
           printed_args += String(config_proxy.debug_last_hash_to_s_proc.call(args[0])).tap do |x|
                             add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-                          end [0..(config_proxy.debug_last_hash_max_length)]
+                          end[0..(config_proxy.debug_last_hash_max_length)]
           printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
         end
       else
@@ -95,7 +95,7 @@ module DebugLogging
                         else
                           args.map(&:inspect).join(', ').tap do |x|
                             add_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                          end [0..(config_proxy.debug_args_max_length)]
+                          end[0..(config_proxy.debug_args_max_length)]
                         end
         printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
       end
