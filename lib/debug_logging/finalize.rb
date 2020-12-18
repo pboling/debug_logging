@@ -7,7 +7,11 @@ module DebugLogging
     def self.extended(obj)
       TracePoint.trace(:end) do |t|
         if obj == t.self
-          obj.finalize
+          if obj.respond_to?(:debug_finalize)
+            obj.debug_finalize
+          else
+            warn "#{obj} does not define a debug_finalize"
+          end
           t.disable
         end
       end
