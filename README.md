@@ -33,13 +33,15 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 * *colorization by class/method*
 * *robust argument printer with customizable ellipsis*
 * *unique invocation identifiers*
-* *single line config, per class/instance/method config*
-* *separate logger, if needed*
+* *simple single line global config, or per class/instance/method config*
+* *separate loggers, if needed*
 * *log method calls, also when exit scope*
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format, since v1.0.12*
 * *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods, since v3.1*
 * *Optional instance, and class-instance, variable logging, sine v3.1*
-* *ActiveRecord style callback-hooks*
+* *ActiveRecord style callback-hooks (optional: `require 'debug_logging/hooks'` and `include DebugLogging::Hooks`)*
+* *All configuration is inheritable to, and overridable by, child classes
+* *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`)*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
@@ -382,6 +384,10 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### License Exceptions
+
+* [`debug_logging/finalize`](https://stackoverflow.com/a/34559282) is licensed under https://creativecommons.org/licenses/by-sa/4.0/
 
 [semver]: http://semver.org/
 [pvc]: http://docs.rubygems.org/read/chapter/16#page74
