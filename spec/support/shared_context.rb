@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+DebugLogging.configuration.active_support_notifications = true
 
 RSpec.shared_context 'with example classes' do
   after do
@@ -12,6 +13,77 @@ RSpec.shared_context 'with example classes' do
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
+    end
+  end
+
+  class ParentSingletonClass
+    # adds the helper methods to the class, all are prefixed with debug_*,
+    #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
+    extend DebugLogging
+    # Needs to be at the top of the class, adds `logged` class method
+    extend DebugLogging::ClassLogger
+    # Needs to be at the top of the class, adds `notifies` class method
+    extend DebugLogging::ClassNotifier
+    self.debug_instance_benchmarks = true
+    self.debug_add_invocation_id = false
+    self.debug_ellipsis = '...'
+    self.debug_last_hash_max_length = 888
+
+    def self.perform(*_args)
+      42
+    end
+
+    def self.banana(*_args)
+      77
+    end
+  end
+
+  class ChildSingletonClass < ParentSingletonClass
+    self.debug_instance_benchmarks = false
+    self.debug_add_invocation_id = true
+    self.debug_ellipsis = ',,,'
+    self.debug_last_hash_max_length = 777
+    logged def self.snakes(*_args)
+             88
+           end
+    logged :banana, ellipsis: '+-+-+-', args_max_length: 55
+  end
+
+  let(:parent_singleton_klass) do
+    ParentSingletonClass
+  end
+
+  let(:child_singleton_klass) do
+    ChildSingletonClass
+  end
+
+
+  let(:child_singleton_logged_klass) do
+    Class.new(ChildSingletonClass) do
+      self.debug_ellipsis = '<<<'
+      logged def self.perform(*_args)
+        67
+      end
+    end
+  end
+
+  let(:child_singleton_notified_klass) do
+    Class.new(ChildSingletonClass) do
+      self.debug_ellipsis = '>>>'
+      notifies def self.perform(*_args)
+                 24
+             end
+    end
+  end
+
+  let(:child_singleton_logged_and_notified_klass) do
+    Class.new(ChildSingletonClass) do
+      self.debug_ellipsis = '***'
+      def self.perform(*_args)
+        43
+      end
+      logged :perform
+      notifies :perform
     end
   end
 
