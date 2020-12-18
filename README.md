@@ -95,6 +95,7 @@ DebugLogging.configuration.log_level = :debug # at what level do the messages cr
 DebugLogging.configuration.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
 DebugLogging.configuration.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
 DebugLogging.configuration.last_hash_max_length = 1_000
+DebugLogging.configuration.args_to_s_proc = nil # e.g. ->(record) { "record id: #{record.id}" }
 DebugLogging.configuration.args_max_length = 1_000
 DebugLogging.configuration.instance_benchmarks = false
 DebugLogging.configuration.class_benchmarks = false
@@ -104,6 +105,8 @@ DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
 DebugLogging.configuration.ellipsis = ' ✂️ …'.freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
+DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
+DebugLogging.configuration.payload_max_length = 1000
 ```
 
 If you prefer to use the block style:
@@ -115,6 +118,7 @@ DebugLogging.configure do |config|
   config.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
   config.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
   config.last_hash_max_length = 1_000
+  config.args_to_s_proc = nil # e.g. ->(record) { "record id: #{record.id}" }
   config.args_max_length = 1_000
   config.instance_benchmarks = false
   config.class_benchmarks = false
@@ -124,6 +128,8 @@ DebugLogging.configure do |config|
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
   config.ellipsis = ' ✂️ …'.freeze
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
+  config.add_payload = false # or a proc which will be called to print the payload
+  config.payload_max_length = 1000
 end
 ```
 
