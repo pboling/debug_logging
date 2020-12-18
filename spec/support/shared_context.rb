@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 DebugLogging.configuration.active_support_notifications = true
 
 RSpec.shared_context 'with example classes' do
@@ -44,8 +45,8 @@ RSpec.shared_context 'with example classes' do
     self.debug_ellipsis = ',,,'
     self.debug_last_hash_max_length = 777
     logged def self.snakes(*_args)
-             88
-           end
+      88
+    end
     logged :banana, ellipsis: '+-+-+-', args_max_length: 55
   end
 
@@ -56,7 +57,6 @@ RSpec.shared_context 'with example classes' do
   let(:child_singleton_klass) do
     ChildSingletonClass
   end
-
 
   let(:child_singleton_logged_klass) do
     Class.new(ChildSingletonClass) do
@@ -71,8 +71,8 @@ RSpec.shared_context 'with example classes' do
     Class.new(ChildSingletonClass) do
       self.debug_ellipsis = '>>>'
       notifies def self.perform(*_args)
-                 24
-             end
+        24
+      end
     end
   end
 

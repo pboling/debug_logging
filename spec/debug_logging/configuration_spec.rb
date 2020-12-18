@@ -168,6 +168,7 @@ RSpec.describe DebugLogging::Configuration do
           parent_singleton_klass.debug_args_max_length = 1000
           child_singleton_klass.debug_args_max_length = 1000
         end
+
         it 'keeps separate configs' do
           expect(parent_singleton_klass.debug_instance_benchmarks).to eq(true)
           expect(parent_singleton_klass.debug_add_invocation_id).to eq(false)
@@ -209,7 +210,7 @@ RSpec.describe DebugLogging::Configuration do
             expect(parent_singleton_klass.banana('a', 3, true, ['b', 2, false], { j: :k, l: :m })).to eq(77)
 
             # ChildSingletonClass is configured to log snakes and banana, but not perform
-            expect(child_singleton_klass.snakes('abcdefghijklmnopqrstuvwxyz' * 3)).to eq (88)
+            expect(child_singleton_klass.snakes('abcdefghijklmnopqrstuvwxyz' * 3)).to eq(88)
             expect(child_singleton_klass.banana('abcdefghijklmnopqrstuvwxyz' * 3)).to eq(77)
             expect(child_singleton_klass.perform('z', 2, true, ['z', 2, false], { f: :g, h: :i })).to eq(42)
 
@@ -217,7 +218,7 @@ RSpec.describe DebugLogging::Configuration do
             expect(child_singleton_notified_klass.perform('x', 3, true, ['x', 2, false], { j: :k, l: :m })).to eq(24)
             expect(child_singleton_logged_and_notified_klass.perform('r', 4, true, ['u', 2, false], { a: :b, c: :d })).to eq(43)
           end
-          expect(output).not_to match("ParentSingletonClass")
+          expect(output).not_to match('ParentSingletonClass')
           expect(output).not_to match("ChildSingletonClass\.perform")
           expect(output).to match(/DEBUG -- : ChildSingletonClass\.snakes\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwx,,,\) ~\d+@.+~ debug: \{\}$/)
           expect(output).to match(/DEBUG -- : ChildSingletonClass\.banana\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc\+-\+-\+-\) ~\d+@.+~ debug: \{\}$/)
