@@ -37,11 +37,11 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 * *separate loggers, if needed*
 * *log method calls, also when exit scope*
 * *Prevents heavy computation of strings with `logger.debug { 'log me' }` block format, since v1.0.12*
-* *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods, since v3.1*
-* *Optional instance, and class-instance, variable logging, sine v3.1*
-* *ActiveRecord style callback-hooks (optional: `require 'debug_logging/hooks'` and `include DebugLogging::Hooks`)*
-* *All configuration is inheritable to, and overridable by, child classes
-* *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`)*
+* *ActiveSupport::Notifications integration for instrumenting/logging events on class and instance methods, since v3.2*
+* *Optional instance, and class-instance, variable logging, since v3.2*
+* *ActiveRecord style callback-hooks (optional: `require 'debug_logging/hooks'` and `include DebugLogging::Hooks`), since v3.2*
+* *All configuration is inheritable to, and overridable by, child classes, since v3.2*
+* *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`), since v3.2*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
