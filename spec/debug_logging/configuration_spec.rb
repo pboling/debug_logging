@@ -230,6 +230,13 @@ RSpec.describe DebugLogging::Configuration do
           expect(parent_singleton_klass).to have_received(:banana).once
           expect(child_singleton_klass).to have_received(:banana).once
         end
+
+        it 'can override configs' do
+          output = capture('stdout') do
+            expect(child_singleton_logged_args_klass.snakes('abcdefghijklmnopqrstuvwxyz' * 3)).to eq(88)
+          end
+          expect(output).to match(/DEBUG -- : #<.+>\.snakes\(\["abcdefghijklmnopqrstuvwxy<><><>\) ~\d+@.+~ debug: \{\}$/)
+        end
       end
 
       context 'instance logging' do

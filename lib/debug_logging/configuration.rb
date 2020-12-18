@@ -17,7 +17,7 @@ module DebugLogging
       add_invocation_id: true,
       ellipsis: DEFAULT_ELLIPSIS,
       mark_scope_exit: false,
-      add_payload: true,
+      add_payload: true, # Can also be a proc returning a string, which will be called when printing the payload
       payload_max_length: 1_000
     }.freeze
     CONFIG_ATTRS = CONFIG_ATTRS_DEFAULTS.keys

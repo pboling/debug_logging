@@ -163,6 +163,14 @@ module DebugLogging
     @debug_logging_configuration.last_hash_max_length = last_hash_max_length
   end
 
+  def debug_args_to_s_proc
+    @debug_logging_configuration.args_to_s_proc
+  end
+
+  def debug_args_to_s_proc=(args_to_s_proc)
+    @debug_logging_configuration.args_to_s_proc = args_to_s_proc
+  end
+
   def debug_args_max_length
     @debug_logging_configuration.args_max_length
   end

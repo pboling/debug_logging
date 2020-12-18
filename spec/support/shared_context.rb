@@ -87,6 +87,13 @@ RSpec.shared_context 'with example classes' do
     end
   end
 
+  let(:child_singleton_logged_args_klass) do
+    Class.new(ChildSingletonClass) do
+      self.debug_ellipsis = '<><><>'
+      logged :snakes, args_max_length: 26, args_to_s_proc: ->(args) { args.to_s[0..27] }
+    end
+  end
+
   let(:complete_logged_klass) do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*,
