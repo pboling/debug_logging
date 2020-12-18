@@ -135,11 +135,6 @@ RSpec.describe DebugLogging::InstanceNotifier do
   end
 
   context 'a singleton logged klass' do
-    before do
-      skip_for(engine: 'ruby', versions: ['2.0.0'],
-               reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
-    end
-
     context 'class method without args' do
       it 'notifies' do
         output = capture('stdout') do

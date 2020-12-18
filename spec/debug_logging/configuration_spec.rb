@@ -85,8 +85,6 @@ RSpec.describe DebugLogging::Configuration do
 
         context 'class logging' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'],
-                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             DebugLogging.configure do |config|
               config.class_benchmarks = true
               config.add_invocation_id = false # invocation id allows you to identify a method call uniquely in a log
@@ -275,8 +273,6 @@ RSpec.describe DebugLogging::Configuration do
 
       context 'class logging' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           singleton_logged_klass.debug_class_benchmarks = true
           singleton_logged_klass.debug_add_invocation_id = false
           complete_logged_klass.debug_class_benchmarks = false
@@ -647,8 +643,6 @@ RSpec.describe DebugLogging::Configuration do
 
       context 'class logging' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           singleton_logged_klass.debug_class_benchmarks = true
           singleton_logged_klass.debug_add_invocation_id = false
           complete_logged_klass.debug_class_benchmarks = false
@@ -683,8 +677,6 @@ RSpec.describe DebugLogging::Configuration do
     context 'last_hash_to_s_proc' do
       context 'class level config' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
         end
@@ -726,8 +718,6 @@ RSpec.describe DebugLogging::Configuration do
     context 'multiple_last_hashes' do
       context 'class level config' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_multiple_last_hashes = true
@@ -781,8 +771,6 @@ RSpec.describe DebugLogging::Configuration do
     context 'last_hash_max_length' do
       context 'when last_hash_to_s_proc is set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_last_hash_max_length = 3
@@ -803,8 +791,6 @@ RSpec.describe DebugLogging::Configuration do
 
       context 'when last_hash_to_s_proc is not set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = nil
           singleton_logged_klass.debug_last_hash_max_length = 3
@@ -827,8 +813,6 @@ RSpec.describe DebugLogging::Configuration do
     context 'args_max_length' do
       context 'when last_hash_to_s_proc is set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = ->(hash) { hash.keys.to_s }
           singleton_logged_klass.debug_args_max_length = 20
@@ -855,8 +839,6 @@ RSpec.describe DebugLogging::Configuration do
 
       context 'when last_hash_to_s_proc is not set' do
         before do
-          skip_for(engine: 'ruby', versions: ['2.0.0'],
-                   reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
           allow(singleton_logged_klass).to receive(:debug_log) { logger }
           singleton_logged_klass.debug_last_hash_to_s_proc = nil
           singleton_logged_klass.debug_args_max_length = 20
@@ -904,8 +886,6 @@ RSpec.describe DebugLogging::Configuration do
 
     context 'class_benchamrks' do
       before do
-        skip_for(engine: 'ruby', versions: ['2.0.0'],
-                 reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
         allow(singleton_logged_klass).to receive(:debug_log) { logger }
         singleton_logged_klass.debug_class_benchmarks = true
       end
@@ -927,8 +907,6 @@ RSpec.describe DebugLogging::Configuration do
       context 'singleton' do
         context 'add_invocation_id is true' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'],
-                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = true
@@ -949,8 +927,6 @@ RSpec.describe DebugLogging::Configuration do
 
         context 'add_invocation_id is false' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'],
-                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = false
@@ -971,8 +947,6 @@ RSpec.describe DebugLogging::Configuration do
 
         context 'add_invocation_id is proc' do
           before do
-            skip_for(engine: 'ruby', versions: ['2.0.0'],
-                     reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
             allow(singleton_logged_klass).to receive(:debug_log) { logger }
             singleton_logged_klass.debug_class_benchmarks = true
             singleton_logged_klass.debug_add_invocation_id = ->(colorized_string) { colorized_string.red }

@@ -48,8 +48,6 @@ RSpec.describe DebugLogging::ClassLogger do
 
   context 'a complete logged class' do
     before do
-      skip_for(engine: 'ruby', versions: ['2.0.0'],
-               reason: 'method definitions return symbol name of method starting with Ruby 2.1, so class method logging not possible')
       allow(complete_logged_klass.debug_config).to receive(:debug_log) { logger }
     end
 
