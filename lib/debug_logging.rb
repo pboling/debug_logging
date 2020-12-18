@@ -7,6 +7,8 @@ require 'digest'
 require 'debug_logging/version'
 require 'debug_logging/errors'
 require 'debug_logging/configuration'
+require 'debug_logging/util'
+require 'debug_logging/finalize'
 require 'debug_logging/argument_printer'
 require 'debug_logging/hooks'
 require 'debug_logging/instance_logger_modulizer'
@@ -63,6 +65,11 @@ module DebugLogging
   def self.extended(base)
     base.send(:extend, ArgumentPrinter)
     base.debug_config_reset(Configuration.new(**debug_logging_configuration.to_hash))
+    base.class_eval do
+      def base.inherited(subclass)
+        subclass.debug_config_reset(Configuration.new(**debug_config.to_hash))
+      end
+    end
   end
 
   #### API ####

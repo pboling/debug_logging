@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+DebugLogging.configuration.active_support_notifications = true
 
 RSpec.describe DebugLogging::Configuration do
   include_context 'with example classes'
@@ -154,6 +155,82 @@ RSpec.describe DebugLogging::Configuration do
     end
 
     context 'per class config' do
+      context 'inheritance' do
+        before do
+          parent_singleton_klass.debug_args_max_length = 999
+          # instantiate child_singleton_logged_klass before setting debug_args_max_length,
+          #   so it won't inherit that config, while the other children will
+          child_singleton_logged_klass
+          child_singleton_klass.debug_args_max_length = 50
+        end
+
+        after do
+          parent_singleton_klass.debug_args_max_length = 1000
+          child_singleton_klass.debug_args_max_length = 1000
+        end
+        it 'keeps separate configs' do
+          expect(parent_singleton_klass.debug_instance_benchmarks).to eq(true)
+          expect(parent_singleton_klass.debug_add_invocation_id).to eq(false)
+          expect(parent_singleton_klass.debug_ellipsis).to eq('...')
+          expect(parent_singleton_klass.debug_args_max_length).to eq(999)
+          expect(parent_singleton_klass.debug_last_hash_max_length).to eq(888)
+
+          expect(child_singleton_klass.debug_instance_benchmarks).to eq(false)
+          expect(child_singleton_klass.debug_add_invocation_id).to eq(true)
+          expect(child_singleton_klass.debug_ellipsis).to eq(',,,')
+          expect(child_singleton_klass.debug_args_max_length).to eq(50)
+          expect(child_singleton_klass.debug_last_hash_max_length).to eq(777)
+
+          expect(child_singleton_logged_klass.debug_instance_benchmarks).to eq(false)
+          expect(child_singleton_logged_klass.debug_add_invocation_id).to eq(true)
+          expect(child_singleton_logged_klass.debug_ellipsis).to eq('<<<')
+          expect(child_singleton_logged_klass.debug_args_max_length).to eq(1000)
+          expect(child_singleton_logged_klass.debug_last_hash_max_length).to eq(777)
+
+          expect(child_singleton_notified_klass.debug_instance_benchmarks).to eq(false)
+          expect(child_singleton_notified_klass.debug_add_invocation_id).to eq(true)
+          expect(child_singleton_notified_klass.debug_ellipsis).to eq('>>>')
+          expect(child_singleton_notified_klass.debug_args_max_length).to eq(50)
+          expect(child_singleton_notified_klass.debug_last_hash_max_length).to eq(777)
+
+          expect(child_singleton_logged_and_notified_klass.debug_instance_benchmarks).to eq(false)
+          expect(child_singleton_logged_and_notified_klass.debug_add_invocation_id).to eq(true)
+          expect(child_singleton_logged_and_notified_klass.debug_ellipsis).to eq('***')
+          expect(child_singleton_logged_and_notified_klass.debug_args_max_length).to eq(50)
+          expect(child_singleton_logged_and_notified_klass.debug_last_hash_max_length).to eq(777)
+        end
+
+        it 'uses separate configs' do
+          allow(parent_singleton_klass).to receive(:banana).and_call_original
+          allow(child_singleton_klass).to receive(:banana).and_call_original
+          output = capture('stdout') do
+            # ParentSingletonClass class is configured to not log anything.
+            expect(parent_singleton_klass.perform('a', 3, true, ['b', 2, false], { j: :k, l: :m })).to eq(42)
+            expect(parent_singleton_klass.banana('a', 3, true, ['b', 2, false], { j: :k, l: :m })).to eq(77)
+
+            # ChildSingletonClass is configured to log snakes and banana, but not perform
+            expect(child_singleton_klass.snakes('abcdefghijklmnopqrstuvwxyz' * 3)).to eq (88)
+            expect(child_singleton_klass.banana('abcdefghijklmnopqrstuvwxyz' * 3)).to eq(77)
+            expect(child_singleton_klass.perform('z', 2, true, ['z', 2, false], { f: :g, h: :i })).to eq(42)
+
+            expect(child_singleton_logged_klass.perform('y', 2, true, ['y', 2, false], { n: :o, p: :q })).to eq(67)
+            expect(child_singleton_notified_klass.perform('x', 3, true, ['x', 2, false], { j: :k, l: :m })).to eq(24)
+            expect(child_singleton_logged_and_notified_klass.perform('r', 4, true, ['u', 2, false], { a: :b, c: :d })).to eq(43)
+          end
+          expect(output).not_to match("ParentSingletonClass")
+          expect(output).not_to match("ChildSingletonClass\.perform")
+          expect(output).to match(/DEBUG -- : ChildSingletonClass\.snakes\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwx,,,\) ~\d+@.+~ debug: \{\}$/)
+          expect(output).to match(/DEBUG -- : ChildSingletonClass\.banana\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc\+-\+-\+-\) ~\d+@.+~ debug: \{\}$/)
+          expect(output).to match(/DEBUG -- : #<.+>\.perform\("y", 2, true, \["y", 2, false\], {:n=>:o, :p=>:q}\) ~\d+@.+~ debug: \{\}$/)
+          expect(output).to match(/DEBUG -- : perform\.log \(\d.\d{3} secs\) start=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\("x", 3, true, \["x", 2, false\], \{:j=>:k, :l=>:m\}\) payload=\{\}/)
+          expect(output).to match(/DEBUG -- : #<.+>\.perform\("r", 4, true, \["u", 2, false\], {:a=>:b, :c=>:d}\) ~\d+@.+~ debug: \{\}$/)
+          expect(output).to match(/DEBUG -- : perform\.log \(\d.\d{3} secs\) start=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\("r", 4, true, \["u", 2, false\], \{:a=>:b, :c=>:d\}\) payload=\{\}/)
+
+          expect(parent_singleton_klass).to have_received(:banana).once
+          expect(child_singleton_klass).to have_received(:banana).once
+        end
+      end
+
       context 'instance logging' do
         before do
           instance_logged_klass_dynamic.debug_instance_benchmarks = true
@@ -398,14 +475,14 @@ RSpec.describe DebugLogging::Configuration do
           expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_nil # not initialized yet
           expect(double_trouble.instance_variable_get(k_pointer_q)).to be_nil # not initialized yet
           expect(double_trouble.instance_variable_get(k_pointer_u)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_bang)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_q)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(ic_pointer_u)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_bang)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_q)).to be_nil # not initialized yet
-          expect(instance.instance_variable_get(i_pointer_u)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(ic_pointer_u)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_bang)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_q)).to be_nil # not initialized yet
+          expect(double_trouble.instance_variable_get(i_pointer_u)).to be_nil # not initialized yet
 
           double_trouble.uses_class_config
           double_trouble.uses_class_config!
@@ -432,14 +509,14 @@ RSpec.describe DebugLogging::Configuration do
           expect(double_trouble.instance_variable_get(k_pointer_bang)).to be_a(described_class) # now initialized
           expect(double_trouble.instance_variable_get(k_pointer_q)).to be_a(described_class) # now initialized
           expect(double_trouble.instance_variable_get(k_pointer_u)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_bang)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_q)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(ic_pointer_u)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_bang)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_q)).to be_a(described_class) # now initialized
-          expect(instance.instance_variable_get(i_pointer_u)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_bang)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_q)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(ic_pointer_u)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_bang)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_q)).to be_a(described_class) # now initialized
+          expect(double_trouble.instance_variable_get(i_pointer_u)).to be_a(described_class) # now initialized
         end
 
         it 'keeps separate configs' do
@@ -489,10 +566,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).add_invocation_id).to eq(true)
+            expect(double_trouble.instance_variable_get(pointer).add_invocation_id).to eq(true)
           end
           # debug_instance_benchmarks gets overridden in double_trouble's configs
           c_pointers.each do |pointer|
@@ -502,10 +579,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(true)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).instance_benchmarks).to eq(true)
+            expect(double_trouble.instance_variable_get(pointer).instance_benchmarks).to eq(true)
           end
           # mark_scope_exit defaults to false, and is never overridden in double_trouble's configs
           c_pointers.each do |pointer|
@@ -515,10 +592,10 @@ RSpec.describe DebugLogging::Configuration do
             expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
           ic_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
           i_pointers.each do |pointer|
-            expect(instance.instance_variable_get(pointer).mark_scope_exit).to eq(false)
+            expect(double_trouble.instance_variable_get(pointer).mark_scope_exit).to eq(false)
           end
         end
       end

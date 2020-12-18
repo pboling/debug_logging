@@ -2,47 +2,35 @@
 
 module DebugLogging
   module InstanceNotifierModulizer
-    def self.to_mod(methods_to_notify: nil)
+    def self.to_mod(methods_to_notify: nil, payload: nil, config: nil)
       Module.new do
-        config_proxy = nil
-
+        methods_to_notify, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
+          method_names: Array(methods_to_notify),
+          payload: payload,
+          config: config
+        )
         Array(methods_to_notify).each do |method_to_notify|
-          # method name must be a symbol
-          payload = (method_to_notify.is_a?(Array) && method_to_notify.last.is_a?(Hash) && method_to_notify.pop.dup) || {}
-          config_opts = {}
-          unless payload.empty?
-            DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
-          end
-          method_to_notify = if method_to_notify.is_a?(Array)
-                               method_to_notify.first&.to_sym
-                             else
-                               method_to_notify.to_sym
-                             end
+          method_to_notify, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
+            method_names: method_to_notify,
+            payload: payload,
+            config: config_opts
+          )
           define_method(method_to_notify) do |*args, &block|
-            config_proxy = if (proxy = instance_variable_get(DebugLogging::Configuration.config_pointer('inm',
-                                                                                                        method_to_notify)))
-                             proxy
-                           else
-                             proxy = if config_opts.empty?
-                                       self.class.debug_config
-                                     else
-                                       Configuration.new(**self.class.debug_config.to_hash.merge(config_opts))
-                                     end
-                             proxy.register(method_to_notify)
-                             instance_variable_set(
-                               DebugLogging::Configuration.config_pointer('inm', method_to_notify), proxy
-                             )
-                             proxy
-                           end
-            paydirt = {}
-            if payload.key?(:instance_variables)
-              paydirt.merge!(payload.reject { |k| k == :instance_variables })
-              payload[:instance_variables].each do |k|
-                paydirt[k] = instance_variable_get("@#{k}") if instance_variable_defined?("@#{k}")
+            config_proxy = DebugLogging::Util.config_proxy_finder(
+              scope: self.class,
+              config_opts: method_config_opts,
+              method_name: method_to_notify,
+              proxy_ref: 'inm'
+            ) do |config_proxy|
+              ActiveSupport::Notifications.subscribe(
+                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify)
+              ) do |*args|
+                config_proxy&.log do
+                  DebugLogging::LogSubscriber.log_event(ActiveSupport::Notifications::Event.new(*args))
+                end
               end
-            else
-              paydirt.merge!(payload)
             end
+            paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)
             ActiveSupport::Notifications.instrument(
               DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify),
               debug_args: args,
@@ -50,13 +38,6 @@ module DebugLogging
               **paydirt
             ) do
               super(*args, &block)
-            end
-          end
-          ActiveSupport::Notifications.subscribe(
-            DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify)
-          ) do |*args|
-            config_proxy&.log do
-              DebugLogging::LogSubscriber.log_event(ActiveSupport::Notifications::Event.new(*args))
             end
           end
         end
