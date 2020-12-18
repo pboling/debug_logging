@@ -45,49 +45,90 @@ module DebugLogging
 
       add_args_ellipsis = false
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)
-        add_last_hash_ellipsis = false
+        add_other_args_ellipsis = false
         if args.length > 1
           if config_proxy.debug_multiple_last_hashes
             last_hash_args, other_args = args.partition do |arg|
               arg.is_a?(Hash)
             end
-            other_args_string = other_args.map(&:inspect).join(', ')[0..(config_proxy.debug_args_max_length)]
+            other_args_string = if config_proxy.debug_args_to_s_proc
+                                  printed, add_other_args_ellipsis = debug_safe_proc(
+                                    proc_name:'args_to_s_proc',
+                                    proc: config_proxy.debug_args_to_s_proc,
+                                    args: other_args,
+                                    max_length: config_proxy.debug_args_max_length
+                                  )
+                                  printed
+                                else
+                                  other_args.map(&:inspect).join(', ').tap do |x|
+                                    add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
+                                  end[0..(config_proxy.debug_args_max_length)]
+                                end
+            other_args_string += config_proxy.debug_ellipsis if add_other_args_ellipsis
             # On the debug_multiple_last_hashes truthy branch we don't print the ellipsis after regular args
-            #   because it will go instead after the last hash (if needed)
+            #   because it will go instead after each of the last hashes (if needed)
             #   ...join(", ").tap {|x| _add_args_ellipsis = x.length > config_proxy.debug_args_max_length}
             last_hash_args_string = last_hash_args.map do |arg|
               arr = []
-              arr << config_proxy.debug_last_hash_to_s_proc.call(arg).to_s
-                                 .tap do |x|
-                add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-              end
-              if add_last_hash_ellipsis
-                arr[-1] = arr[-1][0..(config_proxy.debug_last_hash_max_length)]
-                arr << config_proxy.debug_ellipsis
-              end
+              printed, add_last_hash_ellipsis = debug_safe_proc(
+                proc_name:'last_hash_to_s_proc',
+                proc: config_proxy.debug_last_hash_to_s_proc,
+                args: arg,
+                max_length: config_proxy.debug_last_hash_max_length
+              )
+              printed += config_proxy.debug_ellipsis if add_last_hash_ellipsis
+              arr << printed
               arr
             end.flatten.join(', ')
             printed_args += other_args_string if other_args_string
             printed_args += ', ' if !other_args_string.empty? && !last_hash_args_string.empty?
             printed_args += last_hash_args_string if last_hash_args_string && !last_hash_args_string.empty?
           else
-            printed_args += args[0..-2].map(&:inspect).join(', ').tap do |x|
-                              add_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                            end[0..(config_proxy.debug_args_max_length)]
-            printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
-            printed_args += ", #{config_proxy.debug_last_hash_to_s_proc.call(args[-1]).tap do |x|
-                                   add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-                                 end[0..(config_proxy.debug_last_hash_max_length)]}"
+            other_args = args[0..-2]
+            other_args_string = if config_proxy.debug_args_to_s_proc
+                                  printed, add_other_args_ellipsis = debug_safe_proc(
+                                    proc_name:'args_to_s_proc',
+                                    proc: config_proxy.debug_args_to_s_proc,
+                                    args: other_args,
+                                    max_length: config_proxy.debug_args_max_length
+                                  )
+                                  printed
+                                else
+                                  other_args.map(&:inspect).join(', ').tap do |x|
+                                    add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
+                                  end[0..(config_proxy.debug_args_max_length)]
+                                end
+            other_args_string += config_proxy.debug_ellipsis if add_other_args_ellipsis
+            printed_args += other_args_string
+            printed, add_last_hash_ellipsis = debug_safe_proc(
+              proc_name:'last_hash_to_s_proc',
+              proc: config_proxy.debug_last_hash_to_s_proc,
+              args: args[-1],
+              max_length: config_proxy.debug_last_hash_max_length
+            )
+            printed_args += ", #{printed}"
             printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
           end
         else
-          printed_args += String(config_proxy.debug_last_hash_to_s_proc.call(args[0])).tap do |x|
-                            add_last_hash_ellipsis = x.length > config_proxy.debug_last_hash_max_length
-                          end[0..(config_proxy.debug_last_hash_max_length)]
+          printed, add_last_hash_ellipsis = debug_safe_proc(
+            proc_name:'last_hash_to_s_proc',
+            proc: config_proxy.debug_last_hash_to_s_proc,
+            args: args[0],
+            max_length: config_proxy.debug_last_hash_max_length
+          )
+          printed_args += printed
           printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
         end
       else
-        printed_args += if args.length == 1 && args[0].is_a?(Hash)
+        printed_args += if config_proxy.debug_args_to_s_proc
+                          printed, add_args_ellipsis = debug_safe_proc(
+                            proc_name:'args_to_s_proc',
+                            proc: config_proxy.debug_args_to_s_proc,
+                            args: args,
+                            max_length: config_proxy.debug_args_max_length
+                          )
+                          printed
+                        elsif args.length == 1 && args[0].is_a?(Hash)
                           # handle double splat
                           ("**#{args.map(&:inspect).join(', ').tap do |x|
                                   add_args_ellipsis = x.length > config_proxy.debug_args_max_length
@@ -102,6 +143,19 @@ module DebugLogging
       "(#{printed_args})"
     end
 
+    def debug_safe_proc(proc_name:, proc:, args:, max_length:)
+      max_length ||= 1000 # can't be nil
+      begin
+        add_ellipsis = false
+        printed = String(proc.call(args)).tap do |x|
+          add_ellipsis = x.length > max_length
+        end[0..(max_length)]
+        return printed, add_ellipsis
+      rescue => e
+        return "#{e.class}: #{e.message}\nPlease check that your #{proc_name} is able to handle #{args}", false
+      end
+    end
+
     def debug_payload_to_s(payload: nil, config_proxy: nil)
       return '' unless payload && config_proxy
 
@@ -110,7 +164,16 @@ module DebugLogging
         when true
           payload.inspect
         else
-          config_proxy.debug_add_payload.call(**payload)
+          printed_payload = ""
+          printed, add_payload_ellipsis = debug_safe_proc(
+            proc_name: "add_payload",
+            proc: config_proxy.debug_add_payload,
+            args: payload,
+            max_length: config_proxy.payload_max_length
+          )
+          printed_payload += printed
+          printed_payload += config_proxy.debug_ellipsis if add_payload_ellipsis
+          printed_payload
         end
       else
         ''
