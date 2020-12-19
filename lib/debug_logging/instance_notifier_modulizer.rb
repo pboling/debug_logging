@@ -41,7 +41,7 @@ module DebugLogging
                 super(*args, &block)
               rescue => error
                 if config_proxy.error_handler_proc
-                  config_proxy.error_handler_proc.call(config_proxy, error, self)
+                  config_proxy.error_handler_proc.call(config_proxy, error, self, method_to_notify, args)
                 else
                   raise error
                 end

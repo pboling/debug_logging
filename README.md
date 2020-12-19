@@ -110,7 +110,7 @@ DebugLogging.configuration.ellipsis = ' ✂️ …'.freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
 DebugLogging.configuration.payload_max_length = 1000
-DebugLogging.configuration.error_handler_proc = nil # e.g. ->(error, config, obj) { config.log { "#{error.class}: #{error.message}\n#{obj.errors.inspect}" } }
+DebugLogging.configuration.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, args) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
 ```
 
 If you prefer to use the block style:
@@ -134,7 +134,7 @@ DebugLogging.configure do |config|
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
   config.add_payload = false # or a proc which will be called to print the payload
   config.payload_max_length = 1000
-  config.error_handler_proc = nil # e.g. ->(error, config, obj) { config.log { "#{error.class}: #{error.message}\n#{obj.errors.inspect}" } }
+  config.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, args) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
 end
 ```
 
