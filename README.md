@@ -98,7 +98,7 @@ DebugLogging.configuration.log_level = :debug # at what level do the messages cr
 DebugLogging.configuration.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
 DebugLogging.configuration.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
 DebugLogging.configuration.last_hash_max_length = 1_000
-DebugLogging.configuration.args_to_s_proc = nil # e.g. ->(record) { "record id: #{record.id}" }
+DebugLogging.configuration.args_to_s_proc = nil # e.g. ->(*record) { "record id: #{record.first.id}" }
 DebugLogging.configuration.args_max_length = 1_000
 DebugLogging.configuration.instance_benchmarks = false
 DebugLogging.configuration.class_benchmarks = false
@@ -122,7 +122,7 @@ DebugLogging.configure do |config|
   config.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
   config.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
   config.last_hash_max_length = 1_000
-  config.args_to_s_proc = nil # e.g. ->(record) { "record id: #{record.id}" }
+  config.args_to_s_proc = nil # e.g. ->(*record) { "record id: #{record.first.id}" }
   config.args_max_length = 1_000
   config.instance_benchmarks = false
   config.class_benchmarks = false

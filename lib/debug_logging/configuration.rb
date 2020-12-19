@@ -18,7 +18,7 @@ module DebugLogging
     #           log_level: :debug # at what level do the messages created by this gem sent at?
     #           last_hash_to_s_proc: nil # e.g. ->(hash) { "keys: #{hash.keys}" }
     #           last_hash_max_length: 1_000
-    #           args_to_s_proc: nil # e.g. ->(record) { "record id: #{record.id}" }
+    #           args_to_s_proc: nil # e.g. ->(*record) { "record id: #{record.first.id}" }
     #           args_max_length: 1_000
     #           instance_benchmarks: false
     #           class_benchmarks: false
