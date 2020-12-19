@@ -176,7 +176,7 @@ RSpec.describe DebugLogging do
     it 'sets the args proc value' do
       expect(simple_klass.debug_last_hash_to_s_proc).to eq(nil)
       simple_klass.debug_args_to_s_proc = ->(a) { a.to_s[0..3] }
-      expect(simple_klass.debug_args_to_s_proc.call(11114444)).to eq('1111')
+      expect(simple_klass.debug_args_to_s_proc.call(11_114_444)).to eq('1111')
     end
   end
 

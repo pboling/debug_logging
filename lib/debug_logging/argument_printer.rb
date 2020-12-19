@@ -53,7 +53,7 @@ module DebugLogging
             end
             other_args_string = if config_proxy.debug_args_to_s_proc
                                   printed, add_other_args_ellipsis = debug_safe_proc(
-                                    proc_name:'args_to_s_proc',
+                                    proc_name: 'args_to_s_proc',
                                     proc: config_proxy.debug_args_to_s_proc,
                                     args: other_args,
                                     max_length: config_proxy.debug_args_max_length
@@ -71,7 +71,7 @@ module DebugLogging
             last_hash_args_string = last_hash_args.map do |arg|
               arr = []
               printed, add_last_hash_ellipsis = debug_safe_proc(
-                proc_name:'last_hash_to_s_proc',
+                proc_name: 'last_hash_to_s_proc',
                 proc: config_proxy.debug_last_hash_to_s_proc,
                 args: arg,
                 max_length: config_proxy.debug_last_hash_max_length
@@ -87,7 +87,7 @@ module DebugLogging
             other_args = args[0..-2]
             other_args_string = if config_proxy.debug_args_to_s_proc
                                   printed, add_other_args_ellipsis = debug_safe_proc(
-                                    proc_name:'args_to_s_proc',
+                                    proc_name: 'args_to_s_proc',
                                     proc: config_proxy.debug_args_to_s_proc,
                                     args: other_args,
                                     max_length: config_proxy.debug_args_max_length
@@ -101,7 +101,7 @@ module DebugLogging
             other_args_string += config_proxy.debug_ellipsis if add_other_args_ellipsis
             printed_args += other_args_string
             printed, add_last_hash_ellipsis = debug_safe_proc(
-              proc_name:'last_hash_to_s_proc',
+              proc_name: 'last_hash_to_s_proc',
               proc: config_proxy.debug_last_hash_to_s_proc,
               args: args[-1],
               max_length: config_proxy.debug_last_hash_max_length
@@ -111,7 +111,7 @@ module DebugLogging
           end
         else
           printed, add_last_hash_ellipsis = debug_safe_proc(
-            proc_name:'last_hash_to_s_proc',
+            proc_name: 'last_hash_to_s_proc',
             proc: config_proxy.debug_last_hash_to_s_proc,
             args: args[0],
             max_length: config_proxy.debug_last_hash_max_length
@@ -122,7 +122,7 @@ module DebugLogging
       else
         printed_args += if config_proxy.debug_args_to_s_proc
                           printed, add_args_ellipsis = debug_safe_proc(
-                            proc_name:'args_to_s_proc',
+                            proc_name: 'args_to_s_proc',
                             proc: config_proxy.debug_args_to_s_proc,
                             args: args,
                             max_length: config_proxy.debug_args_max_length
@@ -149,10 +149,10 @@ module DebugLogging
         add_ellipsis = false
         printed = String(proc.call(args)).tap do |x|
           add_ellipsis = x.length > max_length
-        end[0..(max_length)]
-        return printed, add_ellipsis
-      rescue => e
-        return "#{e.class}: #{e.message}\nPlease check that your #{proc_name} is able to handle #{args}", false
+        end[0..max_length]
+        [printed, add_ellipsis]
+      rescue StandardError => e
+        ["#{e.class}: #{e.message}\nPlease check that your #{proc_name} is able to handle #{args}", false]
       end
     end
 
@@ -164,9 +164,9 @@ module DebugLogging
         when true
           payload.inspect
         else
-          printed_payload = ""
+          printed_payload = ''
           printed, add_payload_ellipsis = debug_safe_proc(
-            proc_name: "add_payload",
+            proc_name: 'add_payload',
             proc: config_proxy.debug_add_payload,
             args: payload,
             max_length: config_proxy.payload_max_length

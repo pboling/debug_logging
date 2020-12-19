@@ -60,11 +60,11 @@ module DebugLogging
                 end
               end
               method_return_value
-            rescue => error
+            rescue StandardError => e
               if config_proxy.error_handler_proc
-                config_proxy.error_handler_proc.call(config_proxy, error, self, method_to_log, args)
+                config_proxy.error_handler_proc.call(config_proxy, e, self, method_to_log, args)
               else
-                raise error
+                raise e
               end
             end
           end

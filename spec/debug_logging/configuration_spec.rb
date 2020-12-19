@@ -214,7 +214,8 @@ RSpec.describe DebugLogging::Configuration do
 
             expect(child_singleton_logged_klass.perform('y', 2, true, ['y', 2, false], { n: :o, p: :q })).to eq(67)
             expect(child_singleton_notified_klass.perform('x', 3, true, ['x', 2, false], { j: :k, l: :m })).to eq(24)
-            expect(child_singleton_logged_and_notified_klass.perform('r', 4, true, ['u', 2, false], { a: :b, c: :d })).to eq(43)
+            expect(child_singleton_logged_and_notified_klass.perform('r', 4, true, ['u', 2, false],
+                                                                     { a: :b, c: :d })).to eq(43)
           end
           expect(output).not_to match('ParentSingletonClass')
           expect(output).not_to match("ChildSingletonClass\.perform")

@@ -39,11 +39,11 @@ module DebugLogging
             ) do
               begin
                 super(*args, &block)
-              rescue => error
+              rescue StandardError => e
                 if config_proxy.error_handler_proc
-                  config_proxy.error_handler_proc.call(config_proxy, error, self, method_to_notify, args)
+                  config_proxy.error_handler_proc.call(config_proxy, e, self, method_to_notify, args)
                 else
-                  raise error
+                  raise e
                 end
               end
             end
