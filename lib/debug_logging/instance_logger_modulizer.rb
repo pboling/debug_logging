@@ -40,7 +40,15 @@ module DebugLogging
                 "#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
               end
             else
-              method_return_value = super(*args, &block)
+              begin
+                method_return_value = super(*args, &block)
+              rescue => error
+                if config_proxy.error_handler_proc
+                  config_proxy.error_handler_proc.call(config_proxy, error, self)
+                else
+                  raise error
+                end
+              end
               if config_proxy.exit_scope_markable? && invocation_id && !invocation_id.empty?
                 config_proxy.log do
                   "#{log_prefix} completed#{invocation_id}"

@@ -42,6 +42,7 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 * *ActiveRecord style callback-hooks (optional: `require 'debug_logging/hooks'` and `include DebugLogging::Hooks`), since v3.1.3*
 * *All configuration is inheritable to, and overridable by, child classes, since v3.1.3*
 * *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`), since v3.1.3*
+* *Error handling hooks you can use to log problems when they happen*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
@@ -50,8 +51,10 @@ Herein you will find:
 
 * Classes inheriting from Module
 * Zero tolerance policy on monkey patching
+  * When the gem is loaded there are no monkey patches.
+  * Rather, your own classes/methods get "patched" and "hooked" as you configure them.
 * 100% clean, 0% obtrusive
-* 100% tested
+* ~100% tested
 * 100% Ruby 2.1+ compatible
   - use version `gem "debug_logging", "~> 1.0"` for Ruby < 2.3
   - use version `gem "debug_logging", "~> 2.0"` for Ruby 2.3
@@ -107,6 +110,7 @@ DebugLogging.configuration.ellipsis = ' ✂️ …'.freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
 DebugLogging.configuration.payload_max_length = 1000
+DebugLogging.configuration.error_handler_proc = nil # e.g. ->(error, config, obj) { config.log { "#{error.class}: #{error.message}\n#{obj.errors.inspect}" } }
 ```
 
 If you prefer to use the block style:
@@ -130,6 +134,7 @@ DebugLogging.configure do |config|
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
   config.add_payload = false # or a proc which will be called to print the payload
   config.payload_max_length = 1000
+  config.error_handler_proc = nil # e.g. ->(error, config, obj) { config.log { "#{error.class}: #{error.message}\n#{obj.errors.inspect}" } }
 end
 ```
 

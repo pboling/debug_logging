@@ -55,6 +55,29 @@ RSpec.describe DebugLogging::LogSubscriber do
         expect(@log_subscriber.event.payload[:exception]).to match(['StandardError', 'bad method!'])
         expect(@log_subscriber.event.payload[:exception_object]).to be_a(StandardError)
       end
+
+      context 'with handling' do
+        it 'logs the error using the proc configured' do
+          # Doesn't call the config for the class, but the custom config for the method
+          expect(complete_notified_klass.debug_config).to_not receive(:log)
+          output = ''
+          expect do
+            output = capture('stdout') do
+              complete_notified_klass.k_with_ssplat_handled_error(a: 'a')
+            end
+          end.not_to raise_error
+
+          expect(@log_subscriber.event).to be_a_kind_of(ActiveSupport::Notifications::Event)
+          expect(@log_subscriber.event.name).to match('k_with_ssplat_handled_error.log')
+          expect(@log_subscriber.event.payload[:config_proxy]).to match(instance_of(DebugLogging::Configuration))
+          expect(@log_subscriber.event.payload[:debug_args]).to match([{ a: 'a' }])
+          expect(@log_subscriber.event.payload[:exception]).to be_nil
+          expect(@log_subscriber.event.payload[:exception_object]).to be_nil
+
+          expect(output).to match("DEBUG -- : There was an error like StandardError: bad method! when 0")
+          expect(output).to match(/DEBUG -- : k_with_ssplat_handled_error\.log \(\d.\d{3} secs\) start=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\(\*\*\{:a=>"a"\}\) payload=\{\}/)
+        end
+      end
     end
   end
 end

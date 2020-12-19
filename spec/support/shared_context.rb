@@ -193,6 +193,10 @@ RSpec.shared_context 'with example classes' do
         raise StandardError, 'bad method!'
       end
 
+      def self.k_with_ssplat_handled_error(*_args)
+        raise StandardError, 'bad method!'
+      end
+
       def self.k_with_dsplat_payload(**_args)
         31
       end
@@ -200,11 +204,15 @@ RSpec.shared_context 'with example classes' do
       def self.k_with_dsplat_payload_and_config(**_args)
         32
       end
+
       notifies :k_with_ssplat,
                :k_with_dsplat,
                :k_with_ssplat_error
       notifies :k_with_dsplat_payload, { id: 2, first_name: 'Bae', last_name: 'Fae' }
       notifies :k_with_dsplat_payload_and_config, { id: 3, first_name: 'Jae', last_name: 'Tae', log_level: :error }
+      notifies :k_with_ssplat_handled_error, error_handler_proc: ->(config, error, obj) {
+        config.log "There was an error like #{error.class}: #{error.message} when #{obj.k_without_log}"
+      }
 
       def self.k_without_log
         0

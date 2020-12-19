@@ -37,7 +37,15 @@ module DebugLogging
               config_proxy: config_proxy,
               **paydirt
             ) do
-              super(*args, &block)
+              begin
+                super(*args, &block)
+              rescue => error
+                if config_proxy.error_handler_proc
+                  config_proxy.error_handler_proc.call(config_proxy, error, self)
+                else
+                  raise error
+                end
+              end
             end
           end
         end

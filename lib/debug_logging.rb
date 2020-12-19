@@ -4,6 +4,7 @@ require 'logger'
 require 'colorized_string'
 require 'digest'
 
+require 'debug_logging/constants'
 require 'debug_logging/version'
 require 'debug_logging/errors'
 require 'debug_logging/configuration'
@@ -64,6 +65,8 @@ require 'debug_logging/class_logger'
 module DebugLogging
   def self.extended(base)
     base.send(:extend, ArgumentPrinter)
+    base.send(:extend, ApiClassMethods)
+    base.send(:extend, ConfigClassMethods)
     base.debug_config_reset(Configuration.new(**debug_logging_configuration.to_hash))
     base.class_eval do
       def base.inherited(subclass)
@@ -73,22 +76,6 @@ module DebugLogging
   end
 
   #### API ####
-  # Not used by this gem internally, but provides an external interface for
-  #   classes to also use this logging tool directly,
-  #   with configured options like benchmarking, colors, or leg level.
-  def debug_log(message = nil, config_proxy = nil, &block)
-    # If a, instance-method-level, or class-method-level custom config is not
-    #   passed in, then fall back to the class' default config, which is a
-    #   potentially customized copy of the default config for the whole app.
-    config_proxy ||= debug_config
-    config_proxy.log(message, &block)
-  end
-
-  # There are times when the class will need access to the configuration object,
-  #   such as to override it per instance method
-  def debug_config
-    @debug_logging_configuration
-  end
 
   # For single statement global config in an initializer
   # e.g. DebugLogging.configuration.ellipsis = "..."
@@ -101,138 +88,187 @@ module DebugLogging
     yield(configuration)
   end
 
-  # For per-class config with a block
-  def debug_logging_configure
-    @debug_logging_configuration ||= Configuration.new
-    yield(@debug_logging_configuration)
+  module ApiClassMethods
+    # Not used by this gem internally, but provides an external interface for
+    #   classes to also use this logging tool directly,
+    #   with configured options like benchmarking, colors, or leg level.
+    def debug_log(message = nil, config_proxy = nil, &block)
+      # If a, instance-method-level, or class-method-level custom config is not
+      #   passed in, then fall back to the class' default config, which is a
+      #   potentially customized copy of the default config for the whole app.
+      config_proxy ||= debug_config
+      config_proxy.log(message, &block)
+    end
+
+    # There are times when the class will need access to the configuration object,
+    #   such as to override it per instance method
+    def debug_config
+      @debug_logging_configuration
+    end
   end
 
   #### CONFIG ####
   class << self
     attr_accessor :debug_logging_configuration
   end
-  def debug_config_reset(config = Configuration.new)
-    @debug_logging_configuration = config
+
+  module ConfigClassMethods
+    include Constants
+
+    # For per-class config with a block
+    def debug_logging_configure
+      @debug_logging_configuration ||= Configuration.new
+      yield(@debug_logging_configuration)
+    end
+
+    def debug_config_reset(config = Configuration.new)
+      @debug_logging_configuration = config
+    end
+
+    def debug_enabled
+      @debug_logging_configuration.enabled
+    end
+
+    def debug_enabled=(value)
+      @debug_logging_configuration.enabled = value
+    end
+
+    def debug_logger
+      @debug_logging_configuration.logger
+    end
+
+    def debug_logger=(logger)
+      @debug_logging_configuration.logger = logger
+    end
+
+    def debug_log_level
+      @debug_logging_configuration.log_level
+    end
+
+    def debug_log_level=(log_level)
+      @debug_logging_configuration.log_level = log_level
+    end
+
+    def debug_multiple_last_hashes
+      @debug_logging_configuration.multiple_last_hashes
+    end
+
+    def debug_multiple_last_hashes=(multiple_last_hashes)
+      @debug_logging_configuration.multiple_last_hashes = multiple_last_hashes
+    end
+
+    def debug_last_hash_to_s_proc
+      @debug_logging_configuration.last_hash_to_s_proc
+    end
+
+    def debug_last_hash_to_s_proc=(last_hash_to_s_proc)
+      @debug_logging_configuration.last_hash_to_s_proc = last_hash_to_s_proc
+    end
+
+    def debug_last_hash_max_length
+      @debug_logging_configuration.last_hash_max_length
+    end
+
+    def debug_last_hash_max_length=(last_hash_max_length)
+      @debug_logging_configuration.last_hash_max_length = last_hash_max_length
+    end
+
+    def debug_args_to_s_proc
+      @debug_logging_configuration.args_to_s_proc
+    end
+
+    def debug_args_to_s_proc=(args_to_s_proc)
+      @debug_logging_configuration.args_to_s_proc = args_to_s_proc
+    end
+
+    def debug_args_max_length
+      @debug_logging_configuration.args_max_length
+    end
+
+    def debug_args_max_length=(args_max_length)
+      @debug_logging_configuration.args_max_length = args_max_length
+    end
+
+    def debug_instance_benchmarks
+      @debug_logging_configuration.instance_benchmarks
+    end
+
+    def debug_instance_benchmarks=(instance_benchmarks)
+      @debug_logging_configuration.instance_benchmarks = instance_benchmarks
+    end
+
+    def debug_class_benchmarks
+      @debug_logging_configuration.class_benchmarks
+    end
+
+    def debug_class_benchmarks=(class_benchmarks)
+      @debug_logging_configuration.class_benchmarks = class_benchmarks
+    end
+
+    def debug_colorized_chain_for_method
+      @debug_logging_configuration.colorized_chain_for_method
+    end
+
+    def debug_colorized_chain_for_method=(colorized_chain_for_method)
+      @debug_logging_configuration.colorized_chain_for_method = colorized_chain_for_method
+    end
+
+    def debug_colorized_chain_for_class
+      @debug_logging_configuration.colorized_chain_for_class
+    end
+
+    def debug_colorized_chain_for_class=(colorized_chain_for_class)
+      @debug_logging_configuration.colorized_chain_for_class = colorized_chain_for_class
+    end
+
+    def debug_add_invocation_id
+      @debug_logging_configuration.add_invocation_id
+    end
+
+    def debug_add_invocation_id=(add_invocation_id)
+      @debug_logging_configuration.add_invocation_id = add_invocation_id
+    end
+
+    def debug_ellipsis
+      @debug_logging_configuration.ellipsis
+    end
+
+    def debug_ellipsis=(ellipsis)
+      @debug_logging_configuration.ellipsis = ellipsis
+    end
+
+    def debug_mark_scope_exit
+      @debug_logging_configuration.mark_scope_exit
+    end
+
+    def debug_mark_scope_exit=(mark_scope_exit)
+      @debug_logging_configuration.mark_scope_exit = mark_scope_exit
+    end
+
+    def debug_add_payload
+      @debug_logging_configuration.add_payload
+    end
+
+    def debug_add_payload=(add_payload)
+      @debug_logging_configuration.add_payload = add_payload
+    end
+
+    def debug_payload_max_length
+      @debug_logging_configuration.payload_max_length
+    end
+
+    def debug_payload_max_length=(payload_max_length)
+      @debug_logging_configuration.payload_max_length = payload_max_length
+    end
+
+    def debug_error_handler_proc
+      @debug_logging_configuration.error_handler_proc
+    end
+
+    def debug_error_handler_proc=(error_handler_proc)
+      @debug_logging_configuration.error_handler_proc = error_handler_proc
+    end
   end
 
-  def debug_enabled
-    @debug_logging_configuration.enabled
-  end
-
-  def debug_enabled=(value)
-    @debug_logging_configuration.enabled = value
-  end
-
-  def debug_logger
-    @debug_logging_configuration.logger
-  end
-
-  def debug_logger=(logger)
-    @debug_logging_configuration.logger = logger
-  end
-
-  def debug_log_level
-    @debug_logging_configuration.log_level
-  end
-
-  def debug_log_level=(log_level)
-    @debug_logging_configuration.log_level = log_level
-  end
-
-  def debug_multiple_last_hashes
-    @debug_logging_configuration.multiple_last_hashes
-  end
-
-  def debug_multiple_last_hashes=(multiple_last_hashes)
-    @debug_logging_configuration.multiple_last_hashes = multiple_last_hashes
-  end
-
-  def debug_last_hash_to_s_proc
-    @debug_logging_configuration.last_hash_to_s_proc
-  end
-
-  def debug_last_hash_to_s_proc=(last_hash_to_s_proc)
-    @debug_logging_configuration.last_hash_to_s_proc = last_hash_to_s_proc
-  end
-
-  def debug_last_hash_max_length
-    @debug_logging_configuration.last_hash_max_length
-  end
-
-  def debug_last_hash_max_length=(last_hash_max_length)
-    @debug_logging_configuration.last_hash_max_length = last_hash_max_length
-  end
-
-  def debug_args_to_s_proc
-    @debug_logging_configuration.args_to_s_proc
-  end
-
-  def debug_args_to_s_proc=(args_to_s_proc)
-    @debug_logging_configuration.args_to_s_proc = args_to_s_proc
-  end
-
-  def debug_args_max_length
-    @debug_logging_configuration.args_max_length
-  end
-
-  def debug_args_max_length=(args_max_length)
-    @debug_logging_configuration.args_max_length = args_max_length
-  end
-
-  def debug_instance_benchmarks
-    @debug_logging_configuration.instance_benchmarks
-  end
-
-  def debug_instance_benchmarks=(instance_benchmarks)
-    @debug_logging_configuration.instance_benchmarks = instance_benchmarks
-  end
-
-  def debug_class_benchmarks
-    @debug_logging_configuration.class_benchmarks
-  end
-
-  def debug_class_benchmarks=(class_benchmarks)
-    @debug_logging_configuration.class_benchmarks = class_benchmarks
-  end
-
-  def debug_colorized_chain_for_method
-    @debug_logging_configuration.colorized_chain_for_method
-  end
-
-  def debug_colorized_chain_for_method=(colorized_chain_for_method)
-    @debug_logging_configuration.colorized_chain_for_method = colorized_chain_for_method
-  end
-
-  def debug_colorized_chain_for_class
-    @debug_logging_configuration.colorized_chain_for_class
-  end
-
-  def debug_colorized_chain_for_class=(colorized_chain_for_class)
-    @debug_logging_configuration.colorized_chain_for_class = colorized_chain_for_class
-  end
-
-  def debug_add_invocation_id
-    @debug_logging_configuration.add_invocation_id
-  end
-
-  def debug_add_invocation_id=(add_invocation_id)
-    @debug_logging_configuration.add_invocation_id = add_invocation_id
-  end
-
-  def debug_mark_scope_exit
-    @debug_logging_configuration.mark_scope_exit
-  end
-
-  def debug_mark_scope_exit=(mark_scope_exit)
-    @debug_logging_configuration.mark_scope_exit = mark_scope_exit
-  end
-
-  def debug_ellipsis
-    @debug_logging_configuration.ellipsis
-  end
-
-  def debug_ellipsis=(ellipsis)
-    @debug_logging_configuration.ellipsis = ellipsis
-  end
   self.debug_logging_configuration = Configuration.new # setup defaults
 end

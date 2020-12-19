@@ -40,10 +40,18 @@ module DebugLogging
                 **paydirt
               }
             ) do
-              if args.size == 1 && (harsh = args[0]) && harsh.is_a?(Hash)
-                original_method.call(**harsh, &block)
-              else
-                original_method.call(*args, &block)
+              begin
+                if args.size == 1 && (harsh = args[0]) && harsh.is_a?(Hash)
+                  original_method.call(**harsh, &block)
+                else
+                  original_method.call(*args, &block)
+                end
+              rescue => error
+                if config_proxy.error_handler_proc
+                  config_proxy.error_handler_proc.call(config_proxy, error, self)
+                else
+                  raise error
+                end
               end
             end
           end
