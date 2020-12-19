@@ -42,7 +42,7 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 * *ActiveRecord style callback-hooks (optional: `require 'debug_logging/hooks'` and `include DebugLogging::Hooks`), since v3.1.3*
 * *All configuration is inheritable to, and overridable by, child classes, since v3.1.3*
 * *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`), since v3.1.3*
-* *Error handling hooks you can use to log problems when they happen*
+* *Error handling hooks you can use to log problems when they happen, since v3.1.7*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
