@@ -5,7 +5,7 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 
 ## What do I mean by "unobtrusive"?
 
-**Ugly** debug logging is added inside the body of a method, so it runs when a method is called. This can create a mess of your git history, and can even introduce new bugs to your code.
+**Ugly** debug logging is added inside the body of a method, so it runs when a method is called. This can create a mess of your git history, and can even introduce new bugs to your code.  Don't `puts` all over your codebase...  Instead use this gem.
 
 **Unobtrusive** debug logging stays out of the method, changes no logic, can't break your code, and yet it still runs when your method is called, and tells you everything you wanted to know. It doesn't mess with the git history of the method at all!
 
