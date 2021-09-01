@@ -82,6 +82,21 @@ Or install it yourself as:
 
 Crack open the specs for more complex usage examples than the ones below.
 
+### First, how do I turn it off when I need some silence?
+
+For example, in your test suite, before you `require "config/environment"` or equivalent, do this:
+
+```ruby
+require "logger"
+require "debug_logging"
+
+logger = Logger.new($stdout)
+logger.level = Logger::UNKNOWN # for silence!
+DebugLogging.configuration.logger = logger
+```
+
+It will silence all of the places that have `extend DebugLogger`, _unless_ those places have overridden the logger config they inherited from the global config.
+
 ### Without Rails
 
 It just works. ;)
