@@ -11,8 +11,8 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 
 | Project                 |  DebugLogging           |
 |------------------------ | ----------------------- |
-| gem name                |  [debug_logging](https://rubygems.org/gems/debug_logging) |
-| compatibility           |  Ruby 2.4, 2.5, 2.6, 2.7 |
+| install                |  `bundle add debug_logging` |
+| compatibility           |  Ruby >= 2.4 |
 | license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) |
 | download rank           |  [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging) |
 | version                 |  [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
@@ -21,11 +21,26 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 | test coverage           |  [![Test Coverage](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/test_coverage)](https://codeclimate.com/github/pboling/debug_logging/test_coverage) |
 | maintainability         |  [![Maintainability](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/maintainability)](https://codeclimate.com/github/pboling/debug_logging/maintainability) |
 | code triage             |  [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging) |
-| homepage                |  [on Github.com][homepage], [on Railsbling.com][blogpage] |
 | documentation           |  [on RDoc.info][documentation] |
 | live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 | expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
-| Spread ~♡ⓛⓞⓥⓔ♡~      |  [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [:shipit:](http://coderwall.com/pboling), [![Tweet Peter](https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow)](http://twitter.com/galtzo), [🌹](https://nationalprogressiveparty.org) |
+| Spread ~♡ⓛⓞⓥⓔ♡~        | [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [![Liberapay Patrons][⛳liberapay-img]][⛳liberapay] [![Follow Me on LinkedIn][🖇linkedin-img]][🖇linkedin] [![Find Me on WellFound:][✌️wellfound-img]][✌️wellfound] [![My Blog][🚎blog-img]][🚎blog] [![Follow Me on Twitter][🐦twitter-img]][🐦twitter] |
+
+[![Support my refugee and open source work @ ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O86SNP4)
+
+[⛳liberapay-img]: https://img.shields.io/liberapay/patrons/pboling.svg?logo=liberapay
+[⛳liberapay]: https://liberapay.com/pboling/donate
+[🖇linkedin]: http://www.linkedin.com/in/peterboling
+[🖇linkedin-img]: https://img.shields.io/badge/PeterBoling-blue?style=plastic&logo=linkedin
+[✌️wellfound]: https://angel.co/u/peter-boling
+[✌️wellfound-img]: https://img.shields.io/badge/peter--boling-orange?style=plastic&logo=angellist
+[🐦twitter]: http://twitter.com/intent/user?screen_name=galtzo
+[🐦twitter-img]: https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow%20@galtzo
+[🚎blog]: http://www.railsbling.com/tags/oauth2/
+[🚎blog-img]: https://img.shields.io/badge/blog-railsbling-brightgreen.svg?style=flat
+[my🧪lab]: https://gitlab.com/pboling
+[my🧊berg]: https://codeberg.org/pboling
+[my🛖hut]: https://sr.ht/~galtzo/
 
 ### Gives you (all are optional):
 
