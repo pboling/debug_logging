@@ -34,8 +34,8 @@ module DebugLogging
       {
         name: event.name,
         duration: Rational(event.duration, 1000).to_f,
-        time: event.time,
-        end: event.end,
+        time: debug_time_to_s(event.time),
+        end: debug_time_to_s(event.end),
         args: debug_signature_to_s(args: args, config_proxy: config_proxy),
         payload: debug_payload_to_s(payload: payload, config_proxy: config_proxy),
       }

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "date"
+
 module DebugLogging
   module ArgumentPrinter
     def debug_benchmark_to_s(tms:)
@@ -19,6 +21,23 @@ module DebugLogging
         end
       else
         ""
+      end
+    end
+
+    def debug_time_to_s(time_or_monotonic)
+      # Time format must match:
+      #   \d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}
+      #   YYYY-MM-DD HH:mm:ss +00:00
+      #   strftime("%F %T %z")
+      case time_or_monotonic
+      when Float
+        Time.at(time_or_monotonic).strftime("%F %T %z")
+      when Time, DateTime
+        time_or_monotonic.strftime("%F %T %z")
+      when String
+        Time.parse(time_or_monotonic).strftime("%F %T %z")
+      else
+        time_or_monotonic
       end
     end
 

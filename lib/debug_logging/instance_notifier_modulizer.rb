@@ -38,6 +38,10 @@ module DebugLogging
               **paydirt,
             ) do
               begin
+                # TODO: I need to split logic based on Ruby version.
+                # TODO: Use VersionGem's minimum Ruby version check
+                # TODO: Switch between positional, and kwargs argument handling
+                # See: https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/
                 super(*args, &block)
               rescue StandardError => e
                 if config_proxy.error_handler_proc

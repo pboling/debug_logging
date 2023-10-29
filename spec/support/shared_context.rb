@@ -409,7 +409,7 @@ RSpec.shared_context "with example classes" do
         50
       end
 
-      def i_with_dsplat(**_args)
+      def i_with_dsplat(**_dargs)
         60
       end
       # Needs to be below any methods that will want logging when dynamic

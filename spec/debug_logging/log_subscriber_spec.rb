@@ -75,7 +75,7 @@ RSpec.describe DebugLogging::LogSubscriber do
           expect(@log_subscriber.event.payload[:exception_object]).to be_nil
 
           expect(output).to match(Regexp.escape('DEBUG -- : There was an error like StandardError: bad method! when calling k_with_ssplat_handled_error with [{:a=>"a"}]. Check this: 0'))
-          expect(output).to match(/DEBUG -- : k_with_ssplat_handled_error\.log \(\d.\d{3} secs\) start=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\(\*\*\{:a=>"a"\}\) payload=\{\}/)
+          expect(output).to match(/DEBUG -- : k_with_ssplat_handled_error\.log \(\d.\d{3} secs\) start=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\(\*\*\{:a=>"a"\}\) payload=\{\}/)
         end
       end
     end
