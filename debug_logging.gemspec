@@ -26,17 +26,25 @@ Automatically log selected methods and their arguments as they are called at run
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.4.0' # Uses magic comments
 
-  spec.add_runtime_dependency 'colorize', '>= 0'
-  spec.add_development_dependency 'activesupport', '>= 5.2.4.4'
-  spec.add_development_dependency 'bundler', '>= 2'
-  spec.add_development_dependency 'byebug', '>= 11'
-  spec.add_development_dependency 'rake', '>= 13'
-  spec.add_development_dependency 'rspec', '>= 3'
-  spec.add_development_dependency 'rspec-pending_for', '>= 0'
-  spec.add_development_dependency 'rubocop', '~> 1.0'
-  spec.add_development_dependency 'rubocop-md'
-  spec.add_development_dependency 'rubocop-performance'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.0'
-  spec.add_development_dependency 'silent_stream', '>= 1'
+  spec.add_runtime_dependency("colorize", ">= 0")
+
+  # Optional
+  spec.add_development_dependency("activesupport", ">= 5.2.4.4")
+
+  # Debugging
+  spec.add_development_dependency("byebug", ">= 11")
+
+  # Utilities
+  spec.add_development_dependency("rake", ">= 13")
+
+  # Testing
+  spec.add_development_dependency("rspec", ">= 3")
+  spec.add_development_dependency("rspec-pending_for", ">= 0")
+  spec.add_development_dependency("silent_stream", ">= 1")
+
+  # Linting
+  spec.add_development_dependency("rspec-block_is_expected", "~> 1.0", ">= 1.0.5")
+  spec.add_development_dependency("rubocop-lts", "~> 12.1", ">= 12.1.1")
+  spec.add_development_dependency("rubocop-packaging", "~> 0.5", ">= 0.5.2")
+  spec.add_development_dependency("rubocop-rspec", "~> 2.25")
 end
