@@ -30,7 +30,7 @@ module DebugLogging
                 end
               end
             end
-            paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)
+            paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
             ActiveSupport::Notifications.instrument(
               DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify),
               debug_args: args,

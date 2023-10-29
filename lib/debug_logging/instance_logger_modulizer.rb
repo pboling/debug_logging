@@ -31,7 +31,7 @@ module DebugLogging
             )
             invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
             config_proxy.log do
-              paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)
+              paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
               signature = self.class.debug_signature_to_s(args: args, config_proxy: config_proxy)
               paymud = debug_payload_to_s(payload: paydirt, config_proxy: config_proxy)
               "#{log_prefix}#{signature}#{invocation_id} debug: #{paymud}"

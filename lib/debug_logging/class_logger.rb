@@ -28,7 +28,7 @@ module DebugLogging
             invocation_id = nil
             begin
               config_proxy.log do
-                paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)
+                paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
                 log_prefix = debug_invocation_to_s(
                   klass: to_s,
                   separator: ".",

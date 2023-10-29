@@ -39,7 +39,7 @@ module DebugLogging
       [method_names, payload, config_opts]
     end
 
-    def payload_instance_vaiable_hydration(scope:, payload:)
+    def payload_instance_variable_hydration(scope:, payload:)
       paydirt = {}
       # TODO: Could make instance variable introspection configurable before or after method execution
       if payload.key?(:instance_variables)
