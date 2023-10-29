@@ -13,7 +13,7 @@ module DebugLogging
     end
     attach_to :log
 
-    EVENT_FORMAT_STRING = '%<name>s (%<duration>.3f secs) start=%<time>s end=%<end>s args=%<args>s payload=%<payload>s'
+    EVENT_FORMAT_STRING = "%<name>s (%<duration>.3f secs) start=%<time>s end=%<end>s args=%<args>s payload=%<payload>s"
 
     def self.log_event(event)
       @event = event
@@ -37,7 +37,7 @@ module DebugLogging
         time: event.time,
         end: event.end,
         args: debug_signature_to_s(args: args, config_proxy: config_proxy),
-        payload: debug_payload_to_s(payload: payload, config_proxy: config_proxy)
+        payload: debug_payload_to_s(payload: payload, config_proxy: config_proxy),
       }
     end
   end

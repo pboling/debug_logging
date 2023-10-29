@@ -79,17 +79,17 @@ module DebugLogging
     end
 
     def instance_benchmarks=(instance_benchmarks)
-      require 'benchmark' if instance_benchmarks
+      require "benchmark" if instance_benchmarks
       @instance_benchmarks = instance_benchmarks
     end
 
     def class_benchmarks=(class_benchmarks)
-      require 'benchmark' if class_benchmarks
+      require "benchmark" if class_benchmarks
       @class_benchmarks = class_benchmarks
     end
 
     def active_support_notifications=(active_support_notifications)
-      require 'debug_logging/active_support_notifications' if active_support_notifications
+      require "debug_logging/active_support_notifications" if active_support_notifications
       @active_support_notifications = active_support_notifications
     end
 

@@ -1,5 +1,5 @@
-require 'debug_logging/errors'
-require 'timeout'
+require "debug_logging/errors"
+require "timeout"
 
 module DebugLogging
   module Hooks
@@ -21,7 +21,7 @@ module DebugLogging
                 meth.bind(self).call(*args, &block)
               end
             rescue Timeout::Error
-              error_args = [TimeoutError, 'execution expired', caller]
+              error_args = [TimeoutError, "execution expired", caller]
               raise(*error_args) unless blk
 
               instance_exec(*error_args, &blk)
@@ -33,8 +33,8 @@ module DebugLogging
       def debug_rescue_on_fail(*names, &blk)
         unless blk
           raise NoBlockGiven,
-                '.rescue_on_fail must be called with a block',
-                caller
+            ".rescue_on_fail must be called with a block",
+            caller
         end
         names.each do |name|
           meth = instance_method(name)
@@ -51,12 +51,12 @@ module DebugLogging
       def debug_before(*names, &blk)
         unless blk
           raise NoBlockGiven,
-                '.before must be called with a block',
-                caller
+            ".before must be called with a block",
+            caller
         end
         names.each do |name|
           meth = instance_method(name)
-          define_method name do |*args, &block|
+          define_method(name) do |*args, &block|
             instance_exec(name, *args, block, &blk)
             meth.bind(self).call(*args, &block)
           end
@@ -66,12 +66,12 @@ module DebugLogging
       def debug_after(*names, &blk)
         unless blk
           raise NoBlockGiven,
-                '.after must be called with a block',
-                caller
+            ".after must be called with a block",
+            caller
         end
         names.each do |name|
           meth = instance_method(name)
-          define_method name do |*args, &block|
+          define_method(name) do |*args, &block|
             result = meth.bind(self).call(*args, &block)
             instance_exec(result, &blk)
           end

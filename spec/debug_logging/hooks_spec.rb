@@ -1,6 +1,6 @@
 RSpec.describe DebugLogging::Hooks do
-  context 'when .debug_time_box is used' do
-    it 'does not let the method exceed a given time limit' do
+  context "when .debug_time_box is used" do
+    it "does not let the method exceed a given time limit" do
       timeout_time = 0.5
       klass = Class.new do
         include DebugLogging::Hooks
@@ -19,7 +19,7 @@ RSpec.describe DebugLogging::Hooks do
       expect(result.round(1)).to eq(timeout_time)
     end
 
-    context 'without a block and the method call expires' do
+    context "without a block and the method call expires" do
       before do
         test_class = Class.new do
           include DebugLogging::Hooks
@@ -42,9 +42,9 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    context 'with a block and the method call expires' do
+    context "with a block and the method call expires" do
       before do
-        expected_result = 'expected-result'
+        expected_result = "expected-result"
         @expected_result = expected_result
 
         test_class = Class.new do
@@ -71,11 +71,11 @@ RSpec.describe DebugLogging::Hooks do
           end
       end
 
-      it 'returns the result of the given block' do
+      it "returns the result of the given block" do
         expect(@expected_result).to eq(@result)
       end
 
-      it 'yields an array of argument errors' do
+      it "yields an array of argument errors" do
         args = @test_obj.args
         expect(args).to be_a(Array)
         expect(args[0]).to eq(DebugLogging::TimeoutError)
@@ -84,13 +84,13 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    context 'with a block and the method does not expire' do
+    context "with a block and the method does not expire" do
       before do
         test_class = Class.new do
           include DebugLogging::Hooks
 
           def self.expected_result
-            'expected-result'
+            "expected-result"
           end
 
           attr_reader :args
@@ -102,7 +102,7 @@ RSpec.describe DebugLogging::Hooks do
 
           debug_time_box(0.2, :meth) do |*args|
             @args = args
-            raise 'bad'
+            raise "bad"
           end
         end
 
@@ -115,21 +115,22 @@ RSpec.describe DebugLogging::Hooks do
           end
       end
 
-      it 'returns the result of the method' do
+      it "returns the result of the method" do
         expect(@result).to eq(@test_obj.class.expected_result)
       end
     end
   end
 
-  context 'when .debug_rescue_on_fail is used' do
-    context 'when no block is provided' do
+  context "when .debug_rescue_on_fail is used" do
+    context "when no block is provided" do
       before do
         @result =
           begin
             Class.new do
               include DebugLogging::Hooks
 
-              def meth; end
+              def meth
+              end
 
               debug_rescue_on_fail(:meth)
             end
@@ -143,8 +144,8 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    context 'when the method fails' do
-      blk = ->(err = nil) { { test_value: 'test', error: err } }
+    context "when the method fails" do
+      blk = ->(err = nil) { {test_value: "test", error: err} }
 
       before do
         @test_class =
@@ -152,27 +153,27 @@ RSpec.describe DebugLogging::Hooks do
             include DebugLogging::Hooks
 
             def meth
-              raise StandardError, 'fart sound'
+              raise StandardError, "fart sound"
             end
 
             debug_rescue_on_fail(:meth, &blk)
           end
       end
 
-      it 'returns the result of the block' do
+      it "returns the result of the block" do
         result = @test_class.new.meth
         expected = blk.call
         expect(result[:test_value]).to eq(expected[:test_value])
       end
 
-      it 'yields an error object' do
+      it "yields an error object" do
         result = @test_class.new.meth
         expect(result[:error]).to be_a(StandardError)
       end
     end
   end
 
-  context 'when .debug_before is used' do
+  context "when .debug_before is used" do
     before do
       @test_class = Class.new do
         # require 'rspec/expectations'
@@ -183,8 +184,8 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    context 'without a block given' do
-      it 'raises an error' do
+    context "without a block given" do
+      it "raises an error" do
         result =
           begin
             @test_class.instance_exec do
@@ -197,11 +198,13 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    context 'when given a block' do
-      it 'yields the methods arguments' do
-        test_data = { name: :meth,
-                      args: [1, 2],
-                      blk: -> { 'test' } }
+    context "when given a block" do
+      it "yields the methods arguments" do
+        test_data = {
+          name: :meth,
+          args: [1, 2],
+          blk: -> { "test" },
+        }
         @test_class.instance_exec(self) do |slf|
           debug_before(test_data[:name]) do |name, *args|
             slf.expect(name).to slf.eq(test_data[:name])
@@ -212,23 +215,23 @@ RSpec.describe DebugLogging::Hooks do
       end
     end
 
-    it 'the block is called before the method' do
+    it "the block is called before the method" do
       value = nil
       @test_class.instance_exec(self) do |_slf|
         define_method(:meth) do
-          value = 'in method'
+          value = "in method"
         end
 
         debug_before(:meth) do
-          value = 'in before'
+          value = "in before"
         end
       end
       @test_class.new.meth
-      expect(value).to eq('in method')
+      expect(value).to eq("in method")
     end
   end
 
-  context 'when .debug_after is used' do
-    pending 'it should work'
+  context "when .debug_after is used" do
+    pending "it should work"
   end
 end

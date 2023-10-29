@@ -6,13 +6,13 @@ module DebugLogging
       methods_to_notify, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
         method_names: methods_to_notify,
         payload: nil,
-        config: nil
+        config: nil,
       )
       Array(methods_to_notify).each do |method_to_notify|
         method_to_notify, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
           method_names: method_to_notify,
           payload: payload,
-          config: config_opts
+          config: config_opts,
         )
         original_method = method(method_to_notify)
         (class << self; self; end).class_eval do
@@ -21,10 +21,10 @@ module DebugLogging
               scope: self,
               config_opts: method_config_opts,
               method_name: method_to_notify,
-              proxy_ref: 'kn'
+              proxy_ref: "kn",
             ) do |proxy|
               ActiveSupport::Notifications.subscribe(
-                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify)
+                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify),
               ) do |*debug_args|
                 proxy.log do
                   DebugLogging::LogSubscriber.log_event(ActiveSupport::Notifications::Event.new(*debug_args))
@@ -37,8 +37,8 @@ module DebugLogging
               {
                 debug_args: args,
                 config_proxy: config_proxy,
-                **paydirt
-              }
+                **paydirt,
+              },
             ) do
               begin
                 if args.size == 1 && (harsh = args[0]) && harsh.is_a?(Hash)

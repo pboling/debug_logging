@@ -13,9 +13,11 @@ module DebugLogging
       return unless @instance_methods_to_notify
 
       base.send(:include, ArgumentPrinter)
-      instance_method_notifier = DebugLogging::InstanceNotifierModulizer.to_mod(methods_to_notify: @instance_methods_to_notify,
-                                                                                payload: @payload,
-                                                                                config: @config)
+      instance_method_notifier = DebugLogging::InstanceNotifierModulizer.to_mod(
+        methods_to_notify: @instance_methods_to_notify,
+        payload: @payload,
+        config: @config,
+      )
       base.send(:prepend, instance_method_notifier)
     end
   end

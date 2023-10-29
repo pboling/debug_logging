@@ -35,7 +35,7 @@
 # NOTE: The instance method manner of logging works on Ruby 2.0+
 # NOTE: The class method manner of logging works on Ruby 2.1+
 
-require 'benchmark'
+require "benchmark"
 
 class SimpleDebugLogging < Module
   def initialize(i_methods: nil)
@@ -57,7 +57,7 @@ class SimpleDebugLogging < Module
           define_method(method_to_log.to_sym) do |*args|
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self}.#{method_to_log}(#{args.map(&:inspect).join(', ')})#{invocation_id}"
+            puts "#{self}.#{method_to_log}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
             elapsed = Benchmark.realtime do
               method_return_value = original_method.call(*args)
             end
@@ -76,7 +76,7 @@ class SimpleDebugLogging < Module
           define_method(method_to_log.to_sym) do |*args, &block|
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self.class}##{method_to_log}(#{args.map(&:inspect).join(', ')})#{invocation_id}"
+            puts "#{self.class}##{method_to_log}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
             elapsed = Benchmark.realtime do
               method_return_value = super(*args, &block)
             end

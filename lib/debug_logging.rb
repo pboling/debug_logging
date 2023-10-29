@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'logger'
-require 'colorized_string'
-require 'digest'
+require "logger"
+require "colorized_string"
+require "digest"
 
-require 'debug_logging/constants'
-require 'debug_logging/version'
-require 'debug_logging/errors'
-require 'debug_logging/configuration'
-require 'debug_logging/util'
-require 'debug_logging/finalize'
-require 'debug_logging/argument_printer'
-require 'debug_logging/hooks'
-require 'debug_logging/instance_logger_modulizer'
-require 'debug_logging/instance_logger'
-require 'debug_logging/class_logger'
+require "debug_logging/constants"
+require "debug_logging/version"
+require "debug_logging/errors"
+require "debug_logging/configuration"
+require "debug_logging/util"
+require "debug_logging/finalize"
+require "debug_logging/argument_printer"
+require "debug_logging/hooks"
+require "debug_logging/instance_logger_modulizer"
+require "debug_logging/instance_logger"
+require "debug_logging/class_logger"
 
 ####################
 #                  #

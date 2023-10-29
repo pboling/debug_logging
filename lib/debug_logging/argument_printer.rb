@@ -3,14 +3,14 @@
 module DebugLogging
   module ArgumentPrinter
     def debug_benchmark_to_s(tms:)
-      "completed in #{format('%f', tms.real)}s (#{format('%f', tms.total)}s CPU)"
+      "completed in #{format("%f", tms.real)}s (#{format("%f", tms.total)}s CPU)"
     end
 
     def debug_invocation_id_to_s(args: nil, config_proxy: nil)
-      return '' unless args && config_proxy
+      return "" unless args && config_proxy
 
       if config_proxy.debug_add_invocation_id
-        invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % '%#-21a')[4..-4]}~"
+        invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % "%#-21a")[4..-4]}~"
         case config_proxy.debug_add_invocation_id
         when true
           invocation
@@ -18,30 +18,30 @@ module DebugLogging
           config_proxy.debug_add_invocation_id.call(ColorizedString[invocation])
         end
       else
-        ''
+        ""
       end
     end
 
     def debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: nil)
-      return '' unless config_proxy
+      return "" unless config_proxy
 
       klass_string = if config_proxy.debug_colorized_chain_for_class
-                       config_proxy.debug_colorized_chain_for_class.call(ColorizedString[klass.to_s])
-                     else
-                       klass.to_s
-                     end
+        config_proxy.debug_colorized_chain_for_class.call(ColorizedString[klass.to_s])
+      else
+        klass.to_s
+      end
       method_string = if config_proxy.debug_colorized_chain_for_method
-                        config_proxy.debug_colorized_chain_for_method.call(ColorizedString[method_to_log.to_s])
-                      else
-                        method_to_log.to_s
-                      end
+        config_proxy.debug_colorized_chain_for_method.call(ColorizedString[method_to_log.to_s])
+      else
+        method_to_log.to_s
+      end
       "#{klass_string}#{separator}#{method_string}"
     end
 
     def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity
-      return '' unless args && config_proxy
+      return "" unless args && config_proxy
 
-      printed_args = ''
+      printed_args = ""
 
       add_args_ellipsis = false
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)
@@ -52,18 +52,18 @@ module DebugLogging
               arg.is_a?(Hash)
             end
             other_args_string = if config_proxy.debug_args_to_s_proc
-                                  printed, add_other_args_ellipsis = debug_safe_proc(
-                                    proc_name: 'args_to_s_proc',
-                                    proc: config_proxy.debug_args_to_s_proc,
-                                    args: other_args,
-                                    max_length: config_proxy.debug_args_max_length
-                                  )
-                                  printed
-                                else
-                                  other_args.map(&:inspect).join(', ').tap do |x|
-                                    add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                                  end[0..(config_proxy.debug_args_max_length)]
-                                end
+              printed, add_other_args_ellipsis = debug_safe_proc(
+                proc_name: "args_to_s_proc",
+                proc: config_proxy.debug_args_to_s_proc,
+                args: other_args,
+                max_length: config_proxy.debug_args_max_length,
+              )
+              printed
+            else
+              other_args.map(&:inspect).join(", ").tap do |x|
+                add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
+              end[0..(config_proxy.debug_args_max_length)]
+            end
             other_args_string += config_proxy.debug_ellipsis if add_other_args_ellipsis
             # On the debug_multiple_last_hashes truthy branch we don't print the ellipsis after regular args
             #   because it will go instead after each of the last hashes (if needed)
@@ -71,73 +71,73 @@ module DebugLogging
             last_hash_args_string = last_hash_args.map do |arg|
               arr = []
               printed, add_last_hash_ellipsis = debug_safe_proc(
-                proc_name: 'last_hash_to_s_proc',
+                proc_name: "last_hash_to_s_proc",
                 proc: config_proxy.debug_last_hash_to_s_proc,
                 args: arg,
-                max_length: config_proxy.debug_last_hash_max_length
+                max_length: config_proxy.debug_last_hash_max_length,
               )
               printed += config_proxy.debug_ellipsis if add_last_hash_ellipsis
               arr << printed
               arr
-            end.flatten.join(', ')
+            end.flatten.join(", ")
             printed_args += other_args_string if other_args_string
-            printed_args += ', ' if !other_args_string.empty? && !last_hash_args_string.empty?
+            printed_args += ", " if !other_args_string.empty? && !last_hash_args_string.empty?
             printed_args += last_hash_args_string if last_hash_args_string && !last_hash_args_string.empty?
           else
             other_args = args[0..-2]
             other_args_string = if config_proxy.debug_args_to_s_proc
-                                  printed, add_other_args_ellipsis = debug_safe_proc(
-                                    proc_name: 'args_to_s_proc',
-                                    proc: config_proxy.debug_args_to_s_proc,
-                                    args: other_args,
-                                    max_length: config_proxy.debug_args_max_length
-                                  )
-                                  printed
-                                else
-                                  other_args.map(&:inspect).join(', ').tap do |x|
-                                    add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                                  end[0..(config_proxy.debug_args_max_length)]
-                                end
+              printed, add_other_args_ellipsis = debug_safe_proc(
+                proc_name: "args_to_s_proc",
+                proc: config_proxy.debug_args_to_s_proc,
+                args: other_args,
+                max_length: config_proxy.debug_args_max_length,
+              )
+              printed
+            else
+              other_args.map(&:inspect).join(", ").tap do |x|
+                add_other_args_ellipsis = x.length > config_proxy.debug_args_max_length
+              end[0..(config_proxy.debug_args_max_length)]
+            end
             other_args_string += config_proxy.debug_ellipsis if add_other_args_ellipsis
             printed_args += other_args_string
             printed, add_last_hash_ellipsis = debug_safe_proc(
-              proc_name: 'last_hash_to_s_proc',
+              proc_name: "last_hash_to_s_proc",
               proc: config_proxy.debug_last_hash_to_s_proc,
               args: args[-1],
-              max_length: config_proxy.debug_last_hash_max_length
+              max_length: config_proxy.debug_last_hash_max_length,
             )
             printed_args += ", #{printed}"
             printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
           end
         else
           printed, add_last_hash_ellipsis = debug_safe_proc(
-            proc_name: 'last_hash_to_s_proc',
+            proc_name: "last_hash_to_s_proc",
             proc: config_proxy.debug_last_hash_to_s_proc,
             args: args[0],
-            max_length: config_proxy.debug_last_hash_max_length
+            max_length: config_proxy.debug_last_hash_max_length,
           )
           printed_args += printed
           printed_args += config_proxy.debug_ellipsis if add_last_hash_ellipsis
         end
       else
         printed_args += if config_proxy.debug_args_to_s_proc
-                          printed, add_args_ellipsis = debug_safe_proc(
-                            proc_name: 'args_to_s_proc',
-                            proc: config_proxy.debug_args_to_s_proc,
-                            args: args,
-                            max_length: config_proxy.debug_args_max_length
-                          )
-                          printed
-                        elsif args.length == 1 && args[0].is_a?(Hash)
-                          # handle double splat
-                          ("**#{args.map(&:inspect).join(', ').tap do |x|
-                                  add_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                                end }")[0..(config_proxy.debug_args_max_length)]
-                        else
-                          args.map(&:inspect).join(', ').tap do |x|
-                            add_args_ellipsis = x.length > config_proxy.debug_args_max_length
-                          end[0..(config_proxy.debug_args_max_length)]
-                        end
+          printed, add_args_ellipsis = debug_safe_proc(
+            proc_name: "args_to_s_proc",
+            proc: config_proxy.debug_args_to_s_proc,
+            args: args,
+            max_length: config_proxy.debug_args_max_length,
+          )
+          printed
+        elsif args.length == 1 && args[0].is_a?(Hash)
+          # handle double splat
+          "**#{args.map(&:inspect).join(", ").tap do |x|
+                 add_args_ellipsis = x.length > config_proxy.debug_args_max_length
+               end }"[0..(config_proxy.debug_args_max_length)]
+        else
+          args.map(&:inspect).join(", ").tap do |x|
+            add_args_ellipsis = x.length > config_proxy.debug_args_max_length
+          end[0..(config_proxy.debug_args_max_length)]
+        end
         printed_args += config_proxy.debug_ellipsis if add_args_ellipsis
       end
       "(#{printed_args})"
@@ -157,26 +157,26 @@ module DebugLogging
     end
 
     def debug_payload_to_s(payload: nil, config_proxy: nil)
-      return '' unless payload && config_proxy
+      return "" unless payload && config_proxy
 
       if payload
         case config_proxy.debug_add_payload
         when true
           payload.inspect
         else
-          printed_payload = ''
+          printed_payload = ""
           printed, add_payload_ellipsis = debug_safe_proc(
-            proc_name: 'add_payload',
+            proc_name: "add_payload",
             proc: config_proxy.debug_add_payload,
             args: payload,
-            max_length: config_proxy.payload_max_length
+            max_length: config_proxy.payload_max_length,
           )
           printed_payload += printed
           printed_payload += config_proxy.debug_ellipsis if add_payload_ellipsis
           printed_payload
         end
       else
-        ''
+        ""
       end
     end
 

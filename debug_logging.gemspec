@@ -1,30 +1,32 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('lib', __dir__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'debug_logging/version'
+require "debug_logging/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = 'debug_logging'
-  spec.version       = DebugLogging::VERSION
-  spec.authors       = ['Peter Boling', 'guckin']
-  spec.email         = ['peter.boling@gmail.com']
+  spec.name = "debug_logging"
+  spec.version = DebugLogging::VERSION
+  spec.authors = ["Peter Boling", "John ", "guckin"]
+  spec.email = ["peter.boling@gmail.com"]
 
-  spec.summary       = 'Drop-in debug logging useful when a call stack gets unruly'
-  spec.description   = '
+  spec.summary = "Drop-in debug logging useful when a call stack gets unruly"
+  spec.description = '
 Unobtrusive debug logging for Ruby.  NO LITTERING.
 Automatically log selected methods and their arguments as they are called at runtime!
 '
-  spec.license       = 'MIT'
-  spec.homepage      = 'https://github.com/pboling/debug_logging'
+  spec.license = "MIT"
+  spec.homepage = "https://github.com/pboling/debug_logging"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.metadata["rubygems_mfa_required"] = "true"
+
+  spec.files = %x(git ls-files -z).split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
-  spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ['lib']
-  spec.required_ruby_version = '>= 2.4.0' # Uses magic comments
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
+  spec.required_ruby_version = ">= 2.4.0" # Uses magic comments
 
   spec.add_runtime_dependency("colorize", ">= 0")
 

@@ -1,5 +1,30 @@
 # DebugLogging
 
+<div id="badges">
+
+[![Test Coverage][🔑cc-covi]][🔑cc-cov]
+[![Maintainability][🔑cc-mnti]][🔑cc-mnt]
+[![Depfu][🔑depfui]][🔑depfu]
+
+-----
+
+[![Liberapay Patrons][⛳liberapay-img]][⛳liberapay]
+[![Sponsor Me on Github][🖇sponsor-img]][🖇sponsor]
+<span class="badge-buymeacoffee">
+<a href="https://ko-fi.com/O5O86SNP4" target='_blank' title="Donate to my FLOSS or refugee efforts at ko-fi.com"><img src="https://img.shields.io/badge/buy%20me%20coffee-donate-yellow.svg" alt="Buy me coffee donation button" /></a>
+</span>
+<span class="badge-patreon">
+<a href="https://patreon.com/galtzo" title="Donate to my FLOSS or refugee efforts using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a>
+</span>
+
+</div>
+
+[⛳liberapay-img]: https://img.shields.io/liberapay/patrons/pboling.svg?logo=liberapay
+[⛳liberapay]: https://liberapay.com/pboling/donate
+[🖇sponsor-img]: https://img.shields.io/badge/Sponsor_Me!-pboling.svg?style=social&logo=github
+[🖇sponsor]: https://github.com/sponsors/pboling
+
+
 Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
 Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgillson)).  Optional ActiveRecord callback-style hooks that you can decorate your methods with. Hooks logic was taken from the [`slippy_method_hooks` gem](https://github.com/guckin/slippy_method_hooks), (thanks [@guckin](https://github.com/guckin)), and prefaced with `debug_` for this implementation. `DebugLogging::Finalize` is lightly modified from [this stackoverflow answer](https://stackoverflow.com/a/34559282).
 
@@ -25,8 +50,6 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 | live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 | expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
 | Spread ~♡ⓛⓞⓥⓔ♡~        | [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [![Liberapay Patrons][⛳liberapay-img]][⛳liberapay] [![Follow Me on LinkedIn][🖇linkedin-img]][🖇linkedin] [![Find Me on WellFound:][✌️wellfound-img]][✌️wellfound] [![My Blog][🚎blog-img]][🚎blog] [![Follow Me on Twitter][🐦twitter-img]][🐦twitter] |
-
-[![Support my refugee and open source work @ ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O86SNP4)
 
 [⛳liberapay-img]: https://img.shields.io/liberapay/patrons/pboling.svg?logo=liberapay
 [⛳liberapay]: https://liberapay.com/pboling/donate
@@ -82,7 +105,7 @@ NOTE: The manner this is made to work for class methods is totally different tha
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'debug_logging'
+gem "debug_logging"
 ```
 
 And then execute:
@@ -136,7 +159,7 @@ DebugLogging.configuration.active_support_notifications = false
 DebugLogging.configuration.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
 DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
-DebugLogging.configuration.ellipsis = ' ✂️ …'.freeze
+DebugLogging.configuration.ellipsis = " ✂️ …".freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
 DebugLogging.configuration.payload_max_length = 1000
@@ -160,7 +183,7 @@ DebugLogging.configure do |config|
   config.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
   config.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
-  config.ellipsis = ' ✂️ …'.freeze
+  config.ellipsis = " ✂️ …".freeze
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
   config.add_payload = false # or a proc which will be called to print the payload
   config.payload_max_length = 1000
@@ -226,8 +249,8 @@ class Car
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
   logged :dealer_options, {
-    something: 'here', # <= will be logged, and available to last_hash_to_s_proc
-    multiple_last_hashes: true # <= Overrides config
+    something: "here", # <= will be logged, and available to last_hash_to_s_proc
+    multiple_last_hashes: true, # <= Overrides config
   }
   def self.will_not_be_logged
     false
@@ -258,7 +281,7 @@ class Car
   # Override configuration options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
-  include DebugLogging::InstanceLogger.new(i_methods: [:faster], config: { add_invocation_id: false })
+  include DebugLogging::InstanceLogger.new(i_methods: [:faster], config: {add_invocation_id: false})
 
   def will_not_be_logged
     false
@@ -295,9 +318,11 @@ class Car
   # For instance methods:
   # Option 1: specify the exact method(s) to add instrumentation to
   #   NOTE: You can capture instance variable values as part of the event payload
-  include DebugLogging::InstanceNotifier.new(i_methods: [:drive,
-                                                         :stop,
-                                                         [:turn, { instance_variables: %i[direction angle] }]])
+  include DebugLogging::InstanceNotifier.new(i_methods: [
+        :drive,
+    :stop,
+    [:turn, {instance_variables: %i[direction angle]}],
+])
 
   # For class methods
   #   Provides the versatile `notifies` method decorator / macro
@@ -329,8 +354,8 @@ class Car
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
   notifies :dealer_options, {
-    something: 'here', # <= will be added to the event payload, and be available to last_hash_to_s_proc
-    add_invocation_id: false # <= Overrides config
+    something: "here", # <= will be added to the event payload, and be available to last_hash_to_s_proc
+    add_invocation_id: false, # <= Overrides config
   }
   def self.will_not_be_notified
     false
@@ -357,7 +382,7 @@ class Car
   # Override options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
-  include DebugLogging::InstanceNotifier.new(i_methods: [:faster], config: { add_invocation_id: false })
+  include DebugLogging::InstanceNotifier.new(i_methods: [:faster], config: {add_invocation_id: false})
 
   def will_not_be_notified
     false
@@ -398,7 +423,7 @@ dependency on this gem using the [Pessimistic Version Constraint](http://docs.ru
 For example:
 
 ```ruby
-spec.add_dependency 'debug_logging', '~> 3.1'
+spec.add_dependency("debug_logging", "~> 3.1")
 ```
 
 ## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -439,3 +464,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [documentation]: http://rdoc.info/github/pboling/debug_logging/frames
 [homepage]: https://github.com/pboling/debug_logging
 [blogpage]: http://www.railsbling.com/tags/debug_logging/
+
+[comment]: <> ( PERSONAL LINKS )
+
+[💁🏼‍♂️aboutme]: https://about.me/peter.boling
+[💁🏼‍♂️angellist]: https://angel.co/peter-boling
+[💁🏼‍♂️devto]: https://dev.to/galtzo
+[💁🏼‍♂️followme]: https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow
+[💁🏼‍♂️twitter]: http://twitter.com/galtzo
+
+[comment]: <> ( KEYED LINKS )
+
+[🔑cc-mnt]: https://codeclimate.com/github/<organization>/<project>/maintainability
+[🔑cc-mnti]: https://api.codeclimate.com/v1/badges/<key>/maintainability
+[🔑cc-cov]: https://codeclimate.com/github/<organization>/<project>/test_coverage
+[🔑cc-covi]: "https://api.codeclimate.com/v1/badges/<key>/test_coverage"
+[🔑depfu]: "https://depfu.com/github/<organization>/<project>?project_id=<key>"
+[🔑depfui]: "https://badges.depfu.com/badges/<key>/count.svg"

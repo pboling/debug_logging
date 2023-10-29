@@ -7,23 +7,23 @@ module DebugLogging
         methods_to_notify, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
           method_names: Array(methods_to_notify),
           payload: payload,
-          config: config
+          config: config,
         )
         Array(methods_to_notify).each do |method_to_notify|
           method_to_notify, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
             method_names: method_to_notify,
             payload: payload,
-            config: config_opts
+            config: config_opts,
           )
           define_method(method_to_notify) do |*args, &block|
             config_proxy = DebugLogging::Util.config_proxy_finder(
               scope: self.class,
               config_opts: method_config_opts,
               method_name: method_to_notify,
-              proxy_ref: 'inm'
+              proxy_ref: "inm",
             ) do |config_proxy|
               ActiveSupport::Notifications.subscribe(
-                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify)
+                DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify),
               ) do |*args|
                 config_proxy&.log do
                   DebugLogging::LogSubscriber.log_event(ActiveSupport::Notifications::Event.new(*args))
@@ -35,7 +35,7 @@ module DebugLogging
               DebugLogging::ArgumentPrinter.debug_event_name_to_s(method_to_notify: method_to_notify),
               debug_args: args,
               config_proxy: config_proxy,
-              **paydirt
+              **paydirt,
             ) do
               begin
                 super(*args, &block)

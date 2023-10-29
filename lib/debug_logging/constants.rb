@@ -2,7 +2,7 @@
 
 module DebugLogging
   module Constants
-    DEFAULT_ELLIPSIS = ' ✂️ …'
+    DEFAULT_ELLIPSIS = " ✂️ …"
     CONFIG_ATTRS_DEFAULTS = {
       enabled: true,
       logger: Logger.new($stdout),
@@ -19,13 +19,13 @@ module DebugLogging
       mark_scope_exit: false,
       add_payload: true, # Can also be a proc returning a string, which will be called when printing the payload
       payload_max_length: 1_000,
-      error_handler_proc: nil
+      error_handler_proc: nil,
     }.freeze
     CONFIG_ATTRS = CONFIG_ATTRS_DEFAULTS.keys
     CONFIG_READERS_DEFAULTS = {
       instance_benchmarks: false,
       class_benchmarks: false,
-      active_support_notifications: false
+      active_support_notifications: false,
     }.freeze
     CONFIG_READERS = CONFIG_READERS_DEFAULTS.keys
     CONFIG_KEYS = CONFIG_ATTRS + CONFIG_READERS

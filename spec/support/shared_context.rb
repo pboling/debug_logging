@@ -2,12 +2,12 @@
 
 DebugLogging.configuration.active_support_notifications = true
 
-RSpec.shared_context 'with example classes' do
+RSpec.shared_context "with example classes" do
   after do
     DebugLogging.debug_logging_configuration = DebugLogging::Configuration.new
   end
 
-  let(:logger) { double('logger') }
+  let(:logger) { double("logger") }
 
   let(:simple_klass) do
     Class.new do
@@ -27,7 +27,7 @@ RSpec.shared_context 'with example classes' do
     extend DebugLogging::ClassNotifier
     self.debug_instance_benchmarks = true
     self.debug_add_invocation_id = false
-    self.debug_ellipsis = '...'
+    self.debug_ellipsis = "..."
     self.debug_last_hash_max_length = 888
 
     def self.perform(*_args)
@@ -42,12 +42,12 @@ RSpec.shared_context 'with example classes' do
   class ChildSingletonClass < ParentSingletonClass
     self.debug_instance_benchmarks = false
     self.debug_add_invocation_id = true
-    self.debug_ellipsis = ',,,'
+    self.debug_ellipsis = ",,,"
     self.debug_last_hash_max_length = 777
     logged def self.snakes(*_args)
       88
     end
-    logged :banana, ellipsis: '+-+-+-', args_max_length: 55
+    logged :banana, ellipsis: "+-+-+-", args_max_length: 55
   end
 
   let(:parent_singleton_klass) do
@@ -60,7 +60,7 @@ RSpec.shared_context 'with example classes' do
 
   let(:child_singleton_logged_klass) do
     Class.new(ChildSingletonClass) do
-      self.debug_ellipsis = '<<<'
+      self.debug_ellipsis = "<<<"
       logged def self.perform(*_args)
         67
       end
@@ -69,7 +69,7 @@ RSpec.shared_context 'with example classes' do
 
   let(:child_singleton_notified_klass) do
     Class.new(ChildSingletonClass) do
-      self.debug_ellipsis = '>>>'
+      self.debug_ellipsis = ">>>"
       notifies def self.perform(*_args)
         24
       end
@@ -78,7 +78,7 @@ RSpec.shared_context 'with example classes' do
 
   let(:child_singleton_logged_and_notified_klass) do
     Class.new(ChildSingletonClass) do
-      self.debug_ellipsis = '***'
+      self.debug_ellipsis = "***"
       def self.perform(*_args)
         43
       end
@@ -89,7 +89,7 @@ RSpec.shared_context 'with example classes' do
 
   let(:child_singleton_logged_args_klass) do
     Class.new(ChildSingletonClass) do
-      self.debug_ellipsis = '<><><>'
+      self.debug_ellipsis = "<><><>"
       logged :snakes, args_max_length: 26, args_to_s_proc: ->(args) { args.to_s[0..27] }
     end
   end
@@ -103,9 +103,11 @@ RSpec.shared_context 'with example classes' do
       extend DebugLogging::ClassLogger
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceLogger.new(i_methods: %i[i i_with_ssplat])
-      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: { colorized_chain_for_method: lambda { |colorized_string|
-                                                                                                                    colorized_string.red
-                                                                                                                  } })
+      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: {
+        colorized_chain_for_method: lambda { |colorized_string|
+                                      colorized_string.red
+                                    },
+      })
       logged def self.k
         10
       end
@@ -124,7 +126,7 @@ RSpec.shared_context 'with example classes' do
       def self.k_with_dsplat_i(**_args)
         31
       end
-      logged :k_with_ssplat_i, :k_with_dsplat_i, { last_hash_to_s_proc: ->(_) { 'LOLiii' } }
+      logged :k_with_ssplat_i, :k_with_dsplat_i, {last_hash_to_s_proc: ->(_) { "LOLiii" }}
       def self.k_with_ssplat_e(*_args)
         21
       end
@@ -132,11 +134,14 @@ RSpec.shared_context 'with example classes' do
       def self.k_with_dsplat_e(**_args)
         31
       end
-      logged %i[k_with_ssplat_e k_with_dsplat_e], { last_hash_to_s_proc: lambda { |_|
-                                                                           'LOLeee'
-                                                                         }, colorized_chain_for_class: lambda { |colorized_string|
-                                                                                                         colorized_string.red
-                                                                                                       } }
+      logged %i[k_with_ssplat_e k_with_dsplat_e], {
+        last_hash_to_s_proc: lambda { |_|
+                               "LOLeee"
+                             },
+        colorized_chain_for_class: lambda { |colorized_string|
+                                     colorized_string.red
+                                   },
+      }
       def self.k_without_log
         0
       end
@@ -170,13 +175,15 @@ RSpec.shared_context 'with example classes' do
       extend DebugLogging::ClassNotifier
       # Can only be at the top of the class *if* methods are explicitly defined
       include DebugLogging::InstanceNotifier.new(i_methods: [
-                                                   :i,
-                                                   [:i_with_ssplat, { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
-                                                   [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
-                                                   [:i_with_dsplat_payload, { tags: %w[blue green] }],
-                                                   [:i_with_dsplat_payload_and_config,
-                                                    { tags: %w[yellow red], add_invocation_id: true }]
-                                                 ])
+        :i,
+        [:i_with_ssplat, {id: 1, first_name: "Joe", last_name: "Schmoe"}],
+        [:i_with_dsplat, {salutation: "Mr.", suffix: "Jr."}],
+        [:i_with_dsplat_payload, {tags: %w[blue green]}],
+        [
+          :i_with_dsplat_payload_and_config,
+          {tags: %w[yellow red], add_invocation_id: true},
+        ],
+      ])
       notifies def self.k
         10
       end
@@ -190,11 +197,11 @@ RSpec.shared_context 'with example classes' do
       end
 
       def self.k_with_ssplat_error(*_args)
-        raise StandardError, 'bad method!'
+        raise StandardError, "bad method!"
       end
 
       def self.k_with_ssplat_handled_error(*_args)
-        raise StandardError, 'bad method!'
+        raise StandardError, "bad method!"
       end
 
       def self.k_with_dsplat_payload(**_args)
@@ -206,10 +213,10 @@ RSpec.shared_context 'with example classes' do
       end
 
       notifies :k_with_ssplat,
-               :k_with_dsplat,
-               :k_with_ssplat_error
-      notifies :k_with_dsplat_payload, { id: 2, first_name: 'Bae', last_name: 'Fae' }
-      notifies :k_with_dsplat_payload_and_config, { id: 3, first_name: 'Jae', last_name: 'Tae', log_level: :error }
+        :k_with_dsplat,
+        :k_with_ssplat_error
+      notifies :k_with_dsplat_payload, {id: 2, first_name: "Bae", last_name: "Fae"}
+      notifies :k_with_dsplat_payload_and_config, {id: 3, first_name: "Jae", last_name: "Tae", log_level: :error}
       notifies :k_with_ssplat_handled_error, error_handler_proc: lambda { |config, error, obj, method_name, args|
         config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect}. Check this: #{obj.k_without_log}"
       }
@@ -331,12 +338,18 @@ RSpec.shared_context 'with example classes' do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceNotifier.new(i_methods: [:i,
-                                                             [:i_with_ssplat,
-                                                              { id: 1, first_name: 'Joe', last_name: 'Schmoe' }],
-                                                             [:i_with_dsplat, { salutation: 'Mr.', suffix: 'Jr.' }],
-                                                             [:i_with_instance_vars,
-                                                              { instance_variables: %i[action id msg] }]])
+      include DebugLogging::InstanceNotifier.new(i_methods: [
+        :i,
+        [
+          :i_with_ssplat,
+          {id: 1, first_name: "Joe", last_name: "Schmoe"},
+        ],
+        [:i_with_dsplat, {salutation: "Mr.", suffix: "Jr."}],
+        [
+          :i_with_instance_vars,
+          {instance_variables: %i[action id msg]},
+        ],
+      ])
       def i
         40
       end

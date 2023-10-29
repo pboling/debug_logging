@@ -7,13 +7,13 @@ module DebugLogging
         methods_to_log, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
           method_names: Array(methods_to_log),
           payload: payload,
-          config: config
+          config: config,
         )
         Array(methods_to_log).each do |method_to_log|
           method_to_log, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
             method_names: method_to_log,
             payload: payload,
-            config: config_opts
+            config: config_opts,
           )
           define_method(method_to_log) do |*args, &block|
             method_return_value = nil
@@ -21,10 +21,14 @@ module DebugLogging
               scope: self.class,
               config_opts: method_config_opts,
               method_name: method_to_log,
-              proxy_ref: 'ilm'
+              proxy_ref: "ilm",
             )
-            log_prefix = self.class.debug_invocation_to_s(klass: self.class.to_s, separator: '#',
-                                                          method_to_log: method_to_log, config_proxy: config_proxy)
+            log_prefix = self.class.debug_invocation_to_s(
+              klass: self.class.to_s,
+              separator: "#",
+              method_to_log: method_to_log,
+              config_proxy: config_proxy,
+            )
             invocation_id = self.class.debug_invocation_id_to_s(args: args, config_proxy: config_proxy)
             config_proxy.log do
               paydirt = DebugLogging::Util.payload_instance_vaiable_hydration(scope: self, payload: method_payload)

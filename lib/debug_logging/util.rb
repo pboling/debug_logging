@@ -9,10 +9,10 @@ module DebugLogging
       # When scoped config is not present it will reuse the class' configuration object
       scoped_payload = (method_names.is_a?(Array) && method_names.last.is_a?(Hash) && method_names.pop.clone(freeze: false)) || {}
       payload = if payload
-                  payload.merge(scoped_payload)
-                else
-                  scoped_payload
-                end
+        payload.merge(scoped_payload)
+      else
+        scoped_payload
+      end
       config_opts = config&.clone(freeze: false) || {}
       unless payload.empty?
         DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
@@ -54,19 +54,24 @@ module DebugLogging
     end
 
     def config_proxy_finder(scope:, method_name:, proxy_ref:, config_opts: {}, &block)
-      if (proxy = scope.send(:instance_variable_get, DebugLogging::Configuration.config_pointer(proxy_ref,
-                                                                                                method_name)))
+      if (proxy = scope.send(:instance_variable_get, DebugLogging::Configuration.config_pointer(
+        proxy_ref,
+        method_name,
+      )))
         proxy
       else
         base = scope.respond_to?(:debug_config) ? scope.debug_config : DebugLogging.debug_logging_configuration
         proxy = if config_opts.empty?
-                  base
-                else
-                  DebugLogging::Configuration.new(**base.to_hash.merge(config_opts))
-                end
+          base
+        else
+          DebugLogging::Configuration.new(**base.to_hash.merge(config_opts))
+        end
         proxy.register(method_name)
-        scope.send(:instance_variable_set, DebugLogging::Configuration.config_pointer(proxy_ref, method_name),
-                   proxy)
+        scope.send(
+          :instance_variable_set,
+          DebugLogging::Configuration.config_pointer(proxy_ref, method_name),
+          proxy,
+        )
         yield proxy if block
         proxy
       end
