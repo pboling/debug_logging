@@ -32,6 +32,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
 
     context "when float" do
       let(:time_or_monotonic) { 0.1 }
+
       it "prints" do
         expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
@@ -39,13 +40,15 @@ RSpec.describe DebugLogging::ArgumentPrinter do
 
     context "when time" do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23) }
+
       it "prints" do
         expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
     end
 
     context "when datetime" do
-      let(:time_or_monotonic) { DateTime.new(2019, 8, 10, 4, 10, 9)  }
+      let(:time_or_monotonic) { DateTime.new(2019, 8, 10, 4, 10, 9) }
+
       it "prints" do
         expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
@@ -53,6 +56,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
 
     context "when string" do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23).to_s }
+
       it "prints" do
         expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
@@ -60,6 +64,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
 
     context "when otherwise" do
       let(:time_or_monotonic) { :time }
+
       it "prints" do
         expect(debug_time_to_s).to match(/time/)
       end
@@ -107,7 +112,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
           "config_proxy",
           debug_add_payload: ->(args) { "pppaaayyylllo #{args}" },
           payload_max_length: payload_max_length,
-          debug_ellipsis: "^^^"
+          debug_ellipsis: "^^^",
         )
       }
 
@@ -124,7 +129,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
           "config_proxy",
           debug_add_payload: ->(args) { "pppaaayyy #{args}" },
           payload_max_length: payload_max_length,
-          debug_ellipsis: "^^^"
+          debug_ellipsis: "^^^",
         )
       }
 

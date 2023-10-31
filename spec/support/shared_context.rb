@@ -526,7 +526,7 @@ RSpec.shared_context "with example classes" do
         60
       end
       # Needs to be below any methods that will want logging when dynamic
-      include DebugLogging::InstanceNotifier.new(i_methods: 'i')
+      include DebugLogging::InstanceNotifier.new(i_methods: "i")
       def i_without_log
         0
       end
