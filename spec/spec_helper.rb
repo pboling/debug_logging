@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Std Lib
+require "rational"
+
+# External gems
 require "rspec/pending_for"
 require "silent_stream"
 

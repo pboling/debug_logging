@@ -1,7 +1,7 @@
 RSpec.describe DebugLogging::Hooks do
   context "when .debug_time_box is used" do
     it "does not let the method exceed a given time limit" do
-      timeout_time = 0.5
+      timeout_time = Rational(1, 2)
       klass = Class.new do
         include DebugLogging::Hooks
         def meth
@@ -9,14 +9,15 @@ RSpec.describe DebugLogging::Hooks do
         end
         debug_time_box(timeout_time, :meth)
       end
-      start_time = Time.now
+      start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       begin
         klass.new.meth
       rescue StandardError
-        end_time = Time.now
+        end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       end
       result = end_time - start_time
-      expect(result.round(1)).to eq(timeout_time)
+      rough_time = Rational((result * 10).floor, 10)
+      expect(rough_time).to eq(timeout_time)
     end
 
     context "without a block and the method call expires" do
