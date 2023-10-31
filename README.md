@@ -475,9 +475,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [comment]: <> ( KEYED LINKS )
 
-[🔑cc-mnt]: https://codeclimate.com/github/<organization>/<project>/maintainability
-[🔑cc-mnti]: https://api.codeclimate.com/v1/badges/<key>/maintainability
-[🔑cc-cov]: https://codeclimate.com/github/<organization>/<project>/test_coverage
-[🔑cc-covi]: "https://api.codeclimate.com/v1/badges/<key>/test_coverage"
-[🔑depfu]: "https://depfu.com/github/<organization>/<project>?project_id=<key>"
-[🔑depfui]: "https://badges.depfu.com/badges/<key>/count.svg"
+[🔑cc-mnt]: https://codeclimate.com/github/pboling/debug_logging/maintainability
+[🔑cc-mnti]: https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/maintainability
+[🔑cc-cov]: https://codeclimate.com/github/pboling/debug_logging/test_coverage
+[🔑cc-covi]: "https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/test_coverage"
+[🔑depfu]: "https://depfu.com/github/pboling/debug_logging?project_id=2675"
+[🔑depfui]: "https://badges.depfu.com/badges/2675/count.svg"
