@@ -1,15 +1,15 @@
 {
-  "README.md:1243406985": [
-    [231, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
-    [234, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
-    [238, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
-    [242, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
-    [255, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
-    [336, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
-    [339, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
-    [343, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
-    [347, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
-    [360, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
+  "README.md:1923610752": [
+    [232, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
+    [235, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
+    [239, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
+    [243, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
+    [256, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
+    [337, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
+    [340, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
+    [344, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
+    [348, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
+    [361, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
   ],
   "bin/bundle:4028066867": [
     [64, 5, 20, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2485198147]
