@@ -34,22 +34,24 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 
 **Unobtrusive** debug logging stays out of the method, changes no logic, can't break your code, and yet it still runs when your method is called, and tells you everything you wanted to know. It doesn't mess with the git history of the method at all!
 
-| Project                 |  DebugLogging           |
-|------------------------ | ----------------------- |
-| install                |  `bundle add debug_logging` |
-| compatibility           |  Ruby >= 2.4 |
-| license                 |  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) |
-| download rank           |  [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging) |
-| version                 |  [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging) |
-| dependencies            |  [![Depfu](https://badges.depfu.com/badges/d1a4cf43255916521fef1e3685c61faa/count.svg)](https://depfu.com/github/pboling/debug_logging?project_id=2675) |
-| continuous integration  |  [![Build Status](https://travis-ci.org/pboling/debug_logging.svg?branch=master)](https://travis-ci.org/pboling/debug_logging) |
-| test coverage           |  [![Test Coverage](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/test_coverage)](https://codeclimate.com/github/pboling/debug_logging/test_coverage) |
-| maintainability         |  [![Maintainability](https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/maintainability)](https://codeclimate.com/github/pboling/debug_logging/maintainability) |
-| code triage             |  [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging) |
-| documentation           |  [on RDoc.info][documentation] |
-| live chat               |  [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
-| expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
+| Project                 | DebugLogging                                                                                                                                                                                                                                                                                                                      |
+|------------------------ |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| install                | `bundle add debug_logging`                                                                                                                                                                                                                                                                                                        |
+| compatibility           | Ruby >= 2.4                                                                                                                                                                                                                                                                                                                       |
+| license                 | [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)                                                                                                                                                                                                                        |
+| download rank           | [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging)                                                                                                                                                                                                                   |
+| version                 | [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging)                                                                                                                                                                                                                             |
+| continuous integration  | [![CI Build][🚎dl-cwfi]][🚎dl-cwf]                                                                                                                                                                                                                                                                                                |
+| code triage             | [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging)                                                                                                                                                                                     |
+| documentation           | [on RDoc.info][documentation]                                                                                                                                                                                                                                                                                                     |
+| live chat               | [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)                                                                                                        |
+| expert support          | [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github)                                                                                                                             |
 | Spread ~♡ⓛⓞⓥⓔ♡~        | [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [![Liberapay Patrons][⛳liberapay-img]][⛳liberapay] [![Follow Me on LinkedIn][🖇linkedin-img]][🖇linkedin] [![Find Me on WellFound:][✌️wellfound-img]][✌️wellfound] [![My Blog][🚎blog-img]][🚎blog] [![Follow Me on Twitter][🐦twitter-img]][🐦twitter] |
+
+
+
+[🚎dl-cwf]: https://github.com/pboling/debug_logging/actions/workflows/current.yml
+[🚎dl-cwfi]: https://github.com/pboling/debug_logging/actions/workflows/current.yml/badge.svg
 
 [⛳liberapay-img]: https://img.shields.io/liberapay/patrons/pboling.svg?logo=liberapay
 [⛳liberapay]: https://liberapay.com/pboling/donate
@@ -96,7 +98,8 @@ Herein you will find:
 * 100% Ruby 2.1+ compatible
   - use version `gem "debug_logging", "~> 1.0"` for Ruby < 2.3
   - use version `gem "debug_logging", "~> 2.0"` for Ruby 2.3
-  - use version `gem "debug_logging", "~> 3.0"` for Ruby 2.4+
+  - use version `gem "debug_logging", "~> 3.1"` for Ruby >= 2.4, < 3
+  - use version `gem "debug_logging", "~> 4.0"` (unreleased) for Ruby >= 3.
 
 NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
 
@@ -105,7 +108,7 @@ NOTE: The manner this is made to work for class methods is totally different tha
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "debug_logging"
+gem "debug_logging", "~> 3.1"
 ```
 
 And then execute:
@@ -393,32 +396,41 @@ end
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Run tests!
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```shell
+bundle install
+bundle exec rake
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/pboling/debug_logging.
+See [CONTRIBUTING.md][🪇conduct]
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-6. Create new Pull Request
+[🪇conduct]: CONTRIBUTING.md
 
-## Versioning
+## 🪇 Code of Conduct
 
-This library aims to adhere to [Semantic Versioning 2.0.0](http://semver.org/).
-Violations of this scheme should be reported as bugs. Specifically,
-if a minor or patch version is released that breaks backward
-compatibility, a new version should be immediately released that
-restores compatibility. Breaking changes to the public API will
-only be introduced with new major versions.
+Everyone interacting in this project's codebases, issue trackers,
+chat rooms and mailing lists is expected to follow the [code of conduct][🪇conduct].
 
-As a result of this policy, you can (and should) specify a
-dependency on this gem using the [Pessimistic Version Constraint](http://docs.rubygems.org/read/chapter/16#page74) with two digits of precision.
+[🪇conduct]: CODE_OF_CONDUCT.md
+
+## 📌 Versioning
+
+This Library adheres to [Semantic Versioning 2.0.0][📌semver].
+Violations of this scheme should be reported as bugs.
+Specifically, if a minor or patch version is released that breaks backward compatibility,
+a new version should be immediately released that restores compatibility.
+Breaking changes to the public API will only be introduced with new major versions.
+
+To get a better understanding of how SemVer is intended to work over a project's lifetime,
+read this article from the creator of SemVer:
+
+- ["Major Version Numbers are Not Sacred"][📌major-versions-not-sacred]
+
+As a result of this policy, you can (and should) specify a dependency on these libraries using
+the [Pessimistic Version Constraint][📌pvc] with two digits of precision.
 
 For example:
 
@@ -426,34 +438,28 @@ For example:
 spec.add_dependency("debug_logging", "~> 3.1")
 ```
 
-## License [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[comment]: <> ( VERSIONING LINKS )
 
-MIT License
+[📌pvc]: http://guides.rubygems.org/patterns/#pessimistic-version-constraint
+[📌semver]: http://semver.org/
+[📌major-versions-not-sacred]: https://tom.preston-werner.com/2022/05/23/major-version-numbers-are-not-sacred.html
 
-Copyright (c) 2017 - 2020 [Peter Boling][peterboling] of [RailsBling.com][railsbling]
+## 📄 License
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+The gem is available as open source under the terms of
+the [MIT License][📄license] [![License: MIT][📄license-img]][📄license-ref], with one exception:
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+* [`lib/debug_logging/finalize.rb`](lib/debug_logging/finalize.rb) came from [this StackOverflow](https://stackoverflow.com/a/34559282).
+  * As such, it is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+See [LICENSE.txt][📄license] for the official [Copyright Notice][📄copyright-notice-explainer].
 
-### License Exceptions
+[comment]: <> ( LEGAL LINKS )
 
-* [`debug_logging/finalize`](https://stackoverflow.com/a/34559282) is licensed under https://creativecommons.org/licenses/by-sa/4.0/
+[📄copyright-notice-explainer]: https://opensource.stackexchange.com/questions/5778/why-do-licenses-such-as-the-mit-license-specify-a-single-year
+[📄license]: LICENSE.txt
+[📄license-ref]: https://opensource.org/licenses/MIT
+[📄license-img]: https://img.shields.io/badge/License-MIT-green.svg
 
 [semver]: http://semver.org/
 [pvc]: http://docs.rubygems.org/read/chapter/16#page74
