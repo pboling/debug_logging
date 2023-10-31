@@ -319,10 +319,10 @@ class Car
   # Option 1: specify the exact method(s) to add instrumentation to
   #   NOTE: You can capture instance variable values as part of the event payload
   include DebugLogging::InstanceNotifier.new(i_methods: [
-        :drive,
+    :drive,
     :stop,
     [:turn, {instance_variables: %i[direction angle]}],
-])
+  ])
 
   # For class methods
   #   Provides the versatile `notifies` method decorator / macro

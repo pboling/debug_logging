@@ -1,20 +1,20 @@
 {
-  "README.md:3825714947": [
+  "README.md:2734619011": [
     [231, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [234, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [238, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
     [242, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
     [255, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
-    [322, 9, 6, "Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.", 4069546899],
-    [322, 9, 6, "Layout/FirstArrayElementIndentation: Use 2 spaces for indentation in an array, relative to the start of the line where the left square bracket is.", 4069546899],
-    [325, 1, 1, "Layout/FirstArrayElementIndentation: Indent the right bracket the same as the start of the line where the left bracket is.", 177656],
     [336, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [339, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [343, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
     [347, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
     [360, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
   ],
-  "debug_logging.gemspec:333837244": [
+  "bin/bundle:4028066867": [
+    [64, 5, 20, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2485198147]
+  ],
+  "debug_logging.gemspec:2030280659": [
     [23, 16, 19, "Packaging/GemspecGit: Avoid using git to produce lists of files. Downstreams often need to build your package in an environment that does not have git (on purpose). Use some pure Ruby alternative, like `Dir` or `Dir.glob`.", 3879951891]
   ],
   "lib/debug_logging.rb:2351109743": [
@@ -30,19 +30,19 @@
     [6, 5, 61, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 62321122],
     [10, 5, 59, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2109073884]
   ],
-  "lib/debug_logging/instance_logger_modulizer.rb:3568790230": [
-    [5, 5, 2682, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 35476866]
+  "lib/debug_logging/instance_logger_modulizer.rb:1179473764": [
+    [5, 5, 2683, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 1170736547]
   ],
-  "lib/debug_logging/instance_notifier_modulizer.rb:118444617": [
-    [5, 5, 2067, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2664810702]
+  "lib/debug_logging/instance_notifier_modulizer.rb:3279961670": [
+    [5, 5, 2413, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3630884065]
   ],
-  "lib/debug_logging/log_subscriber.rb:3340533279": [
+  "lib/debug_logging/log_subscriber.rb:2343596607": [
     [12, 7, 20, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1853072198],
     [18, 5, 368, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 479488482],
     [19, 7, 6, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2741946345],
-    [30, 5, 524, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4277533184]
+    [30, 5, 558, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4277533184]
   ],
-  "lib/debug_logging/util.rb:752484356": [
+  "lib/debug_logging/util.rb:672613942": [
     [61, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241],
     [76, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241]
   ],
@@ -112,7 +112,7 @@
     [295, 14, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
     [327, 5, 29, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 3810899421]
   ],
-  "spec/debug_logging/configuration_spec.rb:3216917102": [
+  "spec/debug_logging/configuration_spec.rb:1330294702": [
     [8, 11, 8, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 4105806927],
     [9, 13, 25, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3996754496],
     [10, 7, 20, "RSpec/NestedGroups: Maximum example group nesting exceeded [4/3].", 1551745841],
@@ -171,7 +171,7 @@
     [208, 90, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785],
     [209, 88, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785],
     [215, 9, 26, "RSpec/MultipleExpectations: Example has too many expectations [18/1].", 111182292],
-    [215, 9, 2752, "RSpec/ExampleLength: Example has too many lines. [28/5]", 625785501],
+    [215, 9, 2756, "RSpec/ExampleLength: Example has too many lines. [28/5]", 625785501],
     [251, 9, 25, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 3340672345],
     [259, 7, 26, "RSpec/NestedGroups: Maximum example group nesting exceeded [4/3].", 2728698832],
     [259, 15, 18, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3701803727],
@@ -299,30 +299,30 @@
     [1169, 11, 19, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 3228809368],
     [1177, 11, 256, "RSpec/ExampleLength: Example has too many lines. [7/5]", 4131437431]
   ],
-  "spec/debug_logging/hooks_spec.rb:456699213": [
-    [3, 5, 469, "RSpec/ExampleLength: Example has too many lines. [16/5]", 2371695172],
-    [41, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
-    [68, 13, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
-    [75, 16, 16, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3238182925],
-    [75, 40, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
-    [78, 7, 39, "RSpec/MultipleExpectations: Example has too many expectations [4/1].", 44971633],
-    [79, 16, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
-    [92, 11, 68, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 197593698],
-    [112, 13, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
-    [119, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
-    [119, 31, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
-    [143, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
-    [164, 18, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [170, 18, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [188, 7, 293, "RSpec/ExampleLength: Example has too many lines. [9/5]", 1876230965],
-    [191, 13, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [202, 7, 488, "RSpec/ExampleLength: Example has too many lines. [12/5]", 822639325],
-    [202, 7, 488, "RSpec/NoExpectationExample: No expectation found in this example.", 822639325],
-    [208, 9, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [214, 9, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [218, 5, 343, "RSpec/ExampleLength: Example has too many lines. [11/5]", 1735281741],
-    [220, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [229, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282]
+  "spec/debug_logging/hooks_spec.rb:3446494803": [
+    [3, 5, 606, "RSpec/ExampleLength: Example has too many lines. [17/5]", 2477740067],
+    [42, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
+    [69, 13, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
+    [76, 16, 16, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3238182925],
+    [76, 40, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
+    [79, 7, 39, "RSpec/MultipleExpectations: Example has too many expectations [4/1].", 44971633],
+    [80, 16, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
+    [93, 11, 68, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 197593698],
+    [113, 13, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
+    [120, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
+    [120, 31, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
+    [144, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
+    [165, 18, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [171, 18, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [189, 7, 293, "RSpec/ExampleLength: Example has too many lines. [9/5]", 1876230965],
+    [192, 13, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [203, 7, 488, "RSpec/ExampleLength: Example has too many lines. [12/5]", 822639325],
+    [203, 7, 488, "RSpec/NoExpectationExample: No expectation found in this example.", 822639325],
+    [209, 9, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [215, 9, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [219, 5, 343, "RSpec/ExampleLength: Example has too many lines. [11/5]", 1735281741],
+    [221, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [230, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282]
   ],
   "spec/debug_logging/instance_logger_spec.rb:953110989": [
     [8, 11, 35, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 1427312401],
@@ -400,7 +400,7 @@
     [270, 7, 20, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 1487407123],
     [275, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282]
   ],
-  "spec/debug_logging/log_subscriber_spec.rb:3288061466": [
+  "spec/debug_logging/log_subscriber_spec.rb:4090980442": [
     [12, 7, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
     [18, 7, 19, "RSpec/MultipleExpectations: Example has too many expectations [5/1].", 284421690],
     [18, 7, 528, "RSpec/ExampleLength: Example has too many lines. [6/5]", 257367690],
@@ -430,7 +430,7 @@
     [56, 16, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
     [59, 7, 23, "RSpec/NestedGroups: Maximum example group nesting exceeded [4/3].", 3865265079],
     [60, 9, 45, "RSpec/MultipleExpectations: Example has too many expectations [10/1].", 2435909811],
-    [60, 9, 1376, "RSpec/ExampleLength: Example has too many lines. [15/5]", 3103788213],
+    [60, 9, 1378, "RSpec/ExampleLength: Example has too many lines. [15/5]", 3103788213],
     [62, 63, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
     [70, 18, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
     [71, 18, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
@@ -491,8 +491,8 @@
     [316, 5, 44, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 2012076307],
     [330, 5, 44, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 1379558907]
   ],
-  "spec/support/shared_context.rb:2374029369": [
-    [5, 1, 11045, "RSpec/MultipleMemoizedHelpers: Example group has too many memoized helpers [16/5]", 2543065693],
+  "spec/support/shared_context.rb:3427519005": [
+    [5, 1, 11046, "RSpec/MultipleMemoizedHelpers: Example group has too many memoized helpers [16/5]", 2543065693],
     [10, 18, 16, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 2194695717],
     [20, 3, 696, "RSpec/LeakyConstantDeclaration: Stub class constant instead of declaring explicitly.", 3294572711],
     [33, 5, 41, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3029131508],
