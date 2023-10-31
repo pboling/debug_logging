@@ -2,6 +2,7 @@
 
 <div id="badges">
 
+[![CI Build][🚎dl-cwfi]][🚎dl-cwf]
 [![Test Coverage][🔑cc-covi]][🔑cc-cov]
 [![Maintainability][🔑cc-mnti]][🔑cc-mnt]
 [![Depfu][🔑depfui]][🔑depfu]
@@ -41,7 +42,6 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 | license                | [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)                                                                                                                                                                                                                        |
 | download rank          | [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging)                                                                                                                                                                                                                   |
 | version                | [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging)                                                                                                                                                                                                                             |
-| continuous integration | [![CI Build][🚎dl-cwfi]][🚎dl-cwf]                                                                                                                                                                                                                                                                                                |
 | code triage            | [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging)                                                                                                                                                                                     |
 | documentation          | [on RDoc.info][documentation]                                                                                                                                                                                                                                                                                                     |
 | live chat              | [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)                                                                                                        |
@@ -484,4 +484,4 @@ See [LICENSE.txt][📄license] for the official [Copyright Notice][📄copyright
 [🔑cc-cov]: https://codeclimate.com/github/pboling/debug_logging/test_coverage
 [🔑cc-covi]: https://api.codeclimate.com/v1/badges/1f36d7019c3b81cae1a2/test_coverage
 [🔑depfu]: https://depfu.com/github/pboling/debug_logging?project_id=2675
-[🔑depfui]: https://badges.depfu.com/badges/2675/count.svg
+[🔑depfui]: https://badges.depfu.com/badges/d1a4cf43255916521fef1e3685c61faa/count.svg
