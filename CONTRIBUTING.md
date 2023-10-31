@@ -15,8 +15,8 @@ To release a new version:
 2. Update the version number in `version.rb`
 3. Run `bin/setup && bin/rake` again as a secondary check, and to update `Gemfile.lock`
 4. Run `git commit -am "🔖 Prepare release v<VERSION>"` to commit the changes
-   a. NOTE: Remember to [check the build][🧪build]!
 5. Run `git push` to trigger the final CI pipeline before release, & merge PRs
+   a. NOTE: Remember to [check the build][🧪build]!
 6. Run `git checkout main` (Or whichever branch is considered `trunk`, e.g. `master`)
 7. Run `git pull origin main` to ensure you will release the latest trunk code.
 8. Set `SOURCE_DATE_EPOCH` so `rake build` and `rake release` use same timestamp, and generate same checksums
