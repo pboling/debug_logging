@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "spec_helper"
 DebugLogging.configuration.active_support_notifications = true
 
 RSpec.describe DebugLogging::Configuration do
