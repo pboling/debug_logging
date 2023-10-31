@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "debug_logging/version"
+# Get the GEMFILE_VERSION without *require* "my_gem/version", for code coverage accuracy
+# See: https://github.com/simplecov-ruby/simplecov/issues/557#issuecomment-825171399
+load "lib/debug_logging/version.rb"
+gem_version = DebugLogging::Version::VERSION
+DebugLogging::Version.send(:remove_const, :VERSION)
 
 Gem::Specification.new do |spec|
   spec.name = "debug_logging"
-  spec.version = DebugLogging::VERSION
+  spec.version = gem_version
   spec.authors = ["Peter Boling", "John ", "guckin"]
   spec.email = ["peter.boling@gmail.com"]
 
@@ -39,14 +41,24 @@ Automatically log selected methods and their arguments as they are called at run
   # Utilities
   spec.add_development_dependency("rake", ">= 13")
 
-  # Testing
-  spec.add_development_dependency("rspec", ">= 3")
-  spec.add_development_dependency("rspec-pending_for", ">= 0")
-  spec.add_development_dependency("silent_stream", ">= 1")
+  # Code Coverage
+  # CodeCov + GitHub setup is not via gems: https://github.com/marketplace/actions/codecov
+  spec.add_development_dependency("kettle-soup-cover", "~> 1.0", ">= 1.0.2")
+
+  # Documentation
+  spec.add_development_dependency("kramdown", "~> 2.4")
+  spec.add_development_dependency("yard", "~> 0.9", ">= 0.9.34")
+  spec.add_development_dependency("yard-junk", "~> 0.0")
 
   # Linting
-  spec.add_development_dependency("rspec-block_is_expected", "~> 1.0", ">= 1.0.5")
   spec.add_development_dependency("rubocop-lts", "~> 12.1", ">= 12.1.1")
   spec.add_development_dependency("rubocop-packaging", "~> 0.5", ">= 0.5.2")
   spec.add_development_dependency("rubocop-rspec", "~> 2.25")
+
+  # Testing
+  spec.add_development_dependency("rspec", ">= 3")
+  spec.add_development_dependency("rspec-block_is_expected", "~> 1.0", ">= 1.0.5")
+  spec.add_development_dependency("rspec-pending_for", ">= 0")
+  spec.add_development_dependency("rspec_junit_formatter", "~> 0.6")
+  spec.add_development_dependency("silent_stream", ">= 1")
 end

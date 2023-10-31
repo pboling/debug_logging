@@ -92,7 +92,7 @@ Herein you will find:
   * When the gem is loaded there are no monkey patches.
   * Rather, your own classes/methods get "patched" and "hooked" as you configure them.
 * 100% clean, 0% obtrusive
-* ~100% tested
+* Greater than 93% test coverage & 82% branch coverage
 * 100% Ruby 2.1+ compatible
   - use version `gem "debug_logging", "~> 1.0"` for Ruby < 2.3
   - use version `gem "debug_logging", "~> 2.0"` for Ruby 2.3

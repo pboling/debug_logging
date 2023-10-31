@@ -178,24 +178,20 @@ module DebugLogging
     def debug_payload_to_s(payload: nil, config_proxy: nil)
       return "" unless payload && config_proxy
 
-      if payload
-        case config_proxy.debug_add_payload
-        when true
-          payload.inspect
-        else
-          printed_payload = ""
-          printed, add_payload_ellipsis = debug_safe_proc(
-            proc_name: "add_payload",
-            proc: config_proxy.debug_add_payload,
-            args: payload,
-            max_length: config_proxy.payload_max_length,
-          )
-          printed_payload += printed
-          printed_payload += config_proxy.debug_ellipsis if add_payload_ellipsis
-          printed_payload
-        end
+      case config_proxy.debug_add_payload
+      when true
+        payload.inspect
       else
-        ""
+        printed_payload = ""
+        printed, add_payload_ellipsis = debug_safe_proc(
+          proc_name: "add_payload",
+          proc: config_proxy.debug_add_payload,
+          args: payload,
+          max_length: config_proxy.payload_max_length,
+        )
+        printed_payload += printed
+        printed_payload += config_proxy.debug_ellipsis if add_payload_ellipsis
+        printed_payload
       end
     end
 

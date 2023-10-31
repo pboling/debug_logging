@@ -3,27 +3,21 @@
 # Std Lib
 require "rational"
 
-# External gems
-require "rspec/pending_for"
-require "silent_stream"
+# This does not require "simplecov",
+#   because that has a side-effect of running `.simplecov`
+require "kettle-soup-cover"
 
-begin
-  require "byebug" if RbConfig::CONFIG["RUBY_INSTALL_NAME"] == "ruby"
-rescue LoadError
-  puts "Failed to load gem byebug"
-end
+# RSpec Configs
+require "config/byebug"
+require "config/rspec/rspec_block_is_expected"
+require "config/rspec/rspec_core"
+require "config/rspec/silent_stream"
+require "config/rspec/version_gem"
+
+
+# Last thing before this gem is code coverage:
+require "simplecov" if Kettle::Soup::Cover::DO_COV
 
 # This gem!
 require "debug_logging"
 require "support/shared_context"
-
-RSpec.configure do |config|
-  # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
-
-  config.include SilentStream
-
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
-  end
-end

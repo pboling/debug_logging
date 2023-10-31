@@ -3,10 +3,6 @@
 RSpec.describe DebugLogging do
   include_context "with example classes"
 
-  it "has a version number" do
-    expect(DebugLogging::VERSION).not_to be_nil
-  end
-
   describe ".debug_log" do
     let(:message) { "Marty McFly" }
 

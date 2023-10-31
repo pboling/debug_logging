@@ -3,6 +3,21 @@
 RSpec.describe DebugLogging::InstanceLogger do
   include_context "with example classes"
 
+  context "an instance logged klass with no logged methods" do
+    it "logs" do
+      output = capture("stdout") do
+        complete_logged_klass_no_logged_imethods.new.i
+        complete_logged_klass_no_logged_imethods.new.i_with_ssplat
+        complete_logged_klass_no_logged_imethods.new.i_with_dsplat
+      end
+      expect(output).to eq("")
+    end
+
+    it "has correct return value" do
+      expect(complete_logged_klass_no_logged_imethods.new.i).to eq(40)
+    end
+  end
+
   context "an instance logged klass explicit" do
     it "logs" do
       output = capture("stdout") do

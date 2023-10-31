@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
+# Std Lib
 require "logger"
-require "colorized_string"
 require "digest"
 
+# External gems
+require "version_gem"
+require "colorized_string"
+
+# This gem
 require "debug_logging/constants"
 require "debug_logging/version"
 require "debug_logging/errors"
@@ -271,4 +276,8 @@ module DebugLogging
   end
 
   self.debug_logging_configuration = Configuration.new # setup defaults
+end
+
+DebugLogging::Version.class_eval do
+  extend VersionGem::Basic
 end

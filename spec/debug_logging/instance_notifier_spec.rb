@@ -12,6 +12,21 @@ RSpec.describe DebugLogging::InstanceNotifier do
     end
   end
 
+  context "an instance logged klass with no logged methods" do
+    it "logs" do
+      output = capture("stdout") do
+        instance_notified_klass_no_logged_imethods.new.i
+        instance_notified_klass_no_logged_imethods.new.i_with_ssplat
+        instance_notified_klass_no_logged_imethods.new.i_with_dsplat
+      end
+      expect(output).to eq("")
+    end
+
+    it "has correct return value" do
+      expect(instance_logged_klass_explicit.new.i).to eq(40)
+    end
+  end
+
   context "an instance notified klass explicit" do
     it "notifies" do
       output = capture("stdout") do
