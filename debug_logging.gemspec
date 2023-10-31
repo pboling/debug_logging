@@ -12,25 +12,44 @@ Gem::Specification.new do |spec|
   spec.authors = ["Peter Boling", "John ", "guckin"]
   spec.email = ["peter.boling@gmail.com"]
 
+  # See CONTRIBUTING.md
+  spec.cert_chain = ["certs/pboling.pem"]
+  spec.signing_key = File.expand_path("~/.ssh/gem-private_key.pem") if $PROGRAM_NAME.end_with?("gem")
+
   spec.summary = "Drop-in debug logging useful when a call stack gets unruly"
   spec.description = '
 Unobtrusive debug logging for Ruby.  NO LITTERING.
 Automatically log selected methods and their arguments as they are called at runtime!
 '
-  spec.license = "MIT"
   spec.homepage = "https://github.com/pboling/debug_logging"
-
-  spec.metadata["rubygems_mfa_required"] = "true"
-
-  spec.files = %x(git ls-files -z).split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
-  spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.license = "MIT"
   spec.required_ruby_version = ">= 2.4", "< 3"
 
-  spec.add_runtime_dependency("colorize", ">= 0")
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/pboling/debug_logging/tree/v#{spec.version}"
+  spec.metadata["changelog_uri"] = "https://github.com/pboling/debug_logging/blob/v#{spec.version}/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"] = "https://github.com/pboling/debug_logging/issues"
+  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/debug_logging/#{spec.version}"
+  spec.metadata["wiki_uri"] = "https://github.com/pboling/debug_logging/wiki"
+  spec.metadata["funding_uri"] = "https://liberapay.com/pboling"
+  spec.metadata["rubygems_mfa_required"] = "true"
+
+  # Specify which files should be added to the gem when it is released.
+  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
+  spec.files = Dir[
+    "lib/**/*.rb",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "LICENSE.txt",
+    "README.md",
+    "SECURITY.md"
+  ]
+  spec.bindir = "exe"
+  spec.executables = []
+  spec.require_paths = ["lib"]
+
+  spec.add_dependency("colorize", ">= 0")
 
   # Optional
   spec.add_development_dependency("activesupport", ">= 5.2.4.4")
@@ -58,7 +77,7 @@ Automatically log selected methods and their arguments as they are called at run
   # Testing
   spec.add_development_dependency("rspec", ">= 3")
   spec.add_development_dependency("rspec-block_is_expected", "~> 1.0", ">= 1.0.5")
-  spec.add_development_dependency("rspec-pending_for", ">= 0")
   spec.add_development_dependency("rspec_junit_formatter", "~> 0.6")
+  spec.add_development_dependency("rspec-pending_for", ">= 0")
   spec.add_development_dependency("silent_stream", ">= 1")
 end
