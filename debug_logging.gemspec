@@ -9,7 +9,7 @@ DebugLogging::Version.send(:remove_const, :VERSION)
 Gem::Specification.new do |spec|
   spec.name = "debug_logging"
   spec.version = gem_version
-  spec.authors = ["Peter Boling", "John ", "guckin"]
+  spec.authors = ["Peter Boling", "John Gillson", "guckin"]
   spec.email = ["peter.boling@gmail.com"]
 
   # See CONTRIBUTING.md
