@@ -233,6 +233,29 @@ RSpec.describe DebugLogging::Hooks do
   end
 
   context "when .debug_after is used" do
-    pending "it should work"
+    before do
+      @test_class = Class.new do
+        # require 'rspec/expectations'
+        include DebugLogging::Hooks
+        def meth(*_args, &_blk)
+          nil
+        end
+      end
+    end
+
+    it "the block is called after the method" do
+      value = nil
+      @test_class.instance_exec(self) do |_slf|
+        define_method(:meth) do
+          value = "in method"
+        end
+
+        debug_after(:meth) do
+          value = "in after"
+        end
+      end
+      @test_class.new.meth
+      expect(value).to eq("in after")
+    end
   end
 end
