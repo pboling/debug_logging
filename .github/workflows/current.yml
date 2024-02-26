@@ -30,7 +30,7 @@ permissions:
 # Cancels all previous workflow runs for the same branch that have not yet completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name.
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -58,17 +58,17 @@ jobs:
         uses: amancevice/setup-code-climate@v1
         if: ${{ github.event_name != 'pull_request' }}
         with:
-          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
+          cc_test_reporter_id: "${{ secrets.CC_TEST_REPORTER_ID }}"
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Ruby & Bundle
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
-          rubygems: ${{ matrix.rubygems }}
-          bundler: ${{ matrix.bundler }}
+          ruby-version: "${{ matrix.ruby }}"
+          rubygems: "${{ matrix.rubygems }}"
+          bundler: "${{ matrix.bundler }}"
           bundler-cache: true
 
       - name: CodeClimate Pre-build Notification
@@ -110,5 +110,5 @@ jobs:
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
         continue-on-error: ${{ matrix.experimental != 'false' }}
