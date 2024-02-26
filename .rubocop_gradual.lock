@@ -1,5 +1,5 @@
 {
-  "README.md:3061967429": [
+  "README.md:2800848650": [
     [232, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [235, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [239, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
@@ -48,7 +48,7 @@
   ],
   "spec/debug_logging/argument_printer_spec.rb:2145628744": [
     [12, 17, 35, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 864840599],
-    [50, 33, 35, "Style/DateTime: Prefer Time over DateTime.", 2193634500],
+    [50, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
     [98, 13, 23, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2254666317],
     [111, 9, 193, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 3607462793],
     [128, 9, 189, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 449370282]
@@ -303,7 +303,7 @@
     [1168, 11, 19, "RSpec/MultipleExpectations: Example has too many expectations [2/1].", 3228809368],
     [1176, 11, 256, "RSpec/ExampleLength: Example has too many lines. [7/5]", 4131437431]
   ],
-  "spec/debug_logging/hooks_spec.rb:3446494803": [
+  "spec/debug_logging/hooks_spec.rb:1847186008": [
     [3, 5, 606, "RSpec/ExampleLength: Example has too many lines. [17/5]", 2477740067],
     [42, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 1231042892],
     [69, 13, 9, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2104178699],
@@ -326,7 +326,10 @@
     [215, 9, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
     [219, 5, 343, "RSpec/ExampleLength: Example has too many lines. [11/5]", 1735281741],
     [221, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
-    [230, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282]
+    [230, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [246, 5, 339, "RSpec/ExampleLength: Example has too many lines. [11/5]", 2888247216],
+    [248, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
+    [257, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282]
   ],
   "spec/debug_logging/instance_logger_spec.rb:711645874": [
     [6, 11, 49, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 1691429290],

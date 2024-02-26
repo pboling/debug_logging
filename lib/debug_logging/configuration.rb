@@ -41,10 +41,10 @@ module DebugLogging
     end
     def initialize(**options)
       CONFIG_ATTRS.each do |key|
-        send("#{key}=", get_attr_from_options(options, key))
+        send(:"#{key}=", get_attr_from_options(options, key))
       end
       CONFIG_READERS.each do |key|
-        send("#{key}=", get_reader_from_options(options, key))
+        send(:"#{key}=", get_reader_from_options(options, key))
       end
       @methods_to_log = []
     end
@@ -63,7 +63,7 @@ module DebugLogging
     def loggable?
       return @loggable if defined?(@loggable)
 
-      @loggable = logger.send("#{log_level}?")
+      @loggable = logger.send(:"#{log_level}?")
     end
 
     def benchmarkable_for?(benchmarks)
@@ -95,7 +95,7 @@ module DebugLogging
 
     def to_hash
       CONFIG_KEYS.each_with_object({}) do |key, hash|
-        hash[key] = instance_variable_get("@#{key}")
+        hash[key] = instance_variable_get(:"@#{key}")
       end
     end
 
