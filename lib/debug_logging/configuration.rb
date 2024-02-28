@@ -11,7 +11,7 @@ module DebugLogging
     #
     #     extend DebugLogging::InstanceLogger
     #     i_logged [:drive, :stop],
-    #       config: {
+    #       {
     #         logger: Logger.new(STDOUT) # probably want to override to be the Rails.logger
     #         log_level: :debug # at what level do the messages created by this gem sent at?
     #         last_hash_to_s_proc: nil # e.g. ->(hash) { "keys: #{hash.keys}" }

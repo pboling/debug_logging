@@ -294,7 +294,7 @@ class Car
   # Override configuration options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
-  i_logged [:faster], config: {add_invocation_id: false}
+  i_logged [:faster], {add_invocation_id: false}
 
   # You can also use `i_logged` as a true method decorator:
   i_logged def slower
@@ -400,7 +400,7 @@ class Car
   # Override options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
-  i_notified [:faster], config: {add_invocation_id: false}
+  i_notified [:faster], {add_invocation_id: false}
 
   def will_not_be_notified
     false
