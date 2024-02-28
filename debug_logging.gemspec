@@ -52,9 +52,6 @@ Automatically log selected methods and their arguments as they are called at run
   # Optional
   spec.add_development_dependency("activesupport", ">= 5.2.4.4")
 
-  # Debugging
-  spec.add_development_dependency("byebug", ">= 11")
-
   # Utilities
   spec.add_development_dependency("rake", ">= 13")
 
