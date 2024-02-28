@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Removed
 
-## [4.0.0] - unreleased
+## [4.0.0] - 2024-02-28
 ### Added
 - Class method DSL:
     - `logged`
@@ -95,7 +95,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] ([tag][0.1.0t]) - 2017-03-25
 - Initial release
 
-[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v3.1.9...HEAD
+[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.0...HEAD
+[4.0.0t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.0
+[4.0.0]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v3.1.9...v4.0.0
 [3.1.9t]: https://gitlab.com/pboling/debug_logging/-/tags/v3.1.9
 [3.1.9]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v3.1.8...v3.1.9
 [3.1.8t]: https://gitlab.com/pboling/debug_logging/-/tags/v3.1.8
