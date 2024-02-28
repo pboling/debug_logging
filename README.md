@@ -148,7 +148,7 @@ Recommend creating `config/initializers/debug_logging.rb`, or adding to `config/
 ```ruby
 # Showing the defaults
 DebugLogging.configuration.logger = Logger.new($stdout) # you probably want to override to be the Rails.logger, and if so you can't set it in the initializer, as it needs to be set after Rails.logger is set.
-DebugLogging.configuration.log_level = :debug # at what level do the messages created by this gem sent at?
+DebugLogging.configuration.log_level = :debug # at what level are the messages created by this gem sent at?
 DebugLogging.configuration.multiple_last_hashes = false # pass every hash argument to last_hash_to_s_proc?
 DebugLogging.configuration.last_hash_to_s_proc = nil # e.g. ->(hash) { "keys: #{hash.keys}" }
 DebugLogging.configuration.last_hash_max_length = 1_000
