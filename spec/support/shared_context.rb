@@ -28,12 +28,14 @@ RSpec.shared_context "with example classes" do
     self.debug_ellipsis = "..."
     self.debug_last_hash_max_length = 888
 
-    def self.perform(*_args)
-      42
-    end
+    class << self
+      def perform(*_args)
+        42
+      end
 
-    def self.banana(*_args)
-      77
+      def banana(*_args)
+        77
+      end
     end
   end
 
@@ -77,8 +79,11 @@ RSpec.shared_context "with example classes" do
   let(:child_singleton_logged_and_notified_klass) do
     Class.new(ChildSingletonClass) do
       self.debug_ellipsis = "***"
-      def self.perform(*_args)
-        43
+
+      class << self
+        def perform(*_args)
+          43
+        end
       end
       logged :perform
       notified :perform
@@ -102,32 +107,42 @@ RSpec.shared_context "with example classes" do
       # Adds `i_logged` class method
       extend DebugLogging::InstanceLogger
 
-      logged def self.k
-        10
-      end
-      def self.k_with_ssplat(*_args)
-        20
-      end
+      class << self
+        def k
+          10
+        end
 
-      def self.k_with_dsplat(**_args)
-        30
+        def k_with_ssplat(*_args)
+          20
+        end
+
+        def k_with_dsplat(**_args)
+          30
+        end
+
+        def k_with_ssplat_i(*_args)
+          21
+        end
+
+        def k_with_dsplat_i(**_args)
+          31
+        end
+
+        def k_with_ssplat_e(*_args)
+          21
+        end
+
+        def k_with_dsplat_e(**_args)
+          31
+        end
+
+        def k_without_log
+          0
+        end
       end
+      logged :k
       logged :k_with_ssplat, :k_with_dsplat
-      def self.k_with_ssplat_i(*_args)
-        21
-      end
-
-      def self.k_with_dsplat_i(**_args)
-        31
-      end
       logged :k_with_ssplat_i, :k_with_dsplat_i, {last_hash_to_s_proc: ->(_) { "LOLiii" }}
-      def self.k_with_ssplat_e(*_args)
-        21
-      end
-
-      def self.k_with_dsplat_e(**_args)
-        31
-      end
       logged %i[k_with_ssplat_e k_with_dsplat_e], {
         last_hash_to_s_proc: lambda { |_|
                                "LOLeee"
@@ -136,9 +151,6 @@ RSpec.shared_context "with example classes" do
                                      colorized_string.red
                                    },
       }
-      def self.k_without_log
-        0
-      end
 
       def i
         40
