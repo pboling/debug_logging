@@ -1,5 +1,5 @@
 {
-  "README.md:2883386112": [
+  "README.md:3009712128": [
     [240, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [243, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [247, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
@@ -38,7 +38,7 @@
     [62, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241],
     [77, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241]
   ],
-  "lib/simple_debug_logging.rb:1392172319": [
+  "lib/simple_debug_logging.rb:1035783295": [
     [71, 5, 688, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 790702810]
   ],
   "spec/debug_logging/argument_printer_spec.rb:2145628744": [
@@ -48,7 +48,7 @@
     [111, 9, 193, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 3607462793],
     [128, 9, 189, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 449370282]
   ],
-  "spec/debug_logging/class_logger_spec.rb:989837610": [
+  "spec/debug_logging/class_logger_spec.rb:1162338474": [
     [4, 11, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3715557109],
     [6, 53, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_logged_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
     [16, 14, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(\n        \"kl\",\n        :k_with_dsplat,\n      ))` as a spy using `allow` or `instance_spy`.", 1384559950],
@@ -85,7 +85,7 @@
     [251, 14, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
     [292, 14, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282]
   ],
-  "spec/debug_logging/configuration_spec.rb:318728313": [
+  "spec/debug_logging/configuration_spec.rb:126485881": [
     [7, 11, 8, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 4105806927],
     [8, 13, 25, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3996754496],
     [9, 7, 20, "RSpec/NestedGroups: Maximum example group nesting exceeded [4/3].", 1551745841],
@@ -227,7 +227,7 @@
     [248, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282],
     [257, 7, 11, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 2247037282]
   ],
-  "spec/debug_logging/instance_logger_spec.rb:242382582": [
+  "spec/debug_logging/instance_logger_spec.rb:1603668164": [
     [101, 31, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `output` as a spy using `allow` or `instance_spy`.", 1384559950],
     [200, 27, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `logger` as a spy using `allow` or `instance_spy`.", 1384559950]
   ],

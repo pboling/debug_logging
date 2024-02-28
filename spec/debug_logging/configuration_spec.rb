@@ -119,10 +119,10 @@ RSpec.describe DebugLogging::Configuration do
               singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
               complete_logged_klass.k_with_ssplat("z", 1, true, ["y", 2, false], {t: :t, p: :p})
             end
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
-            expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+\|\d+@.+~ debug: {}\Z/)
-            expect(output).not_to match(/\.k_with_ssplat completed in/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
+            expect(output).to match(/::k_with_ssplat\("z", 1, true, \["y", 2, false\], {:t=>:t, :p=>:p}\) ~\d+\|\d+@.+~ debug: {}\Z/)
+            expect(output).not_to match(/::k_with_ssplat completed in/)
           end
 
           it "has correct return value" do
@@ -236,11 +236,11 @@ RSpec.describe DebugLogging::Configuration do
           end
           expect(output).not_to match("ParentSingletonClass")
           expect(output).not_to match("ChildSingletonClass.perform")
-          expect(output).to match(/DEBUG -- : ChildSingletonClass\.snakes\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwx,,,\) ~\d+\|\d+@.+~ debug: {}$/)
-          expect(output).to match(/DEBUG -- : ChildSingletonClass\.banana\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc\+-\+-\+-\) ~\d+\|\d+@.+~ debug: {}$/)
-          expect(output).to match(/DEBUG -- : #<.+>\.perform\("y", 2, true, \["y", 2, false\], {:n=>:o, :p=>:q}\) ~\d+\|\d+@.+~ debug: {}$/)
+          expect(output).to match(/DEBUG -- : ChildSingletonClass::snakes\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwx,,,\) ~\d+\|\d+@.+~ debug: {}$/)
+          expect(output).to match(/DEBUG -- : ChildSingletonClass::banana\("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabc\+-\+-\+-\) ~\d+\|\d+@.+~ debug: {}$/)
+          expect(output).to match(/DEBUG -- : #<.+>::perform\("y", 2, true, \["y", 2, false\], {:n=>:o, :p=>:q}\) ~\d+\|\d+@.+~ debug: {}$/)
           expect(output).to match(/DEBUG -- : perform\.log \(\d.\d{3} secs\) start=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\("x", 3, true, \["x", 2, false\], \{:j=>:k, :l=>:m\}\) payload=\{\}/)
-          expect(output).to match(/DEBUG -- : #<.+>\.perform\("r", 4, true, \["u", 2, false\], {:a=>:b, :c=>:d}\) ~\d+\|\d+@.+~ debug: {}$/)
+          expect(output).to match(/DEBUG -- : #<.+>::perform\("r", 4, true, \["u", 2, false\], {:a=>:b, :c=>:d}\) ~\d+\|\d+@.+~ debug: {}$/)
           expect(output).to match(/DEBUG -- : perform\.log \(\d.\d{3} secs\) start=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} end=\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4} args=\("r", 4, true, \["u", 2, false\], \{:a=>:b, :c=>:d\}\) payload=\{\}/)
 
           expect(parent_singleton_klass).to have_received(:banana).once
@@ -251,7 +251,7 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             expect(child_singleton_logged_args_klass.snakes("abcdefghijklmnopqrstuvwxyz" * 3)).to eq(88)
           end
-          expect(output).to match(/DEBUG -- : #<.+>\.snakes\(\["abcdefghijklmnopqrstuvwxy<><><>\) ~\d+\|\d+@.+~ debug: {}$/)
+          expect(output).to match(/DEBUG -- : #<.+>::snakes\(\["abcdefghijklmnopqrstuvwxy<><><>\) ~\d+\|\d+@.+~ debug: {}$/)
         end
       end
 
@@ -319,10 +319,10 @@ RSpec.describe DebugLogging::Configuration do
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             complete_logged_klass.k_with_ssplat("z", 1, true, ["y", 2, false], {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
-          expect(output).to match(/\.k_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}\Z/)
-          expect(output).not_to match(/\.k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\)/)
+          expect(output).to match(/::k_with_ssplat\("z", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}\Z/)
+          expect(output).not_to match(/::k_with_ssplat completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
         end
 
         it "has correct return value" do
@@ -713,16 +713,16 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
         end
 
         it "uses discrete alternate config for class methods" do
           output = capture("stdout") do
             complete_logged_klass.k_with_ssplat("x", 1, true, ["y", 2, false], {c: :d, e: :f})
           end
-          expect(output).to match(/\.k_with_ssplat\("x", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}\Z/)
-          expect(output).not_to match(/\.k_with_ssplat completed in/)
+          expect(output).to match(/::k_with_ssplat\("x", 1, true, \["y", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~ debug: {}\Z/)
+          expect(output).not_to match(/::k_with_ssplat completed in/)
         end
 
         it "has correct return value" do
@@ -743,7 +743,7 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_dsplat#{color_regex}\(\[:a, :b, :c, :d, :e\]\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_dsplat#{color_regex}\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
 
         it "has correct return value" do
@@ -812,8 +812,8 @@ RSpec.describe DebugLogging::Configuration do
             )
             singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/)
-          expect(output).to match(/\.#{color_regex}k_with_dsplat#{color_regex}\(\[:a, :b, :c, :d, :e\]\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], \[:c, :e\], \[:a, :b, :c, :d, :e\]\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_dsplat#{color_regex}\(\[:a, :b, :c, :d, :e\]\) ~/)
         end
 
         it "has correct return value" do
@@ -908,7 +908,7 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_dsplat#{color_regex}\(\[:a, ✂️ …\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_dsplat#{color_regex}\(\[:a, ✂️ …\) ~/)
         end
 
         it "has correct return value" do
@@ -933,7 +933,7 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_dsplat#{color_regex}\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_dsplat#{color_regex}\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
         end
 
         it "has correct return value" do
@@ -960,14 +960,14 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_ssplat("a", 1, true, {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \[:c, :e\]\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \[:c, :e\]\) ~/)
         end
 
         it "logs ellipsis" do
           output = capture("stdout") do
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2 ✂️ …, \[:c, :e\]\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2 ✂️ …, \[:c, :e\]\) ~/)
         end
 
         it "has correct return value" do
@@ -986,14 +986,14 @@ RSpec.describe DebugLogging::Configuration do
           output = capture("stdout") do
             singleton_logged_klass.k_with_ssplat("a", 1, {c: :d})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, {:c=>:d}\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, {:c=>:d}\) ~/)
         end
 
         it "logs ellipsis" do
           output = capture("stdout") do
             singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
           end
-          expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2 ✂️ …\) ~/)
+          expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2 ✂️ …\) ~/)
         end
 
         it "has correct return value" do
@@ -1037,8 +1037,8 @@ RSpec.describe DebugLogging::Configuration do
         output = capture("stdout") do
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
-        expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/)
-        expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/)
+        expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/)
+        expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~/)
       end
 
       it "has correct return value" do
@@ -1059,8 +1059,8 @@ RSpec.describe DebugLogging::Configuration do
             output = capture("stdout") do
               singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             end
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~/)
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+~/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+~/)
           end
 
           it "has correct return value" do
@@ -1079,8 +1079,8 @@ RSpec.describe DebugLogging::Configuration do
             output = capture("stdout") do
               singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             end
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+?~\Z/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\)/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+?~\Z/)
           end
 
           it "has correct return value" do
@@ -1099,8 +1099,8 @@ RSpec.describe DebugLogging::Configuration do
             output = capture("stdout") do
               singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
             end
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+?~ debug: {}/)
-            expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+?~/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~\d+\|\d+@.+?~ debug: {}/)
+            expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex} completed in \d+\.?\d*s \(\d+\.?\d*s CPU\) ~\d+\|\d+@.+?~/)
           end
 
           it "has correct return value" do

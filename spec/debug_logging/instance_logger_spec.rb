@@ -113,7 +113,7 @@ RSpec.describe DebugLogging::InstanceLogger do
         output = capture("stdout") do
           singleton_logged_klass.k
         end
-        expect(output).to match(/\.k\(\)/)
+        expect(output).to match(/::k\(\)/)
       end
 
       it "has correct return value" do
@@ -126,7 +126,7 @@ RSpec.describe DebugLogging::InstanceLogger do
         output = capture("stdout") do
           singleton_logged_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
-        expect(output).to match(/\.#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/)
+        expect(output).to match(/::#{color_regex}k_with_ssplat#{color_regex}\("a", 1, true, \["b", 2, false\], {:c=>:d, :e=>:f}\) ~/)
       end
 
       it "has correct return value" do
@@ -139,7 +139,7 @@ RSpec.describe DebugLogging::InstanceLogger do
         output = capture("stdout") do
           singleton_logged_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
-        expect(output).to match(/\.#{color_regex}k_with_dsplat#{color_regex}\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
+        expect(output).to match(/::#{color_regex}k_with_dsplat#{color_regex}\(\*\*{:a=>"a", :b=>1, :c=>true, :d=>\["b", 2, false\], :e=>{:c=>:d, :e=>:f}}\) ~/)
       end
 
       it "has correct return value" do

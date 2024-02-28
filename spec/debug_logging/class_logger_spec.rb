@@ -7,7 +7,7 @@ RSpec.describe DebugLogging::ClassLogger do
       output = capture("stdout") do
         complete_logged_klass.k_with_dsplat(a: "a")
       end
-      expect(output).to match(/.*\.k_with_dsplat/)
+      expect(output).to match(/.*::k_with_dsplat/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       # Without an options hash the class config is the same config object as the per method config
       expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
@@ -23,7 +23,7 @@ RSpec.describe DebugLogging::ClassLogger do
       output = capture("stdout") do
         complete_logged_klass.k_with_dsplat_i(a: "a")
       end
-      expect(output).to match(/\.k_with_dsplat_i\(LOLiii\)/)
+      expect(output).to match(/::k_with_dsplat_i\(LOLiii\)/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
         "kl",
@@ -38,7 +38,7 @@ RSpec.describe DebugLogging::ClassLogger do
       output = capture("stdout") do
         complete_logged_klass.k_with_dsplat_e(a: "a")
       end
-      expect(output).to match(/.*0;31;49m#<Class.*0m\.k_with_dsplat_e\(LOLeee\)/)
+      expect(output).to match(/.*0;31;49m#<Class.*0m::k_with_dsplat_e\(LOLeee\)/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
         "kl",
@@ -65,9 +65,9 @@ RSpec.describe DebugLogging::ClassLogger do
       expect(output).to match(/#i\(\*\*{}\)/)
       expect(output).to match(/#i_with_ssplat\(\*\*{}\)/)
       expect(output).to match(/#.*0;31;49mi_with_dsplat.*0m\(\*\*{}\)/)
-      expect(output).to match(/\.k\(\)/)
-      expect(output).to match(/\.k_with_ssplat\(\)/)
-      expect(output).to match(/\.k_with_dsplat\(\)/)
+      expect(output).to match(/::k\(\)/)
+      expect(output).to match(/::k_with_ssplat\(\)/)
+      expect(output).to match(/::k_with_dsplat\(\)/)
     end
 
     it "has correct return value" do

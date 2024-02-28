@@ -29,7 +29,7 @@ module DebugLogging
                 paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
                 log_prefix = debug_invocation_to_s(
                   klass: to_s,
-                  separator: ".",
+                  separator: "::",
                   method_to_log: method_to_log,
                   config_proxy: config_proxy,
                 )

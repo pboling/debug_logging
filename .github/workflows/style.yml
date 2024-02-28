@@ -18,7 +18,7 @@ jobs:
   rubocop:
     name: RuboCop
     strategy:
-      fail-fast: falsebest
+      fail-fast: false
       matrix:
         experimental: [true]
         rubygems:

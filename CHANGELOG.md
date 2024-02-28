@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `notifies` => `notified`
 - Instance method DSL renamed:
   - `i_notifies` => `i_notified`
+- Disambiguated class method log output send message separator:
+  - `.` => `::`, because `.` is ambiguous; same call syntax used for instance method calls
 ### Fixed
 - Per method config for every decorated method
 ### Removed

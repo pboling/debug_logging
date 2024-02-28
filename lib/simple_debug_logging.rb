@@ -55,11 +55,11 @@ class SimpleDebugLogging < Module
           define_method(method_to_log.to_sym) do |*args|
             method_return_value = nil
             invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self}.#{method_to_log}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
+            puts "#{self}::#{method_to_log}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
             elapsed = Benchmark.realtime do
               method_return_value = original_method.call(*args)
             end
-            puts "#{self}.#{method_to_log} ~#{args.hash}~ complete in #{elapsed}s#{invocation_id}"
+            puts "#{self}::#{method_to_log} ~#{args.hash}~ complete in #{elapsed}s#{invocation_id}"
             method_return_value
           end
         end
