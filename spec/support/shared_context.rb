@@ -23,7 +23,7 @@ RSpec.shared_context "with example classes" do
     extend DebugLogging
     # Needs to be at the top of the class, adds `logged` class method
     extend DebugLogging::ClassLogger
-    # Needs to be at the top of the class, adds `notifies` class method
+    # Needs to be at the top of the class, adds `notified` class method
     extend DebugLogging::ClassNotifier
     self.debug_instance_benchmarks = true
     self.debug_add_invocation_id = false
@@ -70,7 +70,7 @@ RSpec.shared_context "with example classes" do
   let(:child_singleton_notified_klass) do
     Class.new(ChildSingletonClass) do
       self.debug_ellipsis = ">>>"
-      notifies def self.perform(*_args)
+      notified def self.perform(*_args)
         24
       end
     end
@@ -83,7 +83,7 @@ RSpec.shared_context "with example classes" do
         43
       end
       logged :perform
-      notifies :perform
+      notified :perform
     end
   end
 
@@ -101,13 +101,9 @@ RSpec.shared_context "with example classes" do
       extend DebugLogging
       # Needs to be at the top of the class, adds `logged` class method
       extend DebugLogging::ClassLogger
-      # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceLogger.new(i_methods: %i[i i_with_ssplat])
-      include DebugLogging::InstanceLogger.new(i_methods: [:i_with_dsplat], config: {
-        colorized_chain_for_method: lambda { |colorized_string|
-                                      colorized_string.red
-                                    },
-      })
+      # Adds `i_logged` class method
+      extend DebugLogging::InstanceLogger
+
       logged def self.k
         10
       end
@@ -157,24 +153,29 @@ RSpec.shared_context "with example classes" do
       def i_with_dsplat(**_args)
         60
       end
+      i_logged %i[i i_with_ssplat]
+      i_logged [:i_with_dsplat], {
+        colorized_chain_for_method: lambda { |colorized_string|
+          colorized_string.red
+        },
+      }
 
-      # Needs to be below any methods that will want logging when using self.instance_methods(false)
-      # include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
       def i_without_log
         0
       end
     end
   end
 
-  let(:complete_logged_klass_no_logged_imethods) do
+  let(:complex_config_logged_klass) do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
       # Needs to be at the top of the class, adds `logged` class method
       extend DebugLogging::ClassLogger
-      # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceLogger.new(i_methods: false)
+      # Adds `i_logged` class method
+      extend DebugLogging::InstanceLogger
+
       logged def self.k
         10
       end
@@ -225,8 +226,97 @@ RSpec.shared_context "with example classes" do
         60
       end
 
-      # Needs to be below any methods that will want logging when using self.instance_methods(false)
-      # include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
+      def rattle
+        88
+      end
+
+      i_logged %i[i i_with_ssplat]
+      i_logged [:i_with_dsplat], {
+        colorized_chain_for_method: lambda { |colorized_string|
+          colorized_string.red
+        },
+      }
+      i_logged [
+        [
+          :initialize, {
+            log_level: :debug,
+            colorized_chain_for_method: lambda { |colorized_string|
+              colorized_string.red
+            },
+          },
+        ],
+        [
+          :rattle, {
+            log_level: :debug,
+            colorized_chain_for_method: lambda { |colorized_string|
+              colorized_string.blue
+            },
+          },
+        ],
+      ]
+    end
+  end
+
+  let(:complete_logged_klass_no_logged_imethods) do
+    Class.new do
+      # adds the helper methods to the class, all are prefixed with debug_*,
+      #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
+      extend DebugLogging
+      # Needs to be at the top of the class, adds `logged` class method
+      extend DebugLogging::ClassLogger
+      # Adds `i_logged` class method, but we're not going to use it in this class.
+      # Just want to test that inclusion alone doesn't break anything.
+      extend DebugLogging::InstanceLogger
+      logged def self.k
+        10
+      end
+      def self.k_with_ssplat(*_args)
+        20
+      end
+
+      def self.k_with_dsplat(**_args)
+        30
+      end
+      logged :k_with_ssplat, :k_with_dsplat
+      def self.k_with_ssplat_i(*_args)
+        21
+      end
+
+      def self.k_with_dsplat_i(**_args)
+        31
+      end
+      logged :k_with_ssplat_i, :k_with_dsplat_i, {last_hash_to_s_proc: ->(_) { "LOLiii" }}
+      def self.k_with_ssplat_e(*_args)
+        21
+      end
+
+      def self.k_with_dsplat_e(**_args)
+        31
+      end
+      logged %i[k_with_ssplat_e k_with_dsplat_e], {
+        last_hash_to_s_proc: lambda { |_|
+          "LOLeee"
+        },
+        colorized_chain_for_class: lambda { |colorized_string|
+          colorized_string.red
+        },
+      }
+      def self.k_without_log
+        0
+      end
+
+      def i
+        40
+      end
+
+      def i_with_ssplat(*_args)
+        50
+      end
+
+      def i_with_dsplat(**_args)
+        60
+      end
+
       def i_without_log
         0
       end
@@ -238,10 +328,11 @@ RSpec.shared_context "with example classes" do
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
-      # Needs to be at the top of the class, adds `notifies` class method
+      # Needs to be at the top of the class, adds `notified` class method
       extend DebugLogging::ClassNotifier
       # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceNotifier.new(i_methods: [
+      extend DebugLogging::InstanceNotifier
+      i_notified [
         :i,
         [:i_with_ssplat, {id: 1, first_name: "Joe", last_name: "Schmoe"}],
         [:i_with_dsplat, {salutation: "Mr.", suffix: "Jr."}],
@@ -250,8 +341,8 @@ RSpec.shared_context "with example classes" do
           :i_with_dsplat_payload_and_config,
           {tags: %w[yellow red], add_invocation_id: true},
         ],
-      ])
-      notifies def self.k
+      ]
+      notified def self.k
         10
       end
 
@@ -279,12 +370,12 @@ RSpec.shared_context "with example classes" do
         32
       end
 
-      notifies :k_with_ssplat,
+      notified :k_with_ssplat,
         :k_with_dsplat,
         :k_with_ssplat_error
-      notifies :k_with_dsplat_payload, {id: 2, first_name: "Bae", last_name: "Fae"}
-      notifies :k_with_dsplat_payload_and_config, {id: 3, first_name: "Jae", last_name: "Tae", log_level: :error}
-      notifies :k_with_ssplat_handled_error, error_handler_proc: lambda { |config, error, obj, method_name, args|
+      notified :k_with_dsplat_payload, {id: 2, first_name: "Bae", last_name: "Fae"}
+      notified :k_with_dsplat_payload_and_config, {id: 3, first_name: "Jae", last_name: "Tae", log_level: :error}
+      notified :k_with_ssplat_handled_error, error_handler_proc: lambda { |config, error, obj, method_name, args|
         config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect}. Check this: #{obj.k_without_log}"
       }
 
@@ -312,8 +403,6 @@ RSpec.shared_context "with example classes" do
         62
       end
 
-      # Needs to be below any methods that will want logging when using self.instance_methods(false)
-      # include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
       def i_without_log
         0
       end
@@ -336,7 +425,12 @@ RSpec.shared_context "with example classes" do
       def self.k_with_dsplat(**_args)
         30
       end
-      logged :k_with_ssplat, :k_with_dsplat
+      logged :k_with_ssplat, :k_with_dsplat, {
+        add_invocation_id: true,
+        colorized_chain_for_method: ->(colorized_string) {
+          colorized_string.yellow
+        },
+      }
       def self.k_without_log
         0
       end
@@ -349,7 +443,7 @@ RSpec.shared_context "with example classes" do
       extend DebugLogging
       # Needs to be at the top of the class
       extend DebugLogging::ClassNotifier
-      notifies def self.k
+      notified def self.k
         10
       end
       def self.k_with_ssplat(*_args)
@@ -359,7 +453,7 @@ RSpec.shared_context "with example classes" do
       def self.k_with_dsplat(**_args)
         30
       end
-      notifies :k_with_ssplat, :k_with_dsplat
+      notified :k_with_ssplat, :k_with_dsplat
       def self.k_without_log
         0
       end
@@ -370,8 +464,9 @@ RSpec.shared_context "with example classes" do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
-      # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceLogger.new(i_methods: %i[i i_with_ssplat i_with_dsplat])
+      extend DebugLogging::InstanceLogger
+      i_logged %i[i i_with_ssplat i_with_dsplat]
+
       def i
         40
       end
@@ -384,8 +479,6 @@ RSpec.shared_context "with example classes" do
         60
       end
 
-      # Needs to be below any methods that will want logging when using self.instance_methods(false)
-      # include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
       def i_without_log
         0
       end
@@ -404,8 +497,8 @@ RSpec.shared_context "with example classes" do
 
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
-      # Can only be at the top of the class *if* methods are explicitly defined
-      include DebugLogging::InstanceNotifier.new(i_methods: [
+      extend DebugLogging::InstanceNotifier
+      i_notified [
         :i,
         [
           :i_with_ssplat,
@@ -416,7 +509,8 @@ RSpec.shared_context "with example classes" do
           :i_with_instance_vars,
           {instance_variables: %i[action id msg]},
         ],
-      ])
+      ]
+
       def i
         40
       end
@@ -433,8 +527,6 @@ RSpec.shared_context "with example classes" do
         70
       end
 
-      # Needs to be below any methods that will want logging when using self.instance_methods(false)
-      # include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
       def i_without_log
         0
       end
@@ -445,6 +537,7 @@ RSpec.shared_context "with example classes" do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
+      extend DebugLogging::InstanceLogger
       def i
         40
       end
@@ -456,8 +549,9 @@ RSpec.shared_context "with example classes" do
       def i_with_dsplat(**_args)
         60
       end
-      # Needs to be below any methods that will want logging when dynamic
-      include DebugLogging::InstanceLogger.new(i_methods: instance_methods(false))
+      # Needs to be below any methods that will want logging when using dynamic `instance_methods`
+      i_logged instance_methods(false)
+
       def i_without_log
         0
       end
@@ -468,6 +562,8 @@ RSpec.shared_context "with example classes" do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
+      extend DebugLogging::InstanceNotifier
+
       def i
         40
       end
@@ -479,8 +575,7 @@ RSpec.shared_context "with example classes" do
       def i_with_dsplat(**_dargs)
         60
       end
-      # Needs to be below any methods that will want logging when dynamic
-      include DebugLogging::InstanceNotifier.new(i_methods: instance_methods(false))
+      i_notified instance_methods(false)
       def i_without_log
         0
       end
@@ -491,6 +586,8 @@ RSpec.shared_context "with example classes" do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
+      extend DebugLogging::InstanceNotifier
+
       def i
         40
       end
@@ -502,8 +599,7 @@ RSpec.shared_context "with example classes" do
       def i_with_dsplat(**_dargs)
         60
       end
-      # Needs to be below any methods that will want logging when dynamic
-      include DebugLogging::InstanceNotifier.new(i_methods: false)
+
       def i_without_log
         0
       end
@@ -514,9 +610,12 @@ RSpec.shared_context "with example classes" do
     Class.new do
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
+      extend DebugLogging::InstanceNotifier
+
       def i
         40
       end
+      i_notified "i"
 
       def i_with_ssplat(*_args)
         50
@@ -525,8 +624,7 @@ RSpec.shared_context "with example classes" do
       def i_with_dsplat(**_dargs)
         60
       end
-      # Needs to be below any methods that will want logging when dynamic
-      include DebugLogging::InstanceNotifier.new(i_methods: "i")
+
       def i_without_log
         0
       end

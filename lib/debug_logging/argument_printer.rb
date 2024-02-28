@@ -9,11 +9,11 @@ module DebugLogging
       "completed in #{format("%f", tms.real)}s (#{format("%f", tms.total)}s CPU)"
     end
 
-    def debug_invocation_id_to_s(args: nil, config_proxy: nil)
-      return "" unless args && config_proxy
+    def debug_invocation_id_to_s(args: nil, kwargs: nil, config_proxy: nil)
+      return "" unless (args || kwargs) && config_proxy
 
       if config_proxy.debug_add_invocation_id
-        invocation = " ~#{args.object_id}@#{(Time.now.to_f.to_s % "%#-21a")[4..-4]}~"
+        invocation = " ~#{args.object_id}|#{kwargs.object_id}@#{(Time.now.to_f.to_s % "%#-21a")[4..-4]}~"
         case config_proxy.debug_add_invocation_id
         when true
           invocation
@@ -58,12 +58,14 @@ module DebugLogging
       "#{klass_string}#{separator}#{method_string}"
     end
 
-    def debug_signature_to_s(args: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity
-      return "" unless args && config_proxy
+    def debug_signature_to_s(args: nil, kwargs: nil, config_proxy: nil) # rubocop:disable Metrics/CyclomaticComplexity
+      return "" unless (args || kwargs) && config_proxy
 
       printed_args = ""
 
       add_args_ellipsis = false
+      args = args.dup
+      args.push(kwargs) if kwargs
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)
         add_other_args_ellipsis = false
         if args.length > 1

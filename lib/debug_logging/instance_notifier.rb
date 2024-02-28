@@ -1,24 +1,26 @@
 # frozen_string_literal: true
 
 module DebugLogging
-  class InstanceNotifier < Module
-    def initialize(i_methods: nil, payload: nil, config: nil)
-      super()
-      @config = config
-      @payload = payload
-      @instance_methods_to_notify = Array(i_methods) if i_methods
-    end
-
-    def included(base)
-      return unless @instance_methods_to_notify
-
-      base.send(:include, ArgumentPrinter)
-      instance_method_notifier = DebugLogging::InstanceNotifierModulizer.to_mod(
-        methods_to_notify: @instance_methods_to_notify,
-        payload: @payload,
-        config: @config,
+  module InstanceNotifier
+    def i_notified(*methods_to_log)
+      method_names, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
+        method_names: methods_to_log,
+        payload: nil,
+        config: nil,
       )
-      base.send(:prepend, instance_method_notifier)
+      instance_method_notifier = DebugLogging::InstanceNotifierModulizer.to_mod(
+        methods_to_notify: Array(method_names),
+        payload: payload,
+        config: config_opts,
+      )
+
+      wrapped_in_notifier = Module.new do
+        singleton_class.send(:define_method, :included) do |host_class|
+          host_class.prepend(instance_method_notifier)
+        end
+      end
+
+      send(:include, wrapped_in_notifier)
     end
   end
 end

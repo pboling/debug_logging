@@ -2,7 +2,7 @@
 
 module DebugLogging
   module ClassNotifier
-    def notifies(*methods_to_notify)
+    def notified(*methods_to_notify)
       methods_to_notify, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
         method_names: methods_to_notify,
         payload: nil,
@@ -40,18 +40,16 @@ module DebugLogging
                 **paydirt,
               },
             ) do
-              begin
-                if args.size == 1 && (harsh = args[0]) && harsh.is_a?(Hash)
-                  original_method.call(**harsh, &block)
-                else
-                  original_method.call(*args, &block)
-                end
-              rescue StandardError => e
-                if config_proxy.error_handler_proc
-                  config_proxy.error_handler_proc.call(config_proxy, e, self, method_to_notify, args)
-                else
-                  raise e
-                end
+              if args.size == 1 && (harsh = args[0]) && harsh.is_a?(Hash)
+                original_method.call(**harsh, &block)
+              else
+                original_method.call(*args, &block)
+              end
+            rescue StandardError => e
+              if config_proxy.error_handler_proc
+                config_proxy.error_handler_proc.call(config_proxy, e, self, method_to_notify, args)
+              else
+                raise e
               end
             end
           end

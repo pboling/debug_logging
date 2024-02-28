@@ -64,9 +64,9 @@ RSpec.describe DebugLogging::ClassLogger do
         complete_logged_klass.k_with_ssplat
         complete_logged_klass.k_with_dsplat
       end
-      expect(output).to match(/#i\(\)/)
-      expect(output).to match(/#i_with_ssplat\(\)/)
-      expect(output).to match(/#.*0;31;49mi_with_dsplat.*0m\(\)/)
+      expect(output).to match(/#i\(\*\*{}\)/)
+      expect(output).to match(/#i_with_ssplat\(\*\*{}\)/)
+      expect(output).to match(/#.*0;31;49mi_with_dsplat.*0m\(\*\*{}\)/)
       expect(output).to match(/\.k\(\)/)
       expect(output).to match(/\.k_with_ssplat\(\)/)
       expect(output).to match(/\.k_with_dsplat\(\)/)

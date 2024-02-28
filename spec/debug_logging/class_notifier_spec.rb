@@ -27,7 +27,7 @@ RSpec.describe DebugLogging::ClassNotifier do
     complete_notified_klass.k_with_dsplat_payload_and_config(a: "a")
   end
 
-  context "notifies macro" do
+  context "when notified macro" do
     it "works without payload override hash" do
       expect(complete_notified_klass.debug_config).to receive(:log).once.and_call_original
       output = capture("stdout") do
@@ -92,7 +92,7 @@ RSpec.describe DebugLogging::ClassNotifier do
       allow(complete_notified_klass.debug_config).to receive(:debug_log) { logger }
     end
 
-    it "notifies all methods" do
+    it "notified all methods" do
       output = capture("stdout") do
         complete_notified_klass.new.i
         complete_notified_klass.new.i_with_ssplat
@@ -212,7 +212,7 @@ RSpec.describe DebugLogging::ClassNotifier do
       expect(@events.length).to eq(10)
     end
 
-    it "notifies class methods" do
+    it "notified class methods" do
       output = capture("stdout") do
         complete_notified_klass.k
         complete_notified_klass.k_with_ssplat
@@ -238,7 +238,7 @@ RSpec.describe DebugLogging::ClassNotifier do
       )
     end
 
-    it "notifies instance methods" do
+    it "notified instance methods" do
       output = capture("stdout") do
         complete_notified_klass.new.i
         complete_notified_klass.new.i_with_ssplat
@@ -277,7 +277,7 @@ RSpec.describe DebugLogging::ClassNotifier do
       )
     end
 
-    it "notifies multiple method calls" do
+    it "notified multiple method calls" do
       output = capture("stdout") do
         complete_notified_klass.new.i_with_ssplat
         complete_notified_klass.new.i_with_ssplat

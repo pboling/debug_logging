@@ -8,7 +8,7 @@ require "digest/sha2"
 # See: https://learnbyexample.github.io/Ruby_Regexp/lookarounds.html#positive-lookarounds
 # Used to pattern match against a gem package name, which always ends with .gem.
 # The positive lookahead ensures it is present, and prevents it from being captured.
-VERSION_REGEX = /((\d+\.\d+\.\d+)([-.][0-9A-Za-z-]+)*)(?=\.gem)/.freeze
+VERSION_REGEX = /((\d+\.\d+\.\d+)([-.][0-9A-Za-z-]+)*)(?=\.gem)/
 
 gem_path_parts = ARGV.first&.split("/")
 

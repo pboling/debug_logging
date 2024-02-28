@@ -44,7 +44,8 @@ require "debug_logging/class_logger"
 #
 #       # For instance methods:
 #       # Option 1: specify the exact method(s) to add logging to
-#       include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop])
+#       extend DebugLogging::InstanceLogger
+#       i_logged [:drive, :stop]
 #
 #       # Provides the `logged` method decorator
 #       extend DebugLogging::ClassLogger
@@ -59,7 +60,8 @@ require "debug_logging/class_logger"
 #
 #       # For instance methods:
 #       # Option 2: add logging to all instance methods defined above (but *not* defined below)
-#       include DebugLogging::InstanceLogger.new(i_methods: self.instance_methods(false))
+#       extend DebugLogging::InstanceLogger
+#       i_logged instance_methods(false)
 #
 #       def will_not_be_logged; false; end
 #
@@ -68,29 +70,36 @@ require "debug_logging/class_logger"
 ####################
 
 module DebugLogging
-  def self.extended(base)
-    base.send(:extend, ArgumentPrinter)
-    base.send(:extend, ApiClassMethods)
-    base.send(:extend, ConfigClassMethods)
-    base.debug_config_reset(Configuration.new(**debug_logging_configuration.to_hash))
-    base.class_eval do
-      def base.inherited(subclass)
-        subclass.debug_config_reset(Configuration.new(**debug_config.to_hash))
+  # We can't compare with nil to check for no arguments passed as a configuration value,
+  #   because nil can be an argument passed, hence:
+  ACTUAL_NOTHING = Object.new
+
+  class << self
+    def extended(base)
+      base.send(:extend, ArgumentPrinter)
+      base.send(:include, ArgumentPrinter)
+      base.send(:extend, ApiClassMethods)
+      base.send(:extend, ConfigClassMethods)
+      base.debug_config_reset(Configuration.new(**debug_logging_configuration.to_hash))
+      base.class_eval do
+        def base.inherited(subclass)
+          subclass.debug_config_reset(Configuration.new(**debug_config.to_hash))
+        end
       end
     end
-  end
 
-  #### API ####
+    #### API ####
 
-  # For single statement global config in an initializer
-  # e.g. DebugLogging.configuration.ellipsis = "..."
-  def self.configuration
-    self.debug_logging_configuration ||= Configuration.new
-  end
+    # For single statement global config in an initializer
+    # e.g. DebugLogging.configuration.ellipsis = "..."
+    def configuration
+      self.debug_logging_configuration ||= Configuration.new
+    end
 
-  # For global config in an initializer with a block
-  def self.configure
-    yield(configuration)
+    # For global config in an initializer with a block
+    def configure
+      yield(configuration)
+    end
   end
 
   module ApiClassMethods

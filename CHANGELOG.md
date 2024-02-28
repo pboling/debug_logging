@@ -11,6 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Removed
 
+## [4.0.0] - unreleased
+### Added
+- Class method DSL:
+    - `logged`
+- Instance method DSL:
+    - `i_logged`
+### Changed
+- Class method DSL renamed:
+  - `notifies` => `notified`
+- Instance method DSL renamed:
+  - `i_notifies` => `i_notified`
+### Fixed
+- Per method config for every decorated method
+### Removed
+- Support for `include DebugLogging::InstanceLogger.new(...)`
+- Support for `include DebugLogging::InstanceNotifier.new(...)`
+
 ## [3.1.9] - 2023-10-31
 ### Fixed
 - Maximum Ruby version is 2.7. Versions 3.x are not compatible with Ruby >= 3

@@ -11,21 +11,20 @@ module DebugLogging
     # alias the readers to the debug_* prefix so an instance of this class
     #   can have the same API granted by `extend DebugLogging`
     #
-    #     include DebugLogging::InstanceLogger.new(
-    #       i_methods: [:drive, :stop],
+    #     extend DebugLogging::InstanceLogger
+    #     i_logged [:drive, :stop],
     #       config: {
-    #           logger: Logger.new(STDOUT) # probably want to override to be the Rails.logger
-    #           log_level: :debug # at what level do the messages created by this gem sent at?
-    #           last_hash_to_s_proc: nil # e.g. ->(hash) { "keys: #{hash.keys}" }
-    #           last_hash_max_length: 1_000
-    #           args_to_s_proc: nil # e.g. ->(*record) { "record id: #{record.first.id}" }
-    #           args_max_length: 1_000
-    #           instance_benchmarks: false
-    #           class_benchmarks: false
-    #           add_invocation_id: true # invocation id allows you to identify a method call uniquely in a log
-    #           ellipsis: " ✂️ …".freeze
+    #         logger: Logger.new(STDOUT) # probably want to override to be the Rails.logger
+    #         log_level: :debug # at what level do the messages created by this gem sent at?
+    #         last_hash_to_s_proc: nil # e.g. ->(hash) { "keys: #{hash.keys}" }
+    #         last_hash_max_length: 1_000
+    #         args_to_s_proc: nil # e.g. ->(*record) { "record id: #{record.first.id}" }
+    #         args_max_length: 1_000
+    #         instance_benchmarks: false
+    #         class_benchmarks: false
+    #         add_invocation_id: true # invocation id allows you to identify a method call uniquely in a log
+    #         ellipsis: " ✂️ …".freeze
     #       }
-    #     )
     #
     CONFIG_KEYS.each do |key|
       alias_method :"debug_#{key}", :"#{key}"
@@ -39,6 +38,7 @@ module DebugLogging
         "@debug_logging_config_#{type}_#{Digest::MD5.hexdigest(method_to_log.to_s)}".to_sym
       end
     end
+
     def initialize(**options)
       CONFIG_ATTRS.each do |key|
         send(:"#{key}=", get_attr_from_options(options, key))

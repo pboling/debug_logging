@@ -26,8 +26,9 @@
 [🖇sponsor]: https://github.com/sponsors/pboling
 
 
-Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, that won't leave a mess behind when it is time to remove it.
-Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgillson)).  Optional ActiveRecord callback-style hooks that you can decorate your methods with. Hooks logic was taken from the [`slippy_method_hooks` gem](https://github.com/guckin/slippy_method_hooks), (thanks [@guckin](https://github.com/guckin)), and prefaced with `debug_` for this implementation. `DebugLogging::Finalize` is lightly modified from [this stackoverflow answer](https://stackoverflow.com/a/34559282).
+Unobtrusive, inheritable-overridable-configurable, drop-in debug logging, instrumented via method decorators.
+Don't leave a mess behind when it is time to remove logging!
+Supports `ActiveSupport::Notifications` (thanks [@jgillson](https://github.com/jgillson)).  Optional ActiveRecord callback-style hooks that you can decorate your methods with. Hooks logic was taken from the [`slippy_method_hooks` gem](https://github.com/guckin/slippy_method_hooks), (thanks [@guckin](https://github.com/guckin)), and prefaced with `debug_` for this implementation. `DebugLogging::Finalize` is lightly modified from [this stackoverflow answer](https://stackoverflow.com/a/34559282).
 
 ## What do I mean by "unobtrusive"?
 
@@ -35,17 +36,17 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 
 **Unobtrusive** debug logging stays out of the method, changes no logic, can't break your code, and yet it still runs when your method is called, and tells you everything you wanted to know. It doesn't mess with the git history of the method at all!
 
-| Project                | DebugLogging                                                                                                                                                                                                                                                                                                                      |
-|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| install                | `bundle add debug_logging`                                                                                                                                                                                                                                                                                                        |
-| compatibility          | Ruby >= 2.4                                                                                                                                                                                                                                                                                                                       |
-| license                | [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)                                                                                                                                                                                                                        |
-| download rank          | [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging)                                                                                                                                                                                                                   |
-| version                | [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging)                                                                                                                                                                                                                             |
-| code triage            | [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging)                                                                                                                                                                                     |
-| documentation          | [on RDoc.info][documentation]                                                                                                                                                                                                                                                                                                     |
-| live chat              | [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)                                                                                                        |
-| expert support         | [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github)                                                                                                                             |
+| Project                | DebugLogging                                                                                                                                                                                                                                                                                                                     |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| install                | `bundle add debug_logging`                                                                                                                                                                                                                                                                                                       |
+| compatibility          | Ruby >= 3.1 (use version 3.x for Ruby 2.4 - 2.7 compatibility)                                                                                                                                                                                                                                                                   |
+| license                | [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)                                                                                                                                                                                                                       |
+| download rank          | [![Downloads Today](https://img.shields.io/gem/rd/debug_logging.svg)](https://github.com/pboling/debug_logging)                                                                                                                                                                                                                  |
+| version                | [![Version](https://img.shields.io/gem/v/debug_logging.svg)](https://rubygems.org/gems/debug_logging)                                                                                                                                                                                                                            |
+| code triage            | [![Open Source Helpers](https://www.codetriage.com/pboling/debug_logging/badges/users.svg)](https://www.codetriage.com/pboling/debug_logging)                                                                                                                                                                                    |
+| documentation          | [on RDoc.info][documentation]                                                                                                                                                                                                                                                                                                    |
+| live chat              | [![Join the chat at https://gitter.im/pboling/debug_logging](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pboling/debug_logging?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)                                                                                                       |
+| expert support         | [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github)                                                                                                                            |
 | Spread ~♡ⓛⓞⓥⓔ♡~        | [🌏](https://about.me/peter.boling), [👼](https://angel.co/peter-boling), [![Liberapay Patrons][⛳liberapay-img]][⛳liberapay] [![Follow Me on LinkedIn][🖇linkedin-img]][🖇linkedin] [![Find Me on WellFound:][✌️wellfound-img]][✌️wellfound] [![My Blog][🚎blog-img]][🚎blog] [![Follow Me on Twitter][🐦twitter-img]][🐦twitter] |
 
 [🚎dl-cwf]: https://github.com/pboling/debug_logging/actions/workflows/current.yml
@@ -87,26 +88,25 @@ Supports ActiveSupport::Notifications (thanks [@jgillson](https://github.com/jgi
 
 Herein you will find:
 
-* Classes inheriting from Module
+* ~~Classes inheriting from Module~~ Refactored to use standard Modules and `prepend`!
 * Zero tolerance policy on monkey patching
   * When the gem is loaded there are no monkey patches.
   * Rather, your own classes/methods get "patched" and "hooked" as you configure them.
 * 100% clean, 0% obtrusive
-* Greater than 93% test coverage & 82% branch coverage
+* Greater than 94% test coverage & 82% branch coverage
 * 100% Ruby 2.1+ compatible
   - use version `gem "debug_logging", "~> 1.0"` for Ruby < 2.3
   - use version `gem "debug_logging", "~> 2.0"` for Ruby 2.3
   - use version `gem "debug_logging", "~> 3.1"` for Ruby >= 2.4, < 3
-  - use version `gem "debug_logging", "~> 4.0"` (unreleased) for Ruby >= 3.
-
-NOTE: The manner this is made to work for class methods is totally different than the way this is made to work for instance methods.
+  - apologies to Ruby 3.0, which is hiding under a blanket
+  - use version `gem "debug_logging", "~> 4.0"` for Ruby >= 3.1
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "debug_logging", "~> 3.1"
+gem "debug_logging", "~> 4.0"
 ```
 
 And then execute:
@@ -199,7 +199,14 @@ Just prepend `debug_` to any config value you want to override in a class.
 Just prepend `debug_` to any config value you want to override on an instance of a class.
 
 **All** of the above **config** is **inheritable** and **configurable** at the **per-method** level as well!
-Just send along a hash of the config options when you call `logged` or `include DebugLogging::InstanceLogger.new(i_methods: [:drive, :stop], config: { ellipsis: " ✂️ 2 much" })`.  See the example class below, and the specs.
+Just send along a hash of the config options, similar to the following:
+
+- `logged :drive, { ellipsis: " ✂️ it out" }`
+- `i_logged [:drive, :stop], { ellipsis: " ✂️ 2 much" }`
+- `notified :drive, { ellipsis: " ✂️ it out" }`
+- `i_notified [:drive, :stop], { ellipsis: " ✂️ 2 much" }`
+
+See the example class below, and the specs.
 
 **NOTE ON** `Rails.logger` - It will probably be nil in your initializer, so setting the `config.logger` to `Rails.logger` there will result in setting it to `nil`, which means the default will end up being used: `Logger.new(STDOUT)`. Instead just config the logger in your application.rb, or anytime later, but *before your classes get loaded* and start inheriting the config:
 
@@ -222,9 +229,10 @@ class Car
 
   # For class methods
   #   Provides the versatile `logged` method decorator / macro
+  extend DebugLogging::ClassLogger
   # For instance methods
   #   Provides the versatile `i_logged` method decorator / macro
-  extend DebugLogging::ClassLogger
+  extend DebugLogging::InstanceLogger
 
   # == BEGIN CLASS METHODS ==
   # For class methods:
@@ -260,8 +268,12 @@ class Car
 
   # == BEGIN INSTANCE METHODS ==
   # For instance methods:
-  # Option 1: specify the exact method(s) to add logging to
-  include DebugLogging::InstanceLogger.new(i_methods: %i[drive stop])
+  # Option 1: specify the exact method(s) to add logging to, and optionally customize
+  i_notified [
+    :drive,
+    :stop,
+    [:turn, {instance_variables: %i[direction angle]}],
+  ]
 
   def drive(speed)
     speed
@@ -273,16 +285,21 @@ class Car
 
   # For instance methods:
   # Option 2: add logging to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceLogger.new(i_methods: instance_methods(false))
+  i_logged instance_methods(false)
 
   def faster(**_opts)
-    0
+    5
   end
 
   # Override configuration options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
-  include DebugLogging::InstanceLogger.new(i_methods: [:faster], config: {add_invocation_id: false})
+  i_logged [:faster], config: {add_invocation_id: false}
+
+  # You can also use `i_logged` as a true method decorator:
+  i_logged def slower
+    2
+  end
 
   def will_not_be_logged
     false
@@ -313,28 +330,28 @@ Every time a method is called, class and instance method events are instrumented
 class Car
   # Adds the helper methods to the class.
   #   All helpers prefixed with debug_*,
-  #   except for the *notifies* decorator, which comes from extending DebugLogging::ClassNotifier
+  #   except for the *notified* decorator, which comes from extending DebugLogging::ClassNotifier
   extend DebugLogging
+  # For instance methods
+  #   Provides the versatile `i_notified` method decorator / macro
+  extend DebugLogging::InstanceNotifier
+  # For class methods
+  #   Provides the versatile `notified` method decorator / macro
+  extend DebugLogging::ClassNotifier
 
   # For instance methods:
   # Option 1: specify the exact method(s) to add instrumentation to
   #   NOTE: You can capture instance variable values as part of the event payload
-  include DebugLogging::InstanceNotifier.new(i_methods: [
+  i_notified [
     :drive,
     :stop,
     [:turn, {instance_variables: %i[direction angle]}],
-  ])
-
-  # For class methods
-  #   Provides the versatile `notifies` method decorator / macro
-  # For instance methods
-  #   Provides the versatile `i_notifies` method decorator / macro
-  extend DebugLogging::ClassNotifier
+  ]
 
   # == BEGIN CLASS METHODS ==
   # For class methods:
-  # Option 1: Use *notifies* as a method decorator
-  notifies def self.make
+  # Option 1: Use *notified* as a method decorator
+  notified def self.make
     new
   end
   def self.design(*_args)
@@ -350,13 +367,13 @@ class Car
   end
 
   # Option 2: Use *logged* as a macro
-  notifies :design, :safety
+  notified :design, :safety
   # Override configuration options for any class method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
-  notifies :dealer_options, {
-    something: "here", # <= will be added to the event payload, and be available to last_hash_to_s_proc
-    add_invocation_id: false, # <= Overrides config
+  notified :dealer_options, {
+    something: "here", # <== will be added to the event payload, and be available to last_hash_to_s_proc
+    add_invocation_id: false, # <== Overrides config
   }
   def self.will_not_be_notified
     false
@@ -373,8 +390,8 @@ class Car
   end
 
   # For instance methods:
-  # Option 2: add instrumentation to all instance methods defined above (but *not* defined below)
-  include DebugLogging::InstanceNotifier.new(i_methods: instance_methods(false))
+  # Option 2: add notification instrumentation to all instance methods defined above (but *not* defined below)
+  i_notified instance_methods(false)
 
   def faster(**_opts)
     0
@@ -383,7 +400,7 @@ class Car
   # Override options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets added to the event payload,
   #     and also made available to last_hash_to_s_proc
-  include DebugLogging::InstanceNotifier.new(i_methods: [:faster], config: {add_invocation_id: false})
+  i_notified [:faster], config: {add_invocation_id: false}
 
   def will_not_be_notified
     false
@@ -433,7 +450,7 @@ the [Pessimistic Version Constraint][📌pvc] with two digits of precision.
 For example:
 
 ```ruby
-spec.add_dependency("debug_logging", "~> 3.1")
+spec.add_dependency("debug_logging", "~> 4.0")
 ```
 
 [comment]: <> ( VERSIONING LINKS )

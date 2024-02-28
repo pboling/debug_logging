@@ -16,16 +16,14 @@ module DebugLogging
         names.each do |name|
           meth = instance_method(name)
           define_method(name) do |*args, &block|
-            begin
-              Timeout.timeout(time) do
-                meth.bind(self).call(*args, &block)
-              end
-            rescue Timeout::Error
-              error_args = [TimeoutError, "execution expired", caller]
-              raise(*error_args) unless blk
-
-              instance_exec(*error_args, &blk)
+            Timeout.timeout(time) do
+              meth.bind_call(self, *args, &block)
             end
+          rescue Timeout::Error
+            error_args = [TimeoutError, "execution expired", caller]
+            raise(*error_args) unless blk
+
+            instance_exec(*error_args, &blk)
           end
         end
       end
@@ -39,11 +37,9 @@ module DebugLogging
         names.each do |name|
           meth = instance_method(name)
           define_method(name) do |*args, &block|
-            begin
-              meth.bind(self).call(*args, &block)
-            rescue StandardError => e
-              instance_exec(e, &blk)
-            end
+            meth.bind_call(self, *args, &block)
+          rescue StandardError => e
+            instance_exec(e, &blk)
           end
         end
       end
@@ -58,7 +54,7 @@ module DebugLogging
           meth = instance_method(name)
           define_method(name) do |*args, &block|
             instance_exec(name, *args, block, &blk)
-            meth.bind(self).call(*args, &block)
+            meth.bind_call(self, *args, &block)
           end
         end
       end
@@ -72,7 +68,7 @@ module DebugLogging
         names.each do |name|
           meth = instance_method(name)
           define_method(name) do |*args, &block|
-            result = meth.bind(self).call(*args, &block)
+            result = meth.bind_call(self, *args, &block)
             instance_exec(result, &blk)
           end
         end

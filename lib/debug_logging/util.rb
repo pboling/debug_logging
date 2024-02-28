@@ -14,6 +14,7 @@ module DebugLogging
         scoped_payload
       end
       config_opts = config&.clone(freeze: false) || {}
+      # puts "[EPAC] config: #{config}, scoped_payload: #{scoped_payload}, payload: #{payload}, config_opts: #{config_opts}"
       unless payload.empty?
         DebugLogging::Configuration::CONFIG_KEYS.each { |k| config_opts[k] = payload.delete(k) if payload.key?(k) }
       end

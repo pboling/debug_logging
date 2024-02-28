@@ -12,7 +12,7 @@ RSpec.describe DebugLogging::InstanceNotifier do
     end
   end
 
-  context "an instance logged klass with no logged methods" do
+  context "when an instance logged klass with no logged methods" do
     it "logs" do
       output = capture("stdout") do
         instance_notified_klass_no_logged_imethods.new.i
@@ -27,8 +27,8 @@ RSpec.describe DebugLogging::InstanceNotifier do
     end
   end
 
-  context "an instance notified klass explicit" do
-    it "notifies" do
+  context "when an instance notified klass explicit" do
+    it "notified" do
       output = capture("stdout") do
         instance_notified_klass_explicit.new.i
         instance_notified_klass_explicit.new.i_with_ssplat
@@ -107,9 +107,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
     end
   end
 
-  context "an instance notified klass dynamic" do
-    context "instance method without args" do
-      it "notifies" do
+  context "when an instance notified klass dynamic" do
+    context "when instance method without args" do
+      it "notified" do
         output = capture("stdout") do
           instance_notified_klass_dynamic.new.i
         end
@@ -128,8 +128,8 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "instance method with single splat args" do
-      it "notifies" do
+    context "when instance method with single splat args" do
+      it "notified" do
         output = capture("stdout") do
           instance_notified_klass_dynamic.new.i_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
@@ -157,8 +157,8 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "instance method with double splat args" do
-      it "notifies" do
+    context "when instance method with double splat args" do
+      it "notified" do
         output = capture("stdout") do
           instance_notified_klass_dynamic.new.i_with_dsplat(
             a: "a",
@@ -192,7 +192,7 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "instance method not logged" do
+    context "when instance method not logged" do
       it "does not notify" do
         output = capture("stdout") do
           instance_notified_klass_dynamic.new.i_without_log
@@ -207,9 +207,9 @@ RSpec.describe DebugLogging::InstanceNotifier do
     end
   end
 
-  context "a singleton logged klass" do
-    context "class method without args" do
-      it "notifies" do
+  context "when a singleton logged klass" do
+    context "when class method without args" do
+      it "notified" do
         output = capture("stdout") do
           singleton_notified_klass.k
         end
@@ -228,8 +228,8 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "class method with single splat args" do
-      it "notifies" do
+    context "when class method with single splat args" do
+      it "notified" do
         output = capture("stdout") do
           singleton_notified_klass.k_with_ssplat("a", 1, true, ["b", 2, false], {c: :d, e: :f})
         end
@@ -251,8 +251,8 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "class method with double splat args" do
-      it "notifies" do
+    context "when class method with double splat args" do
+      it "notified" do
         output = capture("stdout") do
           singleton_notified_klass.k_with_dsplat(a: "a", b: 1, c: true, d: ["b", 2, false], e: {c: :d, e: :f})
         end
@@ -280,7 +280,7 @@ RSpec.describe DebugLogging::InstanceNotifier do
       end
     end
 
-    context "class method not logged" do
+    context "when class method not logged" do
       it "does not notify" do
         output = capture("stdout") do
           singleton_notified_klass.k_without_log
