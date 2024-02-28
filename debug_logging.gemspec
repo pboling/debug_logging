@@ -23,7 +23,7 @@ Automatically log selected methods and their arguments as they are called at run
 '
   spec.homepage = "https://github.com/pboling/debug_logging"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.4", "< 3"
+  spec.required_ruby_version = ">= 3.1"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/pboling/debug_logging/tree/v#{spec.version}"
@@ -70,7 +70,7 @@ Automatically log selected methods and their arguments as they are called at run
   spec.add_development_dependency("yard-junk", "~> 0.0")
 
   # Linting
-  spec.add_development_dependency("rubocop-lts", "~> 12.1", ">= 12.1.1")
+  spec.add_development_dependency("rubocop-lts", "~> 22.1", ">= 22.1.3")
   spec.add_development_dependency("rubocop-packaging", "~> 0.5", ">= 0.5.2")
   spec.add_development_dependency("rubocop-rspec", "~> 2.25")
 
