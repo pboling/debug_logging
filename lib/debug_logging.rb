@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Std Lib
 require "logger"
 require "digest"

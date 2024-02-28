@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # From: https://stackoverflow.com/a/34559282
 # License: https://creativecommons.org/licenses/by-sa/4.0/
 module DebugLogging

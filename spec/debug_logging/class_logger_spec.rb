@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe DebugLogging::ClassLogger do
   include_context "with example classes"
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# frozen_string_literal: true
 
 # Script from https://github.com/rubygems/guides/pull/325
 require "digest/sha2"

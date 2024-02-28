@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module DebugLogging
   module InstanceNotifier
     def i_notified(*methods_to_log)

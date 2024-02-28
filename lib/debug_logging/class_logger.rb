@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module DebugLogging
   module ClassLogger
     def logged(*methods_to_log)

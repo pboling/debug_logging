@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Simpler version of what the sibling DebugLogging library does.  Included as a bauble.
 #
 ############# THIS IS A BAUBLE

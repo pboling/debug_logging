@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 DebugLogging.configuration.active_support_notifications = true
 
 RSpec.shared_context "with example classes" do
