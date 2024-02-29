@@ -47,6 +47,10 @@ Automatically log selected methods and their arguments as they are called at run
   spec.executables = []
   spec.require_paths = ["lib"]
 
+  # Root Gemfile is only for local development only. It is not loaded on CI.
+  # On CI we only need the gemspecs' dependencies (including development dependencies).
+  # Exceptions, if any, will be found in gemfiles/*.gemfile
+
   spec.add_dependency("colorize", ">= 0")
 
   # Optional
