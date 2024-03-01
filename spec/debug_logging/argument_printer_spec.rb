@@ -5,9 +5,11 @@ RSpec.describe DebugLogging::ArgumentPrinter do
     end
   end
   let(:instance) { myklass.new }
+  let(:time_format_regex) { /\d{4,}\d{2}\d{2} \d{2}:\d{2}:\d{2}/ }
+  let(:event_time_format_regex) { /\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/ }
 
   describe "#debug_benchmark_to_s" do
-    subject(:debug_benchmark_to_s) { instance.debug_benchmark_to_s(tms: tms) }
+    subject(:debug_benchmark_to_s) { instance.debug_benchmark_to_s(tms:) }
 
     let(:tms) { double("tms", real: 42, total: 543) }
 
@@ -17,13 +19,65 @@ RSpec.describe DebugLogging::ArgumentPrinter do
   end
 
   describe "#debug_invocation_id_to_s" do
-    subject(:debug_invocation_id_to_s) { instance.debug_invocation_id_to_s(args: args, config_proxy: config_proxy) }
+    subject(:debug_invocation_id_to_s) { instance.debug_invocation_id_to_s(args: args, config_proxy:) }
 
     let(:args) { false }
     let(:config_proxy) { false }
 
     it "prints" do
       expect(debug_invocation_id_to_s).to eq("")
+    end
+  end
+
+  describe "#debug_time_to_s" do
+    subject(:debug_time_to_s) { instance.debug_time_to_s(time_or_monotonic, config_proxy:) }
+
+    let(:config_proxy) {
+      double(
+        "config_proxy",
+        add_timestamp: true,
+        time_formatter_proc: DebugLogging::Constants::DEFAULT_TIME_FORMATTER
+      )
+    }
+
+    context "when float" do
+      let(:time_or_monotonic) { 0.1 }
+
+      it "prints" do
+        expect(debug_time_to_s).to match(time_format_regex)
+      end
+    end
+
+    context "when time" do
+      let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23) }
+
+      it "prints" do
+        expect(debug_time_to_s).to match(time_format_regex)
+      end
+    end
+
+    context "when datetime" do
+      let(:time_or_monotonic) { DateTime.new(2019, 8, 10, 4, 10, 9) }
+
+      it "prints" do
+        expect(debug_time_to_s).to match(time_format_regex)
+      end
+    end
+
+    context "when string" do
+      let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23).to_s }
+
+      it "prints" do
+        expect(debug_time_to_s).to match(time_format_regex)
+      end
+    end
+
+    context "when otherwise" do
+      let(:time_or_monotonic) { :time }
+
+      it "prints" do
+        expect(debug_time_to_s).to match(time_format_regex)
+      end
     end
   end
 
@@ -34,7 +88,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { 0.1 }
 
       it "prints" do
-        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(event_time_format_regex)
       end
     end
 
@@ -42,7 +96,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23) }
 
       it "prints" do
-        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(event_time_format_regex)
       end
     end
 
@@ -50,7 +104,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { DateTime.new(2019, 8, 10, 4, 10, 9) }
 
       it "prints" do
-        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(event_time_format_regex)
       end
     end
 
@@ -58,7 +112,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23).to_s }
 
       it "prints" do
-        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(event_time_format_regex)
       end
     end
 
@@ -66,13 +120,13 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { :time }
 
       it "prints" do
-        expect(debug_event_time_to_s).to match(/time/)
+        expect(debug_event_time_to_s).to match(event_time_format_regex)
       end
     end
   end
 
   describe "#debug_invocation_to_s" do
-    subject(:debug_invocation_to_s) { instance.debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: config_proxy) }
+    subject(:debug_invocation_to_s) { instance.debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy:) }
 
     let(:config_proxy) { false }
 
@@ -93,7 +147,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
   end
 
   describe "#debug_payload_to_s" do
-    subject(:debug_payload_to_s) { instance.debug_payload_to_s(payload: payload, config_proxy: config_proxy) }
+    subject(:debug_payload_to_s) { instance.debug_payload_to_s(payload:, config_proxy:) }
 
     context "no payload, no config" do
       let(:payload) { false }

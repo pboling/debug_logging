@@ -7,11 +7,13 @@ module DebugLogging
       "completed in #{format("%f", tms.real)}s (#{format("%f", tms.total)}s CPU)"
     end
 
-    def debug_invocation_id_to_s(args: nil, kwargs: nil, config_proxy: nil)
+    def debug_invocation_id_to_s(args: nil, kwargs: nil, start_at: nil, config_proxy: nil)
       return "" unless (args || kwargs) && config_proxy
 
       if config_proxy.debug_add_invocation_id
-        invocation = " ~#{args.object_id}|#{kwargs.object_id}@#{(Time.now.to_f.to_s % "%#-21a")[4..-4]}~"
+        time = start_at ? Util.debug_time(start_at) : Time.now
+        unique_id = (time.to_f.to_s % "%#-21a")[4..-4]
+        invocation = " ~#{args.object_id}|#{kwargs.object_id}@#{unique_id}~"
         case config_proxy.debug_add_invocation_id
         when true
           invocation
@@ -23,22 +25,25 @@ module DebugLogging
       end
     end
 
+    # @return [String]
+    def debug_time_to_s(time_or_monotonic, config_proxy: nil)
+      return "" unless config_proxy&.add_timestamp
+      return config_proxy.time_formatter_proc.call(Time.now) unless time_or_monotonic
+
+      time = Util.debug_time(time_or_monotonic)
+
+      config_proxy.time_formatter_proc.call(time)
+    end
+
     # A custom time format will never apply here, because ActiveSupport::Notifications have a required time format
     def debug_event_time_to_s(time_or_monotonic)
       # Time format must match:
       #   \d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}
       #   YYYY-MM-DD HH:mm:ss +00:00
       #   strftime("%F %T %z")
-      case time_or_monotonic
-      when Numeric
-        Time.at(time_or_monotonic).strftime("%F %T %z")
-      when Time, DateTime
-        time_or_monotonic.strftime("%F %T %z")
-      when String
-        Time.parse(time_or_monotonic).strftime("%F %T %z")
-      else
-        time_or_monotonic
-      end
+      time_or_monotonic = Time.now if time_or_monotonic.nil? || (time_or_monotonic.respond_to?(:empty?) && time_or_monotonic.empty?)
+      time = Util.debug_time(time_or_monotonic)
+      DebugLogging::Constants::EVENT_TIME_FORMATTER.call(time)
     end
 
     def debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: nil)
@@ -197,10 +202,10 @@ module DebugLogging
       end
     end
 
+    module_function
+
     def debug_event_name_to_s(method_to_notify: nil)
       "#{method_to_notify}.log"
     end
-
-    module_function
   end
 end

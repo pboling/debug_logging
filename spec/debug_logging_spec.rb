@@ -97,7 +97,7 @@ RSpec.describe DebugLogging do
         end
       end.not_to raise_error
       expect(simple_klass.debug_config.logger).to be_nil
-      expect(simple_klass.debug_config_reset).to be_a(DebugLogging::Configuration)
+      expect(simple_klass.debug_config_reset).to be_a(described_class::Configuration)
       expect(simple_klass.debug_config.logger).not_to be_nil
     end
   end
@@ -118,7 +118,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_log_level" do
     it "returns the log level" do
-      expect(simple_klass.debug_log_level).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:log_level])
+      expect(simple_klass.debug_log_level).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:log_level])
     end
   end
 
@@ -132,7 +132,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_multiple_last_hashes" do
     it "returns the multiple last hashes setting" do
-      expect(simple_klass.debug_multiple_last_hashes).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:multiple_last_hashes])
+      expect(simple_klass.debug_multiple_last_hashes).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:multiple_last_hashes])
     end
   end
 
@@ -146,7 +146,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_last_hash_to_s_proc" do
     it "returns the debug_last_hash_to_s_proc value" do
-      expect(simple_klass.debug_last_hash_to_s_proc).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:last_hash_to_s_proc])
+      expect(simple_klass.debug_last_hash_to_s_proc).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:last_hash_to_s_proc])
     end
   end
 
@@ -160,7 +160,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_args_to_s_proc" do
     it "returns the debug_args_to_s_proc value" do
-      expect(simple_klass.debug_args_to_s_proc).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:args_to_s_proc])
+      expect(simple_klass.debug_args_to_s_proc).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:args_to_s_proc])
     end
   end
 
@@ -174,7 +174,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_args_max_length" do
     it "returns the debug_args_max_length value" do
-      expect(simple_klass.debug_args_max_length).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:args_max_length])
+      expect(simple_klass.debug_args_max_length).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:args_max_length])
     end
   end
 
@@ -188,7 +188,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_instance_benchmarks" do
     it "returns the debug_instance_benchmarks value" do
-      expect(simple_klass.debug_instance_benchmarks).to eq(DebugLogging::Constants::CONFIG_READERS_DEFAULTS[:instance_benchmarks])
+      expect(simple_klass.debug_instance_benchmarks).to eq(described_class::Constants::CONFIG_READERS_DEFAULTS[:instance_benchmarks])
     end
   end
 
@@ -202,7 +202,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_class_benchmarks" do
     it "returns the debug_class_benchmarks value" do
-      expect(simple_klass.debug_class_benchmarks).to eq(DebugLogging::Constants::CONFIG_READERS_DEFAULTS[:class_benchmarks])
+      expect(simple_klass.debug_class_benchmarks).to eq(described_class::Constants::CONFIG_READERS_DEFAULTS[:class_benchmarks])
     end
   end
 
@@ -216,7 +216,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_colorized_chain_for_method" do
     it "returns the debug_colorized_chain_for_method value" do
-      expect(simple_klass.debug_colorized_chain_for_method).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:colorized_chain_for_method])
+      expect(simple_klass.debug_colorized_chain_for_method).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:colorized_chain_for_method])
     end
   end
 
@@ -230,7 +230,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_colorized_chain_for_class" do
     it "returns the debug_colorized_chain_for_class value" do
-      expect(simple_klass.debug_colorized_chain_for_class).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:colorized_chain_for_class])
+      expect(simple_klass.debug_colorized_chain_for_class).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:colorized_chain_for_class])
     end
   end
 
@@ -244,7 +244,7 @@ RSpec.describe DebugLogging do
 
   describe ".debug_add_invocation_id" do
     it "returns the debug_add_invocation_id value" do
-      expect(simple_klass.debug_add_invocation_id).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:add_invocation_id])
+      expect(simple_klass.debug_add_invocation_id).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:add_invocation_id])
     end
   end
 
@@ -258,13 +258,13 @@ RSpec.describe DebugLogging do
 
   describe ".debug_ellipsis" do
     it "returns the debug_ellipsis value" do
-      expect(simple_klass.debug_ellipsis).to eq(DebugLogging::Configuration::DEFAULT_ELLIPSIS)
+      expect(simple_klass.debug_ellipsis).to eq(described_class::Configuration::DEFAULT_ELLIPSIS)
     end
   end
 
   describe ".debug_ellipsis=" do
     it "sets the debug_ellipsis value" do
-      expect(simple_klass.debug_ellipsis).to eq(DebugLogging::Configuration::DEFAULT_ELLIPSIS)
+      expect(simple_klass.debug_ellipsis).to eq(described_class::Configuration::DEFAULT_ELLIPSIS)
       simple_klass.debug_ellipsis = "ROTFLMAO"
       expect(simple_klass.debug_ellipsis).to eq("ROTFLMAO")
     end
@@ -272,27 +272,27 @@ RSpec.describe DebugLogging do
 
   describe ".debug_mark_scope_exit" do
     it "returns the debug_mark_scope_exit value" do
-      expect(simple_klass.debug_mark_scope_exit).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
+      expect(simple_klass.debug_mark_scope_exit).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
     end
   end
 
   describe ".debug_mark_scope_exit=" do
     it "sets the debug_mark_scope_exit value" do
-      expect(simple_klass.debug_mark_scope_exit).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
-      simple_klass.debug_mark_scope_exit = !DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit]
-      expect(simple_klass.debug_mark_scope_exit).to eq(!DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
+      expect(simple_klass.debug_mark_scope_exit).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
+      simple_klass.debug_mark_scope_exit = !described_class::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit]
+      expect(simple_klass.debug_mark_scope_exit).to eq(!described_class::Constants::CONFIG_ATTRS_DEFAULTS[:mark_scope_exit])
     end
   end
 
   describe ".debug_add_payload" do
     it "returns the debug_add_payload value" do
-      expect(simple_klass.debug_add_payload).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:add_payload])
+      expect(simple_klass.debug_add_payload).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:add_payload])
     end
   end
 
   describe ".debug_add_payload=" do
     it "sets the debug_add_payload value" do
-      expect(simple_klass.debug_add_payload).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:add_payload])
+      expect(simple_klass.debug_add_payload).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:add_payload])
       simple_klass.debug_add_payload = ->(a) { a.to_s[0..3] }
       expect(simple_klass.debug_add_payload).to be_a(Proc)
     end
@@ -300,13 +300,13 @@ RSpec.describe DebugLogging do
 
   describe ".debug_payload_max_length" do
     it "returns the debug_payload_max_length value" do
-      expect(simple_klass.debug_payload_max_length).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:payload_max_length])
+      expect(simple_klass.debug_payload_max_length).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:payload_max_length])
     end
   end
 
   describe ".debug_payload_max_length=" do
     it "sets the debug_payload_max_length value" do
-      expect(simple_klass.debug_payload_max_length).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:payload_max_length])
+      expect(simple_klass.debug_payload_max_length).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:payload_max_length])
       simple_klass.debug_payload_max_length = 555
       expect(simple_klass.debug_payload_max_length).to eq(555)
     end
@@ -314,13 +314,13 @@ RSpec.describe DebugLogging do
 
   describe ".debug_error_handler_proc" do
     it "returns the debug_error_handler_proc value" do
-      expect(simple_klass.debug_error_handler_proc).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:error_handler_proc])
+      expect(simple_klass.debug_error_handler_proc).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:error_handler_proc])
     end
   end
 
   describe ".debug_error_handler_proc=" do
     it "sets the debug_error_handler_proc value" do
-      expect(simple_klass.debug_error_handler_proc).to eq(DebugLogging::Constants::CONFIG_ATTRS_DEFAULTS[:error_handler_proc])
+      expect(simple_klass.debug_error_handler_proc).to eq(described_class::Constants::CONFIG_ATTRS_DEFAULTS[:error_handler_proc])
       simple_klass.debug_error_handler_proc = ->(a) { a.to_s[0..3] }
       expect(simple_klass.debug_error_handler_proc).to be_a(Proc)
     end

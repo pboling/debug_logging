@@ -28,19 +28,22 @@ module DebugLogging
                 method_to_log: method_to_log,
                 config_proxy: config_proxy,
               )
-              invocation_id = self.class.debug_invocation_id_to_s(args:, kwargs:, config_proxy:)
+              start_at = Time.now
+              start_timestamp = self.class.debug_time_to_s(start_at, config_proxy:)
+              invocation_id = self.class.debug_invocation_id_to_s(args:, kwargs:, start_at:, config_proxy:)
               config_proxy.log do
                 paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
                 signature = self.class.debug_signature_to_s(args:, kwargs:, config_proxy:)
                 paymud = debug_payload_to_s(payload: paydirt, config_proxy:)
-                "#{log_prefix}#{signature}#{invocation_id} debug: #{paymud}"
+                "#{start_timestamp}#{log_prefix}#{signature}#{invocation_id} debug: #{paymud}"
               end
               if config_proxy.benchmarkable_for?(:debug_instance_benchmarks)
                 tms = Benchmark.measure do
                   method_return_value = super(*args, **kwargs, &block)
                 end
+                end_timestamp = self.class.debug_time_to_s(Time.now, config_proxy:)
                 config_proxy.log do
-                  "#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
+                  "#{end_timestamp}#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
                 end
               else
                 begin
@@ -53,8 +56,9 @@ module DebugLogging
                   end
                 end
                 if config_proxy.exit_scope_markable? && invocation_id && !invocation_id.empty?
+                  end_timestamp = self.class.debug_time_to_s(Time.now, config_proxy:)
                   config_proxy.log do
-                    "#{log_prefix} completed#{invocation_id}"
+                    "#{end_timestamp}#{log_prefix} completed#{invocation_id}"
                   end
                 end
               end

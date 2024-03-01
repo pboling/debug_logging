@@ -160,6 +160,8 @@ DebugLogging.configuration.active_support_notifications = false
 DebugLogging.configuration.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
 DebugLogging.configuration.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
 DebugLogging.configuration.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
+DebugLogging.configuration.time_formatter_proc = DebugLogging::Constants::DEFAULT_TIME_FORMATTER
+DebugLogging.configuration.add_timestamp = false
 DebugLogging.configuration.ellipsis = " ✂️ …".freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
@@ -183,6 +185,8 @@ DebugLogging.configure do |config|
   config.active_support_notifications = false
   config.colorized_chain_for_method = false # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
   config.colorized_chain_for_class = false # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
+  config.time_formatter_proc = DebugLogging::Constants::DEFAULT_TIME_FORMATTER
+  config.add_timestamp = false
   config.add_invocation_id = true # identify a method call uniquely in a log, pass a proc for colorization, e.g. ->(colorized_string) { colorized_string.light_black }
   config.ellipsis = " ✂️ …".freeze
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
@@ -208,7 +212,7 @@ Just send along a hash of the config options, similar to the following:
 
 See the example class below, and the specs.
 
-**NOTE ON** `Rails.logger` - It will probably be nil in your initializer, so setting the `config.logger` to `Rails.logger` there will result in setting it to `nil`, which means the default will end up being used: `Logger.new(STDOUT)`. Instead just config the logger in your application.rb, or anytime later, but *before your classes get loaded* and start inheriting the config:
+**NOTE ON** `Rails.logger` - It will probably be nil in your initializer, so setting the `config.logger` to `Rails.logger` there will result in setting it to `nil`, which means the default will end up being used: `Logger.new($stdout)`. Instead just config the logger in your application.rb, or anytime later, but *before your classes get loaded* and start inheriting the config:
 
 ```ruby
 DebugLogging.configuration.logger = Rails.logger
@@ -294,7 +298,28 @@ class Car
   # Override configuration options for any instance method(s), by passing a hash as the last argument
   # In the last hash any non-Configuration keys will be data that gets logged,
   #     and also made available to last_hash_to_s_proc
-  i_logged [:faster], {add_invocation_id: false}
+  # Here's an example that sets every possible option, while also showing what the default values are!
+  i_logged [:faster], {
+    logger: Logger.new($stdout), # probably want to override to be the Rails.logger
+    log_level: :debug, # at what level do the messages created by this gem sent at?
+    multiple_last_hashes: false,
+    last_hash_to_s_proc: nil, # e.g. ->(hash) { "keys: #{hash.keys}" }
+    last_hash_max_length: 1_000,
+    args_to_s_proc: nil, # e.g. ->(*record) { "record id: #{record.first.id}" }
+    args_max_length: 1_000,
+    colorized_chain_for_method: false, # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
+    colorized_chain_for_class: false,  # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
+    add_invocation_id: true, # allows unique identification of method call; association of entry and exit log lines
+    ellipsis: " ✂️ …".freeze,
+    mark_scope_exit: false,
+    add_payload: true, # Can also be a proc returning a string, which will be called when printing the payload
+    payload_max_length: 1_000,
+    error_handler_proc: nil,
+    time_formatter_proc: DebugLogging::Constants::DEFAULT_TIME_FORMATTER,
+    add_timestamp: false,
+    instance_benchmarks: false,
+    class_benchmarks: false,
+  }
 
   # You can also use `i_logged` as a true method decorator:
   i_logged def slower

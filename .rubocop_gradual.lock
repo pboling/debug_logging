@@ -1,15 +1,15 @@
 {
-  "README.md:3009712128": [
+  "README.md:3801622303": [
     [240, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [243, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [247, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
     [251, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
     [264, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
-    [354, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
-    [357, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
-    [361, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
-    [365, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
-    [378, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
+    [375, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
+    [378, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
+    [382, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
+    [386, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
+    [399, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
   ],
   "bin/bundle:1543177218": [
     [63, 5, 20, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2485198147]
@@ -17,9 +17,9 @@
   "lib/debug_logging.rb:2647816515": [
     [124, 5, 42, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1265699560]
   ],
-  "lib/debug_logging/argument_printer.rb:3334736513": [
+  "lib/debug_logging/argument_printer.rb:268366549": [
     [11, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009],
-    [60, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009]
+    [66, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009]
   ],
   "lib/debug_logging/finalize.rb:2519216288": [
     [5, 5, 299, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2506770293]
@@ -28,20 +28,20 @@
     [6, 5, 61, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 62321122],
     [10, 5, 59, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2109073884]
   ],
-  "lib/debug_logging/log_subscriber.rb:1842174884": [
+  "lib/debug_logging/log_subscriber.rb:2124920356": [
     [10, 7, 20, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1853072198],
     [16, 5, 368, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 479488482],
     [17, 7, 6, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2741946345],
-    [28, 5, 558, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4277533184]
+    [28, 5, 570, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4277533184]
   ],
-  "lib/debug_logging/util.rb:1177721888": [
-    [62, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241],
-    [77, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241]
+  "lib/debug_logging/util.rb:1422248835": [
+    [78, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241],
+    [93, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241]
   ],
   "lib/simple_debug_logging.rb:1035783295": [
     [71, 5, 688, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 790702810]
   ],
-  "spec/debug_logging/argument_printer_spec.rb:2145628744": [
+  "spec/debug_logging/argument_printer_spec.rb:2820935729": [
     [12, 17, 35, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 864840599],
     [50, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
     [98, 13, 23, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2254666317],
@@ -284,7 +284,7 @@
     [7, 7, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
     [11, 11, 55, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2011841710]
   ],
-  "spec/debug_logging_spec.rb:3914205660": [
+  "spec/debug_logging_spec.rb:2514057238": [
     [10, 44, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `simple_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
     [11, 25, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `logger` as a spy using `allow` or `instance_spy`.", 1384559950],
     [20, 44, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `simple_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],

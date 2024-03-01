@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Support for all Numeric types to be used as monotonic timestamps for ActiveSupport::Notifications
+- `time_formatter_proc` - used to format timestamp added to beginning of log lines
+- `add_timestamp` - Add timestamp to front of each log line
 ### Changed
 - `DebugLogging::ArgumentPrinter.debug_time_to_s` => `DebugLogging::ArgumentPrinter.debug_event_time_to_s`
 ### Fixed

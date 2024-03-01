@@ -2,6 +2,20 @@ module DebugLogging
   module Util
     module_function
 
+    def debug_time(time_or_monotonic)
+      case time_or_monotonic
+      when Time, DateTime
+        time_or_monotonic
+      when Numeric
+        Time.at(time_or_monotonic)
+      when String
+        Time.parse(time_or_monotonic)
+      else
+        # Garbage in, Sweet Nourishing Gruel Out
+        Time.now
+      end
+    end
+
     # methods_to_log may be an array of a single method name, followed by config options and payload,
     #   or it could be an array of method names followed by config options and payload to be shared by the whole set.
     def extract_payload_and_config(method_names:, payload: nil, config: nil)
@@ -36,6 +50,8 @@ module DebugLogging
             # logged :meth1, :meth2, :meth3 without options is valid
             method_names
           end
+        else
+          raise ArgumentError, "unknown type for method_names: #{method_names.class}"
         end
       [method_names, payload, config_opts]
     end

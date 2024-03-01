@@ -12,16 +12,25 @@ module DebugLogging
     #     extend DebugLogging::InstanceLogger
     #     i_logged [:drive, :stop],
     #       {
-    #         logger: Logger.new(STDOUT) # probably want to override to be the Rails.logger
-    #         log_level: :debug # at what level do the messages created by this gem sent at?
-    #         last_hash_to_s_proc: nil # e.g. ->(hash) { "keys: #{hash.keys}" }
-    #         last_hash_max_length: 1_000
-    #         args_to_s_proc: nil # e.g. ->(*record) { "record id: #{record.first.id}" }
-    #         args_max_length: 1_000
-    #         instance_benchmarks: false
-    #         class_benchmarks: false
-    #         add_invocation_id: true # invocation id allows you to identify a method call uniquely in a log
-    #         ellipsis: " ✂️ …".freeze
+    #         logger: Logger.new($stdout), # probably want to override to be the Rails.logger
+    #         log_level: :debug, # at what level do the messages created by this gem sent at?
+    #         multiple_last_hashes: false,
+    #         last_hash_to_s_proc: nil, # e.g. ->(hash) { "keys: #{hash.keys}" }
+    #         last_hash_max_length: 1_000,
+    #         args_to_s_proc: nil, # e.g. ->(*record) { "record id: #{record.first.id}" }
+    #         args_max_length: 1_000,
+    #         colorized_chain_for_method: false, # e.g. ->(colorized_string) { colorized_string.red.on_blue.underline }
+    #         colorized_chain_for_class: false,  # e.g. ->(colorized_string) { colorized_string.colorize(:light_blue ).colorize( :background => :red) }
+    #         add_invocation_id: true, # allows unique identification of method call; association of entry and exit log lines
+    #         ellipsis: " ✂️ …".freeze,
+    #         mark_scope_exit: false,
+    #         add_payload: true, # Can also be a proc returning a string, which will be called when printing the payload
+    #         payload_max_length: 1_000,
+    #         error_handler_proc: nil,
+    #         time_formatter_proc: DebugLogging::Constants::DEFAULT_TIME_FORMATTER,
+    #         add_timestamp: false,
+    #         instance_benchmarks: false,
+    #         class_benchmarks: false,
     #       }
     #
     CONFIG_KEYS.each do |key|
