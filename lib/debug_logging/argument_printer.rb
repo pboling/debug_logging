@@ -27,12 +27,12 @@ module DebugLogging
 
     # @return [String]
     def debug_time_to_s(time_or_monotonic, config_proxy: nil)
-      return "" unless config_proxy&.add_timestamp
-      return config_proxy.time_formatter_proc.call(Time.now) unless time_or_monotonic
+      return "" unless config_proxy&.debug_add_timestamp
+      return config_proxy.debug_time_formatter_proc.call(Time.now) unless time_or_monotonic
 
       time = Util.debug_time(time_or_monotonic)
 
-      config_proxy.time_formatter_proc.call(time)
+      config_proxy.debug_time_formatter_proc.call(time)
     end
 
     # A custom time format will never apply here, because ActiveSupport::Notifications have a required time format
@@ -194,7 +194,7 @@ module DebugLogging
           proc_name: "add_payload",
           proc: config_proxy.debug_add_payload,
           args: payload,
-          max_length: config_proxy.payload_max_length,
+          max_length: config_proxy.debug_payload_max_length,
         )
         printed_payload += printed
         printed_payload += config_proxy.debug_ellipsis if add_payload_ellipsis

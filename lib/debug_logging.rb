@@ -233,6 +233,22 @@ module DebugLogging
       @debug_logging_configuration.colorized_chain_for_class = colorized_chain_for_class
     end
 
+    def debug_add_timestamp
+      @debug_logging_configuration.add_timestamp
+    end
+
+    def debug_add_timestamp=(add_timestamp)
+      @debug_logging_configuration.add_timestamp = add_timestamp
+    end
+
+    def debug_time_formatter_proc
+      @debug_logging_configuration.time_formatter_proc
+    end
+
+    def debug_time_formatter_proc=(time_formatter_proc)
+      @debug_logging_configuration.time_formatter_proc = time_formatter_proc
+    end
+
     def debug_add_invocation_id
       @debug_logging_configuration.add_invocation_id
     end
