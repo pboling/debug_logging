@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Support for all Numeric types to be used as monotonic timestamps for ActiveSupport::Notifications
 ### Changed
 ### Fixed
 ### Removed

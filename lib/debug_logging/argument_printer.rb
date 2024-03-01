@@ -29,7 +29,7 @@ module DebugLogging
       #   YYYY-MM-DD HH:mm:ss +00:00
       #   strftime("%F %T %z")
       case time_or_monotonic
-      when Float
+      when Numeric
         Time.at(time_or_monotonic).strftime("%F %T %z")
       when Time, DateTime
         time_or_monotonic.strftime("%F %T %z")
