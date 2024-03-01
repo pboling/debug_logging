@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    debug_logging (4.0.0)
+    debug_logging (4.0.1)
       colorize
 
 GEM

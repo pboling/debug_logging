@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## [4.0.1] ([tag][4.0.1t]) - 2024-03-01
+### Added
 - Support for all Numeric types to be used as monotonic timestamps for ActiveSupport::Notifications
 - `time_formatter_proc` - used to format timestamp added to beginning of log lines
 - `add_timestamp` - Add timestamp to front of each log line
@@ -15,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Removed
 
-## [4.0.0] - 2024-02-28
+## [4.0.0] ([tag][4.0.0t]) - 2024-02-28
 ### Added
 - Class method DSL:
     - `logged`
@@ -34,57 +40,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `include DebugLogging::InstanceLogger.new(...)`
 - Support for `include DebugLogging::InstanceNotifier.new(...)`
 
-## [3.1.9] - 2023-10-31
+## [3.1.9] ([tag][3.1.9t]) - 2023-10-31
 ### Fixed
 - Maximum Ruby version is 2.7. Versions 3.x are not compatible with Ruby >= 3
 
-## [3.1.8] - 2020-12-19
+## [3.1.8] ([tag][3.1.8t]) - 2020-12-19
 
-## [3.1.7] - 2020-12-19
+## [3.1.7] ([tag][3.1.7t]) - 2020-12-19
 
-## [3.1.6] - tagged, but unreleased
+## [3.1.6] ([tag][3.1.6t]) - tagged, but unreleased
 
-## [3.1.5] - 2020-12-18
+## [3.1.5] ([tag][3.1.5t]) - 2020-12-18
 
-## [3.1.4] - 2020-12-18
+## [3.1.4] ([tag][3.1.4t]) - 2020-12-18
 
-## [3.1.3] - 2020-12-18
+## [3.1.3] ([tag][3.1.3t]) - 2020-12-18
 
-## [3.1.2] - 2020-12-10
+## [3.1.2] ([tag][3.1.2t]) - 2020-12-10
 
-## [3.1.1] - 2020-12-09
+## [3.1.1] ([tag][3.1.1t]) - 2020-12-09
 
-## [3.1.0] - 2020-10-24
+## [3.1.0] ([tag][3.1.0t]) - 2020-10-24
 
-## [3.0.0] - 2020-10-07
+## [3.0.0] ([tag][3.0.0t]) - 2020-10-07
 
-## [2.0.0] - 2020-10-06
+## [2.0.0] ([tag][2.0.0t]) - 2020-10-06
 
-## [1.0.17] - 2018-09-10
+## [1.0.17] ([tag][1.0.17t]) - 2018-09-10
 
-## [1.0.16] - 2018-01-16
+## [1.0.16] ([tag][1.0.16t]) - 2018-01-16
 
-## [1.0.15] - 2017-10-17
+## [1.0.15] ([tag][1.0.15t]) - 2017-10-17
 
-## [1.0.14] - 2017-10-09
+## [1.0.14] ([tag][1.0.14t]) - 2017-10-09
 
-## [1.0.13] - 2017-10-08
+## [1.0.13] ([tag][1.0.13t]) - 2017-10-08
 
-## [1.0.12] - 2017-10-08
+## [1.0.12] ([tag][1.0.12t]) - 2017-10-08
 
-## [1.0.11] - 2017-10-06
+## [1.0.11] ([tag][1.0.11t]) - 2017-10-06
 
-## [1.0.10] - 2017-09-26
+## [1.0.10] ([tag][1.0.10t]) - 2017-09-26
 
-## [1.0.9] - 2017-09-06
+## [1.0.9] ([tag][1.0.9t]) - 2017-09-06
 
-## [1.0.8] - 2017-09-06
+## [1.0.8] ([tag][1.0.8t]) - 2017-09-06
 
-## [1.0.7] - 2017-09-06
+## [1.0.7] ([tag][1.0.7t]) - 2017-09-06
 
-## [1.0.6] - 2017-09-05
+## [1.0.6] ([tag][1.0.6t]) - 2017-09-05
 
-## [1.0.5] ([tag][1.0.1t]) - 2017-03-31
+## [1.0.5] ([tag][1.0.5t]) - 2017-03-31
 
 ## [1.0.4] ([tag][1.0.4t]) - 2017-03-31
 
@@ -99,7 +105,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] ([tag][0.1.0t]) - 2017-03-25
 - Initial release
 
-[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.0...HEAD
+[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.1...HEAD
+[4.0.1t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.1
+[4.0.1]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.0...v4.0.1
 [4.0.0t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.0
 [4.0.0]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v3.1.9...v4.0.0
 [3.1.9t]: https://gitlab.com/pboling/debug_logging/-/tags/v3.1.9
