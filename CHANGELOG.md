@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support for all Numeric types to be used as monotonic timestamps for ActiveSupport::Notifications
 ### Changed
+- `DebugLogging::ArgumentPrinter.debug_time_to_s` => `DebugLogging::ArgumentPrinter.debug_event_time_to_s`
 ### Fixed
 ### Removed
 

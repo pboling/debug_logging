@@ -23,7 +23,8 @@ module DebugLogging
       end
     end
 
-    def debug_time_to_s(time_or_monotonic)
+    # A custom time format will never apply here, because ActiveSupport::Notifications have a required time format
+    def debug_event_time_to_s(time_or_monotonic)
       # Time format must match:
       #   \d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}
       #   YYYY-MM-DD HH:mm:ss +00:00
@@ -196,10 +197,10 @@ module DebugLogging
       end
     end
 
-    module_function
-
     def debug_event_name_to_s(method_to_notify: nil)
       "#{method_to_notify}.log"
     end
+
+    module_function
   end
 end

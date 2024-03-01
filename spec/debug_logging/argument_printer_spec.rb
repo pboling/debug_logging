@@ -27,14 +27,14 @@ RSpec.describe DebugLogging::ArgumentPrinter do
     end
   end
 
-  describe "#debug_time_to_s" do
-    subject(:debug_time_to_s) { instance.debug_time_to_s(time_or_monotonic) }
+  describe "#debug_event_time_to_s" do
+    subject(:debug_event_time_to_s) { instance.debug_event_time_to_s(time_or_monotonic) }
 
     context "when float" do
       let(:time_or_monotonic) { 0.1 }
 
       it "prints" do
-        expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23) }
 
       it "prints" do
-        expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { DateTime.new(2019, 8, 10, 4, 10, 9) }
 
       it "prints" do
-        expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { Time.new(2023, 10, 31, 3, 5, 23).to_s }
 
       it "prints" do
-        expect(debug_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
+        expect(debug_event_time_to_s).to match(/\d{4,}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [-+]\d{4}/)
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       let(:time_or_monotonic) { :time }
 
       it "prints" do
-        expect(debug_time_to_s).to match(/time/)
+        expect(debug_event_time_to_s).to match(/time/)
       end
     end
   end
