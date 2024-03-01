@@ -211,7 +211,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
           debug_multiple_last_hashes: false,
           debug_last_hash_max_length: 5,
           debug_ellipsis: ".•.",
-          )
+        )
       }
       let(:args) { [1, 2, 3, {zz_yy_xx: :top}] }
 
@@ -229,7 +229,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
           debug_args_max_length: 10,
           debug_multiple_last_hashes: true,
           debug_last_hash_max_length: 15,
-          debug_ellipsis: "..."
+          debug_ellipsis: "...",
         )
       }
       let(:args) { [1, 2, 3, {zz: :top}, {def: :leopard}] }
@@ -248,7 +248,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
           debug_args_max_length: 5,
           debug_multiple_last_hashes: true,
           debug_last_hash_max_length: 7,
-          debug_ellipsis: ".~."
+          debug_ellipsis: ".~.",
         )
       }
       let(:args) { [1, 2, 3, {zz: :top}, {def_leopard_pours_sugar: :on_me}] }

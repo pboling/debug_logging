@@ -1,23 +1,23 @@
 {
-  "README.md:3801622303": [
-    [240, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
-    [243, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
-    [247, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
-    [251, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
-    [264, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
-    [375, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
-    [378, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
-    [382, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
-    [386, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
-    [399, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
+  "README.md:243321080": [
+    [244, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
+    [247, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
+    [251, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
+    [255, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
+    [268, 3, 43, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 235184892],
+    [379, 12, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
+    [382, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
+    [386, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
+    [390, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 3568969579],
+    [403, 3, 45, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 637514124]
   ],
   "bin/bundle:1543177218": [
     [63, 5, 20, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2485198147]
   ],
-  "lib/debug_logging.rb:2647816515": [
+  "lib/debug_logging.rb:2086097347": [
     [124, 5, 42, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1265699560]
   ],
-  "lib/debug_logging/argument_printer.rb:268366549": [
+  "lib/debug_logging/argument_printer.rb:4090970709": [
     [11, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009],
     [66, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009]
   ],
@@ -41,12 +41,11 @@
   "lib/simple_debug_logging.rb:1035783295": [
     [71, 5, 688, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 790702810]
   ],
-  "spec/debug_logging/argument_printer_spec.rb:2820935729": [
-    [12, 17, 35, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 864840599],
-    [50, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
-    [98, 13, 23, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2254666317],
-    [111, 9, 193, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 3607462793],
-    [128, 9, 189, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 449370282]
+  "spec/debug_logging/argument_printer_spec.rb:1838802775": [
+    [14, 17, 35, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 864840599],
+    [70, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
+    [114, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
+    [265, 13, 23, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2254666317]
   ],
   "spec/debug_logging/class_logger_spec.rb:1162338474": [
     [4, 11, 14, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 3715557109],
@@ -280,9 +279,10 @@
     [71, 18, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
     [72, 18, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588]
   ],
-  "spec/debug_logging/util_spec.rb:2223678571": [
-    [7, 7, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
-    [11, 11, 55, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2011841710]
+  "spec/debug_logging/util_spec.rb:1892549499": [
+    [4, 11, 55, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 2011841710],
+    [8, 9, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
+    [47, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500]
   ],
   "spec/debug_logging_spec.rb:2514057238": [
     [10, 44, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `simple_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
