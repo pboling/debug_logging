@@ -60,7 +60,7 @@ Supports `ActiveSupport::Notifications` (thanks [@jgillson](https://github.com/j
 [✌️wellfound-img]: https://img.shields.io/badge/peter--boling-orange?style=plastic&logo=angellist
 [🐦twitter]: http://twitter.com/intent/user?screen_name=galtzo
 [🐦twitter-img]: https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow%20@galtzo
-[🚎blog]: http://www.railsbling.com/tags/oauth2/
+[🚎blog]: http://www.railsbling.com/tags/debug_logging/
 [🚎blog-img]: https://img.shields.io/badge/blog-railsbling-brightgreen.svg?style=flat
 [my🧪lab]: https://gitlab.com/pboling
 [my🧊berg]: https://codeberg.org/pboling
@@ -511,13 +511,15 @@ See [LICENSE.txt][📄license] for the official [Copyright Notice][📄copyright
 [homepage]: https://github.com/pboling/debug_logging
 [blogpage]: http://www.railsbling.com/tags/debug_logging/
 
-[comment]: <> ( PERSONAL LINKS )
+[comment]: <> ( 💁🏼‍♂️ PERSONAL LINKS )
 
 [💁🏼‍♂️aboutme]: https://about.me/peter.boling
 [💁🏼‍♂️angellist]: https://angel.co/peter-boling
 [💁🏼‍♂️devto]: https://dev.to/galtzo
 [💁🏼‍♂️followme]: https://img.shields.io/twitter/follow/galtzo.svg?style=social&label=Follow
 [💁🏼‍♂️twitter]: http://twitter.com/galtzo
+[💁🏼‍♂️peterboling]: http://www.peterboling.com
+[💁🏼‍♂️railsbling]: http://www.railsbling.com
 
 [comment]: <> ( KEYED LINKS )
 
