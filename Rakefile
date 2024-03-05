@@ -8,4 +8,4 @@ task test: :spec
 require "rubocop/lts"
 Rubocop::Lts.install_tasks
 
-task default: :spec
+task default: %i[spec rubocop_gradual]

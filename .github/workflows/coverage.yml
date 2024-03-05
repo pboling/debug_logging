@@ -70,7 +70,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental != 'false' }}
 
       - name: Run tests
-        run: bundle exec rake
+        run: bundle exec rake test
 
       - name: CodeClimate Post-build Notification
         run: cc-test-reporter after-build
