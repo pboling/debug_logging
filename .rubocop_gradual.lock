@@ -14,10 +14,10 @@
   "bin/bundle:1543177218": [
     [63, 5, 20, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2485198147]
   ],
-  "lib/debug_logging.rb:292260752": [
-    [125, 5, 42, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1265699560]
+  "lib/debug_logging.rb:1872922185": [
+    [119, 5, 42, "ThreadSafety/ClassAndModuleAttributes: Avoid mutating class and module attributes.", 1265699560]
   ],
-  "lib/debug_logging/argument_printer.rb:412190958": [
+  "lib/debug_logging/argument_printer.rb:1736755237": [
     [11, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009],
     [66, 7, 49, "Style/UnlessLogicalOperators: Do not use mixed logical operators in an `unless`.", 24710009]
   ],
@@ -30,14 +30,7 @@
     [17, 7, 6, "ThreadSafety/InstanceVariableInClassMethod: Avoid instance variables in class methods.", 2741946345],
     [28, 5, 570, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4277533184]
   ],
-  "lib/debug_logging/util.rb:1422248835": [
-    [78, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241],
-    [93, 9, 5, "Style/IdenticalConditionalBranches: Move `proxy` out of the conditional.", 187023241]
-  ],
-  "lib/simple_debug_logging.rb:1035783295": [
-    [71, 5, 688, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 790702810]
-  ],
-  "spec/debug_logging/argument_printer_spec.rb:1838802775": [
+  "spec/debug_logging/argument_printer_spec.rb:2929005244": [
     [14, 17, 35, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 864840599],
     [70, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
     [114, 33, 35, "Style/DateTime: Prefer `Time` over `DateTime`.", 2193634500],
@@ -51,12 +44,11 @@
     [49, 14, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(\n        \"kl\",\n        :k_with_dsplat_e,\n      ))` as a spy using `allow` or `instance_spy`.", 1384559950],
     [54, 11, 25, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 979372993]
   ],
-  "spec/debug_logging/class_notifier_spec.rb:2436940239": [
-    [20, 29, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `config_proxy` as a spy using `allow` or `instance_spy`.", 1384559950],
-    [26, 55, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
-    [44, 55, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
-    [63, 59, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
-    [84, 11, 27, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 816374769]
+  "spec/debug_logging/class_notifier_spec.rb:417203690": [
+    [28, 55, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
+    [46, 55, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
+    [65, 59, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
+    [86, 11, 27, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 816374769]
   ],
   "spec/debug_logging/configuration_spec.rb:3229940924": [
     [5, 11, 8, "RSpec/ContextWording: Context description should match /^when\\b/, /^with\\b/, or /^without\\b/.", 4105806927],
@@ -222,7 +214,7 @@
     [259, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282],
     [287, 16, 7, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 289916282]
   ],
-  "spec/debug_logging/log_subscriber_spec.rb:1210402362": [
+  "spec/debug_logging/log_subscriber_spec.rb:871128604": [
     [9, 7, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
     [16, 57, 7, "RSpec/MessageSpies: Prefer `have_received` for setting message expectations. Setup `complete_notified_klass.debug_config` as a spy using `allow` or `instance_spy`.", 1384559950],
     [19, 16, 15, "RSpec/InstanceVariable: Avoid instance variables - use let, a method call, or a local variable (if possible).", 3325407588],
@@ -282,7 +274,7 @@
     [253, 55, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785],
     [255, 55, 2, "RSpec/BeEq: Prefer `be` over `eq`.", 5860785]
   ],
-  "spec/support/shared_context.rb:2744088959": [
+  "spec/support/shared_context.rb:969556964": [
     [8, 18, 16, "RSpec/VerifiedDoubles: Prefer using verifying doubles over normal doubles.", 2194695717],
     [24, 3, 724, "RSpec/LeakyConstantDeclaration: Stub class constant instead of declaring explicitly.", 3294572711],
     [48, 3, 323, "RSpec/LeakyConstantDeclaration: Stub class constant instead of declaring explicitly.", 3200438956],

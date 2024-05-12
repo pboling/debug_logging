@@ -68,18 +68,20 @@ class SimpleDebugLogging < Module
   end
 
   module InstanceMethodLoggerModulizer
-    def self.to_mod(methods_to_log = [])
-      Module.new do
-        Array(methods_to_log).each do |decorated_method|
-          define_method(decorated_method.to_sym) do |*args, &block|
-            method_return_value = nil
-            invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
-            puts "#{self.class}##{decorated_method}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
-            elapsed = Benchmark.realtime do
-              method_return_value = super(*args, &block)
+    class << self
+      def to_mod(methods_to_log = [])
+        Module.new do
+          Array(methods_to_log).each do |decorated_method|
+            define_method(decorated_method.to_sym) do |*args, &block|
+              method_return_value = nil
+              invocation_id = " ~#{args.object_id}@#{Time.now.to_i}~" if args
+              puts "#{self.class}##{decorated_method}(#{args.map(&:inspect).join(", ")})#{invocation_id}"
+              elapsed = Benchmark.realtime do
+                method_return_value = super(*args, &block)
+              end
+              puts "#{self.class}##{decorated_method} ~#{args.hash}~ complete in #{elapsed}s#{invocation_id}"
+              method_return_value
             end
-            puts "#{self.class}##{decorated_method} ~#{args.hash}~ complete in #{elapsed}s#{invocation_id}"
-            method_return_value
           end
         end
       end
