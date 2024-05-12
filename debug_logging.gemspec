@@ -19,10 +19,10 @@ Gem::Specification.new do |spec|
 Unobtrusive debug logging for Ruby.  NO LITTERING.
 Automatically log selected methods and their arguments as they are called at runtime!
 '
-  spec.homepage = "https://github.com/pboling/debug_logging"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
+  spec.homepage = "https://github.com/pboling/debug_logging"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/pboling/debug_logging/tree/v#{spec.version}"
   spec.metadata["changelog_uri"] = "https://github.com/pboling/debug_logging/blob/v#{spec.version}/CHANGELOG.md"
@@ -72,6 +72,7 @@ Automatically log selected methods and their arguments as they are called at run
   spec.add_development_dependency("rubocop-lts", "~> 22.1", ">= 22.1.3")
   spec.add_development_dependency("rubocop-packaging", "~> 0.5", ">= 0.5.2")
   spec.add_development_dependency("rubocop-rspec", "~> 2.25")
+  spec.add_development_dependency("standard-rubocop-lts", "~> 1.0", ">= 1.0.10")
 
   # Testing
   spec.add_development_dependency("rspec", ">= 3")
