@@ -4,7 +4,7 @@ module RegexHelpers
   end
 
   def inv_id_regex
-    /~\d+\|\d+@\d+\.\d+~/.source
+    /~\d+\|\d+@\d+\.\d*~/.source
   end
 
   def debug_regex
