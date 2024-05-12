@@ -9,6 +9,12 @@ RSpec.shared_context "with example classes" do
 
   let(:simple_klass) do
     Class.new do
+      class << self
+        def name
+          "SimpleKlass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
@@ -60,6 +66,12 @@ RSpec.shared_context "with example classes" do
 
   let(:child_singleton_logged_klass) do
     Class.new(ChildSingletonClass) do
+      class << self
+        def name
+          "ChildSingletonLoggedKlass"
+        end
+        alias_method :to_s, :name
+      end
       self.debug_ellipsis = "<<<"
       logged def self.perform(*_args)
         67
@@ -69,6 +81,12 @@ RSpec.shared_context "with example classes" do
 
   let(:child_singleton_notified_klass) do
     Class.new(ChildSingletonClass) do
+      class << self
+        def name
+          "ChildSingletonNotifiedKlass"
+        end
+        alias_method :to_s, :name
+      end
       self.debug_ellipsis = ">>>"
       notified def self.perform(*_args)
         24
@@ -78,6 +96,12 @@ RSpec.shared_context "with example classes" do
 
   let(:child_singleton_logged_and_notified_klass) do
     Class.new(ChildSingletonClass) do
+      class << self
+        def name
+          "ChildSingletonLoggedAndNotifiedKlass"
+        end
+        alias_method :to_s, :name
+      end
       self.debug_ellipsis = "***"
 
       class << self
@@ -92,6 +116,12 @@ RSpec.shared_context "with example classes" do
 
   let(:child_singleton_logged_args_klass) do
     Class.new(ChildSingletonClass) do
+      class << self
+        def name
+          "ChildSingletonLoggedArgsKlass"
+        end
+        alias_method :to_s, :name
+      end
       self.debug_ellipsis = "<><><>"
       logged :snakes, args_max_length: 26, args_to_s_proc: ->(args) { args.to_s[0..27] }
     end
@@ -99,6 +129,12 @@ RSpec.shared_context "with example classes" do
 
   let(:complete_logged_klass) do
     Class.new do
+      class << self
+        def name
+          "CompleteLoggedKlass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
@@ -178,6 +214,12 @@ RSpec.shared_context "with example classes" do
 
   let(:complex_config_logged_klass) do
     Class.new do
+      class << self
+        def name
+          "ComplexConfigLoggedKlass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
@@ -269,6 +311,12 @@ RSpec.shared_context "with example classes" do
 
   let(:complete_logged_klass_no_logged_imethods) do
     Class.new do
+      class << self
+        def name
+          "CompleteLoggedClassNoLoggedImethods"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
@@ -335,6 +383,12 @@ RSpec.shared_context "with example classes" do
 
   let(:complete_notified_klass) do
     Class.new do
+      class << self
+        def name
+          "CompleteNotifiedClass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*,
       #   except for the logged class method, which comes from extending DebugLogging::ClassLogger
       extend DebugLogging
@@ -421,6 +475,12 @@ RSpec.shared_context "with example classes" do
 
   let(:singleton_logged_klass) do
     Class.new do
+      class << self
+        def name
+          "SingletonLoggedKlass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       # Needs to be at the top of the class
@@ -449,6 +509,12 @@ RSpec.shared_context "with example classes" do
 
   let(:singleton_notified_klass) do
     Class.new do
+      class << self
+        def name
+          "SingletonNotifiedKlass"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       # Needs to be at the top of the class
@@ -472,6 +538,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_logged_klass_explicit) do
     Class.new do
+      class << self
+        def name
+          "SingletonLoggedKlassExplicit"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       extend DebugLogging::InstanceLogger
@@ -497,6 +569,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_notified_klass_explicit) do
     Class.new do
+      class << self
+        def name
+          "InstanceNotifiedKlassExplicit"
+        end
+        alias_method :to_s, :name
+      end
       attr_accessor :id, :action, :msg
 
       def initialize(action: nil, id: nil, msg: {})
@@ -545,6 +623,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_logged_klass_dynamic) do
     Class.new do
+      class << self
+        def name
+          "InstanceLoggedKlassDynamic"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       extend DebugLogging::InstanceLogger
@@ -570,6 +654,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_notified_klass_dynamic) do
     Class.new do
+      class << self
+        def name
+          "InstanceNotifiedKlassDynamic"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       extend DebugLogging::InstanceNotifier
@@ -594,6 +684,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_notified_klass_no_logged_imethods) do
     Class.new do
+      class << self
+        def name
+          "InstanceNotifiedKlassNoLoggedImethods"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       extend DebugLogging::InstanceNotifier
@@ -618,6 +714,12 @@ RSpec.shared_context "with example classes" do
 
   let(:instance_notified_klass_string_logged_imethods) do
     Class.new do
+      class << self
+        def name
+          "InstanceNotifiedKlassStringLoggedImethods"
+        end
+        alias_method :to_s, :name
+      end
       # adds the helper methods to the class, all are prefixed with debug_*
       extend DebugLogging
       extend DebugLogging::InstanceNotifier
