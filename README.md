@@ -441,8 +441,8 @@ end
 Run tests!
 
 ```shell
-bundle install
-bundle exec rake
+bin/setup
+bin/rake
 ```
 
 ## Contributing
