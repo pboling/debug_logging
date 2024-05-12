@@ -3,12 +3,14 @@ require "timeout"
 
 module DebugLogging
   module Hooks
-    def self.included(mod)
-      mod.extend(ClassMethods)
-    end
+    class << self
+      def included(mod)
+        mod.extend(ClassMethods)
+      end
 
-    def self.extend(mod)
-      mod.extend(ClassMethods)
+      def extended(mod)
+        mod.extend(ClassMethods)
+      end
     end
 
     module ClassMethods

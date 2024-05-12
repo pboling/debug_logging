@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 - Add undeclared runtime dependency `version_gem`
+- `DebugLogging::Hooks` integration via `extend`
 ### Removed
 
 ## [4.0.1] ([tag][4.0.1t]) - 2024-03-01
