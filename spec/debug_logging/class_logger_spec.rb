@@ -2,19 +2,22 @@ RSpec.describe DebugLogging::ClassLogger do
   include_context "with example classes"
 
   context "logged macro" do
-    it "works witout configuration override hash" do
-      expect(complete_logged_klass.debug_config).to receive(:log).once.and_call_original
+    it "works without configuration override hash" do
+      allow(complete_logged_klass.debug_config).to receive(:log).twice.and_call_original
       output = capture("stdout") do
-        complete_logged_klass.k_with_dsplat(a: "a")
+        complete_logged_klass.k
       end
-      expect(output).to match(/.*::k_with_dsplat/)
+      expect(complete_logged_klass.debug_config).to have_received(:log).once
+      expect(output).to match(/CompleteLoggedKlass::k\(\) #{enter_tail_match_src}/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       # Without an options hash the class config is the same config object as the per method config
-      expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
+      pointer = complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
         "kl",
-        :k_with_dsplat,
-      ))).to receive(:log)
-      complete_logged_klass.k_with_dsplat(a: "a")
+        :k,
+      ))
+      expect(pointer).to eq(complete_logged_klass.debug_config)
+      complete_logged_klass.k
+      expect(pointer).to have_received(:log).twice
     end
 
     it "works with an implicit array of methods and a configuration override hash" do
@@ -38,7 +41,7 @@ RSpec.describe DebugLogging::ClassLogger do
       output = capture("stdout") do
         complete_logged_klass.k_with_dsplat_e(a: "a")
       end
-      expect(output).to match(/.*0;31;49m#<Class.*0m::k_with_dsplat_e\(LOLeee\)/)
+      expect(output).to match(/.*0;31;49mCompleteLoggedKlass.*0m::k_with_dsplat_e\(LOLeee\)/)
       # Can't set an expectation on the per class method config until after the method has been called once, as that is when the ivar gets set.
       expect(complete_logged_klass.instance_variable_get(DebugLogging::Configuration.config_pointer(
         "kl",
@@ -62,12 +65,12 @@ RSpec.describe DebugLogging::ClassLogger do
         complete_logged_klass.k_with_ssplat
         complete_logged_klass.k_with_dsplat
       end
-      expect(output).to match(/#i\(\*\*{}\)/)
-      expect(output).to match(/#i_with_ssplat\(\*\*{}\)/)
-      expect(output).to match(/#.*0;31;49mi_with_dsplat.*0m\(\*\*{}\)/)
-      expect(output).to match(/::k\(\)/)
-      expect(output).to match(/::k_with_ssplat\(\)/)
-      expect(output).to match(/::k_with_dsplat\(\)/)
+      expect(output).to match(/CompleteLoggedKlass#i\(\)/)
+      expect(output).to match(/CompleteLoggedKlass#i_with_ssplat\(\)/)
+      expect(output).to match(/CompleteLoggedKlass#.*0;31;49mi_with_dsplat.*0m\(\)/)
+      expect(output).to match(/CompleteLoggedKlass::k\(\)/)
+      expect(output).to match(/CompleteLoggedKlass::k_with_ssplat\(\)/)
+      expect(output).to match(/CompleteLoggedKlass::k_with_dsplat\(\)/)
     end
 
     it "has correct return value" do

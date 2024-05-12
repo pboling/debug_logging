@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - More documentation
 ### Changed
 - DRY logic for `DebugLogging::ClassLogger` & `DebugLogging::InstanceLogger` via `LambDart`
+- Refactored test suite; increased test coverage to 96%
 ### Fixed
 - Add undeclared runtime dependency `version_gem`
 - `DebugLogging::Hooks` integration via `extend`
