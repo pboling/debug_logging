@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.2] ([tag][4.0.2t]) - 2024-05-12
 ### Added
+- More documentation
 ### Changed
 ### Fixed
 - Add undeclared runtime dependency `version_gem`

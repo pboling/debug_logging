@@ -21,13 +21,6 @@ require "debug_logging/class_logger"
 
 ####################
 #                  #
-# NOTE: The manner this is made to work for class methods is totally different
-#       than the way this is made to work for instance methods.
-# NOTE: The instance method manner works on Ruby 2.0+
-# NOTE: The class method manner works on Ruby 2.1+
-#                  #
-####################
-#                  #
 # USAGE (see specs)#
 #                  #
 #     class Car

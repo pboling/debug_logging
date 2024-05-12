@@ -33,7 +33,6 @@ Automatically log selected methods and their arguments as they are called at run
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir[
     "lib/**/*.rb",
     "CHANGELOG.md",
