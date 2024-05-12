@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    debug_logging (4.0.1)
+    debug_logging (4.0.2)
       colorize
       version_gem (~> 1.1, >= 1.1.4)
 
