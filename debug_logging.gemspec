@@ -53,11 +53,12 @@ Automatically log selected methods and their arguments as they are called at run
 
   spec.add_dependency("colorize", ">= 0")
 
+  # Utilities
+  spec.add_dependency("version_gem", "~> 1.1", ">= 1.1.4")
+  spec.add_development_dependency("rake", ">= 13.2.1")
+
   # Optional
   spec.add_development_dependency("activesupport", ">= 5.2.4.4")
-
-  # Utilities
-  spec.add_development_dependency("rake", ">= 13")
 
   # Code Coverage
   # CodeCov + GitHub setup is not via gems: https://github.com/marketplace/actions/codecov
