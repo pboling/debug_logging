@@ -82,6 +82,7 @@ Supports `ActiveSupport::Notifications` (thanks [@jgillson](https://github.com/j
 * *All configuration is inheritable to, and overridable by, child classes, since v3.1.3*
 * *[Class finalization hook](https://stackoverflow.com/a/34559282) (optional: `require 'debug_logging/finalize'` and `extend DebugLogging::Finalize`), since v3.1.3*
 * *Error handling hooks you can use to log problems when they happen, since v3.1.7*
+  * *Fixed: Works with benchmarking options since v4.0.2*
 * **so many free ponies** 🎠🐴🎠🐴🎠🐴
 
 ## Next Level Magic
@@ -89,7 +90,7 @@ Supports `ActiveSupport::Notifications` (thanks [@jgillson](https://github.com/j
 Herein you will find:
 
 * ~~Classes inheriting from Module~~ Refactored to use standard Modules and `prepend`!
-* Zero tolerance policy on monkey patching
+* Zero tolerance policy on global monkey patching
   * When the gem is loaded there are no monkey patches.
   * Rather, your own classes/methods get "patched" and "hooked" as you configure them.
 * 100% clean, 0% obtrusive
@@ -166,7 +167,7 @@ DebugLogging.configuration.ellipsis = " ✂️ …".freeze
 DebugLogging.configuration.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
 DebugLogging.configuration.add_payload = false # or a proc which will be called to print the payload
 DebugLogging.configuration.payload_max_length = 1000
-DebugLogging.configuration.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, args) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
+DebugLogging.configuration.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, *args, **kwargs) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
 ```
 
 If you prefer to use the block style:
@@ -192,7 +193,7 @@ DebugLogging.configure do |config|
   config.mark_scope_exit = true # Only has an effect if benchmarking is off, since benchmarking always marks the scope exit
   config.add_payload = false # or a proc which will be called to print the payload
   config.payload_max_length = 1000
-  config.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, args) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
+  config.error_handler_proc = nil # e.g. ->(error, config, obj, method_name, *args, **kwargs) { config.log { "#{error.class}: #{error.message} in #{method_name}\nargs: #{args.inspect}" } }
 end
 ```
 
@@ -264,6 +265,7 @@ class Car
   logged :dealer_options, {
     something: "here", # <= will be logged, and available to last_hash_to_s_proc
     multiple_last_hashes: true, # <= Overrides config
+    error_handler_proc: nil, # NOTE: if you define the error_handler_proc inside a class like this you can use self inside the proc to refer to the class the method was called on!
   }
   def self.will_not_be_logged
     false
@@ -314,7 +316,7 @@ class Car
     mark_scope_exit: false,
     add_payload: true, # Can also be a proc returning a string, which will be called when printing the payload
     payload_max_length: 1_000,
-    error_handler_proc: nil,
+    error_handler_proc: nil, # NOTE: if you define the error_handler_proc inside a class like this you can use self inside the proc to refer to the instance of the class the method was called on!
     time_formatter_proc: DebugLogging::Constants::DEFAULT_TIME_FORMATTER,
     add_timestamp: false,
     instance_benchmarks: false,

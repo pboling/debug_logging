@@ -38,11 +38,11 @@ module DebugLogging
     end
 
     class << self
-      def config_pointer(type, method_to_log)
+      def config_pointer(type, decorated_method)
         # Methods names that do not match the following regex can't be part of an ivar name
         #   /[a-zA-Z_][a-zA-Z0-9_]*/
         # Thus we have to use a different form of the method name that is compatible with ivar name conventions
-        "@debug_logging_config_#{type}_#{Digest::MD5.hexdigest(method_to_log.to_s)}".to_sym
+        "@debug_logging_config_#{type}_#{Digest::MD5.hexdigest(decorated_method.to_s)}".to_sym
       end
     end
 

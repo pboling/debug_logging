@@ -46,7 +46,7 @@ module DebugLogging
       DebugLogging::Constants::EVENT_TIME_FORMATTER.call(time)
     end
 
-    def debug_invocation_to_s(klass: nil, separator: nil, method_to_log: nil, config_proxy: nil)
+    def debug_invocation_to_s(klass: nil, separator: nil, decorated_method: nil, config_proxy: nil)
       return "" unless config_proxy
 
       klass_string = if config_proxy.debug_colorized_chain_for_class
@@ -55,9 +55,9 @@ module DebugLogging
         klass.to_s
       end
       method_string = if config_proxy.debug_colorized_chain_for_method
-        config_proxy.debug_colorized_chain_for_method.call(ColorizedString[method_to_log.to_s])
+        config_proxy.debug_colorized_chain_for_method.call(ColorizedString[decorated_method.to_s])
       else
-        method_to_log.to_s
+        decorated_method.to_s
       end
       "#{klass_string}#{separator}#{method_string}"
     end
@@ -69,7 +69,7 @@ module DebugLogging
 
       add_args_ellipsis = false
       args = args.dup
-      args.push(kwargs) if kwargs
+      args.push(kwargs) if kwargs&.keys && !kwargs&.keys&.length&.zero?
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)
         add_other_args_ellipsis = false
         if args.length > 1
@@ -204,8 +204,8 @@ module DebugLogging
 
     module_function
 
-    def debug_event_name_to_s(method_to_notify: nil)
-      "#{method_to_notify}.log"
+    def debug_event_name_to_s(decorated_method: nil)
+      "#{decorated_method}.log"
     end
   end
 end

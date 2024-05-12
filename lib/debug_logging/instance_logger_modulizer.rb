@@ -8,61 +8,31 @@ module DebugLogging
             payload:,
             config:,
           )
-          Array(methods_to_log).each do |method_to_log|
-            method_to_log, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
-              method_names: method_to_log,
+          Array(methods_to_log).each do |decorated_method|
+            decorated_method, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
+              method_names: decorated_method,
               payload:,
               config: config_opts,
             )
-            define_method(method_to_log) do |*args, **kwargs, &block|
-              method_return_value = nil
-              config_proxy = DebugLogging::Util.config_proxy_finder(
-                scope: self.class,
-                config_opts: method_config_opts,
-                method_name: method_to_log,
-                proxy_ref: "ilm",
+            define_method(decorated_method) do |*args, **kwargs, &block|
+              lamb_dart = LambDart::Log.new(
+                instance: self,
+                method_config_opts:,
+                method_payload:,
+                args:,
+                kwargs:,
+                decorated_method:,
               )
-              log_prefix = self.class.debug_invocation_to_s(
-                klass: self.class.to_s,
-                separator: "#",
-                method_to_log: method_to_log,
-                config_proxy: config_proxy,
-              )
-              start_at = Time.now
-              start_timestamp = self.class.debug_time_to_s(start_at, config_proxy:)
-              invocation_id = self.class.debug_invocation_id_to_s(args:, kwargs:, start_at:, config_proxy:)
-              config_proxy.log do
-                paydirt = DebugLogging::Util.payload_instance_variable_hydration(scope: self, payload: method_payload)
-                signature = self.class.debug_signature_to_s(args:, kwargs:, config_proxy:)
-                paymud = debug_payload_to_s(payload: paydirt, config_proxy:)
-                "#{start_timestamp}#{log_prefix}#{signature}#{invocation_id} debug: #{paymud}"
-              end
-              if config_proxy.benchmarkable_for?(:debug_instance_benchmarks)
-                tms = Benchmark.measure do
-                  method_return_value = super(*args, **kwargs, &block)
-                end
-                end_timestamp = self.class.debug_time_to_s(Time.now, config_proxy:)
-                config_proxy.log do
-                  "#{end_timestamp}#{log_prefix} #{self.class.debug_benchmark_to_s(tms: tms)}#{invocation_id}"
-                end
-              else
-                begin
-                  method_return_value = super(*args, **kwargs, &block)
-                rescue StandardError => e
-                  if config_proxy.error_handler_proc
-                    config_proxy.error_handler_proc.call(config_proxy, e, self, method_to_log, args, kwargs)
-                  else
-                    raise e
-                  end
-                end
-                if config_proxy.exit_scope_markable? && invocation_id && !invocation_id.empty?
-                  end_timestamp = self.class.debug_time_to_s(Time.now, config_proxy:)
-                  config_proxy.log do
-                    "#{end_timestamp}#{log_prefix} completed#{invocation_id}"
-                  end
+              real_mccoy = ->() {
+                super(*args, **kwargs, &block)
+              }
+              _dl_ld_enter_log(lamb_dart) do
+                _dl_ld_error_handle(lamb_dart) do
+                  return _dl_ld_benchmarked(lamb_dart) { real_mccoy.call } if lamb_dart.bench?
+
+                  _dl_ld_exit_log(lamb_dart) { real_mccoy.call }
                 end
               end
-              method_return_value
             end
           end
         end

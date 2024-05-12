@@ -1,5 +1,11 @@
 module DebugLogging
   module InstanceNotifier
+    class << self
+      def extended(base)
+        base.include(LambDartable::Note)
+      end
+    end
+
     def i_notified(*methods_to_log)
       method_names, payload, config_opts = DebugLogging::Util.extract_payload_and_config(
         method_names: methods_to_log,

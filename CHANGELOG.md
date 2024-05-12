@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Removed
 
+## [4.0.2] ([tag][4.0.2t]) - 2024-05-12
+### Added
+- More documentation
+### Changed
+- DRY logic for `DebugLogging::ClassLogger` & `DebugLogging::InstanceLogger` via `LambDart`
+- Refactored test suite; increased test coverage to 97%
+- Refactored ActiveSupport::Notification integration (DRY)
+### Fixed
+- Add undeclared runtime dependency `version_gem`
+- `DebugLogging::Hooks` integration via `extend`
+- `DebugLogging::ClassNotifier` support for method signatures with kwargs
+- `error_handler_proc` support for method signatures with kwargs
+
 ## [4.0.1] ([tag][4.0.1t]) - 2024-03-01
 ### Added
 - Support for all Numeric types to be used as monotonic timestamps for ActiveSupport::Notifications
@@ -105,7 +118,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] ([tag][0.1.0t]) - 2017-03-25
 - Initial release
 
-[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.1...HEAD
+[Unreleased]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.2...HEAD
+[4.0.2t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.2
+[4.0.2]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.1...v4.0.2
 [4.0.1t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.1
 [4.0.1]: https://gitlab.com/kettle-rb/kettle-soup-cover/-/compare/v4.0.0...v4.0.1
 [4.0.0t]: https://gitlab.com/pboling/debug_logging/-/tags/v4.0.0

@@ -11,6 +11,7 @@ require "config/rspec/rspec_block_is_expected"
 require "config/rspec/rspec_core"
 require "config/rspec/silent_stream"
 require "config/rspec/version_gem"
+require "config/rspec/helpers"
 
 # Last thing before this gem is code coverage:
 require "simplecov" if Kettle::Soup::Cover::DO_COV

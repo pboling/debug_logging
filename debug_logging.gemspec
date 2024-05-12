@@ -19,10 +19,10 @@ Gem::Specification.new do |spec|
 Unobtrusive debug logging for Ruby.  NO LITTERING.
 Automatically log selected methods and their arguments as they are called at runtime!
 '
-  spec.homepage = "https://github.com/pboling/debug_logging"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
+  spec.homepage = "https://github.com/pboling/debug_logging"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/pboling/debug_logging/tree/v#{spec.version}"
   spec.metadata["changelog_uri"] = "https://github.com/pboling/debug_logging/blob/v#{spec.version}/CHANGELOG.md"
@@ -33,7 +33,6 @@ Automatically log selected methods and their arguments as they are called at run
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir[
     "lib/**/*.rb",
     "CHANGELOG.md",
@@ -53,11 +52,12 @@ Automatically log selected methods and their arguments as they are called at run
 
   spec.add_dependency("colorize", ">= 0")
 
+  # Utilities
+  spec.add_dependency("version_gem", "~> 1.1", ">= 1.1.4")
+  spec.add_development_dependency("rake", ">= 13.2.1")
+
   # Optional
   spec.add_development_dependency("activesupport", ">= 5.2.4.4")
-
-  # Utilities
-  spec.add_development_dependency("rake", ">= 13")
 
   # Code Coverage
   # CodeCov + GitHub setup is not via gems: https://github.com/marketplace/actions/codecov
@@ -72,6 +72,7 @@ Automatically log selected methods and their arguments as they are called at run
   spec.add_development_dependency("rubocop-lts", "~> 22.1", ">= 22.1.3")
   spec.add_development_dependency("rubocop-packaging", "~> 0.5", ">= 0.5.2")
   spec.add_development_dependency("rubocop-rspec", "~> 2.25")
+  spec.add_development_dependency("standard-rubocop-lts", "~> 1.0", ">= 1.0.10")
 
   # Testing
   spec.add_development_dependency("rspec", ">= 3")

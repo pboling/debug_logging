@@ -15,17 +15,12 @@ require "debug_logging/util"
 require "debug_logging/finalize"
 require "debug_logging/argument_printer"
 require "debug_logging/hooks"
+require "debug_logging/lamb_dart"
+require "debug_logging/lamb_dartable"
 require "debug_logging/instance_logger_modulizer"
 require "debug_logging/instance_logger"
 require "debug_logging/class_logger"
 
-####################
-#                  #
-# NOTE: The manner this is made to work for class methods is totally different
-#       than the way this is made to work for instance methods.
-# NOTE: The instance method manner works on Ruby 2.0+
-# NOTE: The class method manner works on Ruby 2.1+
-#                  #
 ####################
 #                  #
 # USAGE (see specs)#

@@ -71,27 +71,31 @@ module DebugLogging
     end
 
     def config_proxy_finder(scope:, method_name:, proxy_ref:, config_opts: {}, &block)
-      if (proxy = scope.send(:instance_variable_get, DebugLogging::Configuration.config_pointer(
-        proxy_ref,
-        method_name,
-      )))
-        proxy
+      proxy = scope.send(
+        :instance_variable_get,
+        DebugLogging::Configuration.config_pointer(
+          proxy_ref,
+          method_name,
+        ),
+      )
+      # short circuit on subsequent calls is required
+      #   so we only register notifications once
+      return proxy if proxy
+
+      base = scope.respond_to?(:debug_config) ? scope.debug_config : DebugLogging.debug_logging_configuration
+      proxy = if config_opts.empty?
+        base
       else
-        base = scope.respond_to?(:debug_config) ? scope.debug_config : DebugLogging.debug_logging_configuration
-        proxy = if config_opts.empty?
-          base
-        else
-          DebugLogging::Configuration.new(**base.to_hash.merge(config_opts))
-        end
-        proxy.register(method_name)
-        scope.send(
-          :instance_variable_set,
-          DebugLogging::Configuration.config_pointer(proxy_ref, method_name),
-          proxy,
-        )
-        yield proxy if block
-        proxy
+        DebugLogging::Configuration.new(**base.to_hash.merge(config_opts))
       end
+      proxy.register(method_name)
+      scope.send(
+        :instance_variable_set,
+        DebugLogging::Configuration.config_pointer(proxy_ref, method_name),
+        proxy,
+      )
+      yield proxy if block
+      proxy
     end
   end
 end
