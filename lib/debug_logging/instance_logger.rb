@@ -1,5 +1,11 @@
 module DebugLogging
   module InstanceLogger
+    class << self
+      def extended(base)
+        base.include(LambDartable)
+      end
+    end
+
     # NOTE: These params can be passed in / hidden in a last hash of *args
     # NOTE: They can also be passed in discretely for each method, by passing *args as an array of arrays
     # TODO: Refactor to use modern Ruby 3 *args, **kwargs instead
