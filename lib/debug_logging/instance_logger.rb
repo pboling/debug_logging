@@ -2,7 +2,7 @@ module DebugLogging
   module InstanceLogger
     class << self
       def extended(base)
-        base.include(LambDartable)
+        base.include(LambDartable::Log)
       end
     end
 
@@ -35,9 +35,9 @@ module DebugLogging
         config: nil,
       )
       instance_method_modules =
-        Array(methods_to_log).map do |method_to_log|
+        Array(methods_to_log).map do |decorated_method|
           DebugLogging::InstanceLoggerModulizer.to_mod(
-            methods_to_log: Array(method_to_log),
+            methods_to_log: Array(decorated_method),
             payload: payload,
             config: config_opts,
           )

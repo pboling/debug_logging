@@ -144,11 +144,11 @@ RSpec.describe DebugLogging::ArgumentPrinter do
   end
 
   describe "#debug_invocation_to_s" do
-    subject(:debug_invocation_to_s) { instance.debug_invocation_to_s(klass:, separator:, method_to_log:, config_proxy:) }
+    subject(:debug_invocation_to_s) { instance.debug_invocation_to_s(klass:, separator:, decorated_method:, config_proxy:) }
 
     let(:klass) { nil }
     let(:separator) { nil }
-    let(:method_to_log) { nil }
+    let(:decorated_method) { nil }
     let(:config_proxy) { false }
 
     it "prints" do
@@ -165,7 +165,7 @@ RSpec.describe DebugLogging::ArgumentPrinter do
       }
       let(:klass) { ParentSingletonClass }
       let(:separator) { "^.^" }
-      let(:method_to_log) { :shoe_fly }
+      let(:decorated_method) { :shoe_fly }
 
       it "prints" do
         expect(debug_invocation_to_s).to eq("\e[0;34;49mParentSingletonClass\e[0m^.^\e[0;34;49mshoe_fly\e[0m")

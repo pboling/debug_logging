@@ -2,7 +2,7 @@ module DebugLogging
   module ClassLogger
     class << self
       def extended(base)
-        base.extend(LambDartable)
+        base.extend(LambDartable::Log)
       end
     end
 
@@ -12,22 +12,22 @@ module DebugLogging
         payload: nil,
         config: nil,
       )
-      Array(methods_to_log).each do |method_to_log|
-        method_to_log, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
-          method_names: method_to_log,
+      Array(methods_to_log).each do |decorated_method|
+        decorated_method, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
+          method_names: decorated_method,
           payload: payload,
           config: config_opts,
         )
-        original_method = method(method_to_log)
+        original_method = method(decorated_method)
         (class << self; self; end).class_eval do
-          define_method(method_to_log) do |*args, **kwargs, &block|
-            lamb_dart = LambDart.new(
+          define_method(decorated_method) do |*args, **kwargs, &block|
+            lamb_dart = LambDart::Log.new(
               klass: self,
               method_config_opts:,
               method_payload:,
               args:,
               kwargs:,
-              method_to_log:,
+              decorated_method:,
             )
             real_mccoy = ->() {
               original_method.call(*args, **kwargs, &block)

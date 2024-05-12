@@ -16,13 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - More documentation
 ### Changed
 - DRY logic for `DebugLogging::ClassLogger` & `DebugLogging::InstanceLogger` via `LambDart`
-- Refactored test suite; increased test coverage to 96%
+- Refactored test suite; increased test coverage to 97%
+- Refactored ActiveSupport::Notification integration (DRY)
 ### Fixed
 - Add undeclared runtime dependency `version_gem`
 - `DebugLogging::Hooks` integration via `extend`
 - `DebugLogging::ClassNotifier` support for method signatures with kwargs
 - `error_handler_proc` support for method signatures with kwargs
-### Removed
 
 ## [4.0.1] ([tag][4.0.1t]) - 2024-03-01
 ### Added

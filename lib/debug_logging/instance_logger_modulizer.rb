@@ -8,20 +8,20 @@ module DebugLogging
             payload:,
             config:,
           )
-          Array(methods_to_log).each do |method_to_log|
-            method_to_log, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
-              method_names: method_to_log,
+          Array(methods_to_log).each do |decorated_method|
+            decorated_method, method_payload, method_config_opts = DebugLogging::Util.extract_payload_and_config(
+              method_names: decorated_method,
               payload:,
               config: config_opts,
             )
-            define_method(method_to_log) do |*args, **kwargs, &block|
-              lamb_dart = LambDart.new(
+            define_method(decorated_method) do |*args, **kwargs, &block|
+              lamb_dart = LambDart::Log.new(
                 instance: self,
                 method_config_opts:,
                 method_payload:,
                 args:,
                 kwargs:,
-                method_to_log:,
+                decorated_method:,
               )
               real_mccoy = ->() {
                 super(*args, **kwargs, &block)

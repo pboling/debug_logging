@@ -17,8 +17,10 @@ RSpec.describe DebugLogging::ClassNotifier do
       "kn",
       :k_with_dsplat_payload_and_config,
     ))
-    expect(config_proxy).to receive(:log).once.and_call_original
+    allow(config_proxy).to receive(:log).and_call_original
     complete_notified_klass.k_with_dsplat_payload_and_config(a: "a")
+    complete_notified_klass.k_with_dsplat_payload_and_config(a: "a")
+    expect(config_proxy).to have_received(:log).twice
   end
 
   context "when notified macro" do

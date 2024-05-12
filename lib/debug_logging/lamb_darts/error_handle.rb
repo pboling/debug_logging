@@ -11,7 +11,7 @@ module DebugLogging
                 ld.config_proxy,
                 e,
                 self,
-                ld.method_to_log,
+                ld.decorated_method,
                 *ld.args,
                 **ld.kwargs,
               )

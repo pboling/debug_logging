@@ -476,13 +476,13 @@ RSpec.shared_context "with example classes" do
       notified :k_with_dsplat_payload_and_config, {id: 3, first_name: "Jae", last_name: "Tae", log_level: :error}
       notified :k_with_ssplat_handled_error,
         class_benchmarks: true,
-        error_handler_proc: lambda { |config, error, obj, method_name, *args|
-          config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect}. Check this: #{obj.k_without_log}"
+        error_handler_proc: lambda { |config, error, obj, method_name, *args, **kwargs|
+          config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect} & #{kwargs.inspect}. Check this: #{obj.k_without_log}"
         }
       notified :k_with_dsplat_handled_error,
         class_benchmarks: true,
         error_handler_proc: lambda { |config, error, obj, method_name, *args, **kwargs|
-          config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect} * #{kwargs.inspect}. Check this: #{obj.k_without_log}"
+          config.log "There was an error like #{error.class}: #{error.message} when calling #{method_name} with #{args.inspect} & #{kwargs.inspect}. Check this: #{obj.k_without_log}"
         }
 
       def i
