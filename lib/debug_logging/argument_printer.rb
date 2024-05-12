@@ -69,7 +69,7 @@ module DebugLogging
 
       add_args_ellipsis = false
       args = args.dup
-      args.push(kwargs) if kwargs
+      args.push(kwargs) if kwargs&.keys && !kwargs&.keys&.length&.zero?
       if config_proxy.debug_last_hash_to_s_proc && args[-1].is_a?(Hash)
         add_other_args_ellipsis = false
         if args.length > 1
