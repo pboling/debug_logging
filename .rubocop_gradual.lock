@@ -1,5 +1,5 @@
 {
-  "README.md:806010860": [
+  "README.md:374337233": [
     [245, 10, 27, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2226893134],
     [248, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 4163348045],
     [252, 3, 37, "Style/ClassMethodsDefinitions: Use `class << self` to define a class method.", 2420123939],
