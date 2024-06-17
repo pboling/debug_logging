@@ -24,8 +24,10 @@ To release a new version:
 7. Run `git pull origin main` to ensure you will release the latest trunk code.
 8. Set `SOURCE_DATE_EPOCH` so `rake build` and `rake release` use same timestamp, and generate same checksums
    a. Run `export SOURCE_DATE_EPOCH=$EPOCHSECONDS && echo $SOURCE_DATE_EPOCH`
+   b. If the echo above has no output, then it didn't work.
+   c. Note that you'll need the `zsh/datetime` module, if running `zsh`.
 9. Run `bundle exec rake build`
-10. Run [`bin/checksums`](https://github.com/rubygems/guides/pull/325) to create SHA-256 and SHA-512 checksums
+10. Run [`bin/checksums`][🔒️rubygems-checksums-pr] to create SHA-256 and SHA-512 checksums
    a. Checksums will be committed automatically by the script, but not pushed
 11. Run `bundle exec rake release` which will create a git tag for the version,
    push git commits and tags, and push the `.gem` file to [rubygems.org][💎rubygems]
@@ -36,7 +38,7 @@ See: [RubyGems Security Guide][🔒️rubygems-security-guide]
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=pboling/debug_logging)][🖐contributors]
+[![Contributors][🖐contributors-img]][🖐contributors]
 
 Made with [contributors-img][🖐contrib-rocks].
 
@@ -45,6 +47,8 @@ Made with [contributors-img][🖐contrib-rocks].
 [🤝conduct]: https://github.com/pboling/debug_logging/blob/main/CODE_OF_CONDUCT.md
 [🖐contrib-rocks]: https://contrib.rocks
 [🖐contributors]: https://github.com/pboling/debug_logging/graphs/contributors
+[🖐contributors-img]: https://contrib.rocks/image?repo=pboling/debug_logging
 [💎rubygems]: https://rubygems.org
 [🔒️rubygems-security-guide]: https://guides.rubygems.org/security/#building-gems
+[🔒️rubygems-checksums-pr]: https://github.com/rubygems/guides/pull/325
 [🚎src-main]: https://github.com/pboling/debug_logging
