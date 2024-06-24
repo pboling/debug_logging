@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: CodeClimate Install
-        uses: amancevice/setup-code-climate@v1
+        uses: amancevice/setup-code-climate@v2
         if: ${{ github.event_name != 'pull_request' }}
         with:
           cc_test_reporter_id: "${{ secrets.CC_TEST_REPORTER_ID }}"
